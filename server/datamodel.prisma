@@ -1,0 +1,53 @@
+
+enum JOB_TYPE {
+	FULL_TIME
+	PART_TIME
+	FREELANCE
+	CONTRACT
+}
+
+enum STATUS_TYPE {
+	NEW
+	FEATURED
+	CLOSED
+}
+
+type User {
+	id: ID! @unique
+	email: String! @unique
+	password: String!
+	company: Company!
+	createdAt: DateTime!
+}
+
+type File {
+	base64: String!
+	mimetype: String!	
+}
+
+type Company {
+	id: ID! @unique
+	createdBy: User!
+	email: String!
+	name: String!
+	website: String!
+	logo: File
+	jobs: [Job!]!
+}
+
+type Job {
+	id: ID! @unique
+	position: String!
+	location: String!
+	salary: Int!
+	description: String!
+	job_type: JOB_TYPE!
+	status: STATUS_TYPE!
+	apply_url: String!
+	company: Company
+	company_name: String
+	company_email: String
+	company_website: String
+	createdAt: DateTime!
+	expiresIn: DateTime!
+}

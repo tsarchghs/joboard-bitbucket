@@ -1,0 +1,157 @@
+
+enum JOB_TYPE {
+	FULL_TIME
+	PART_TIME
+	FREELANCE
+	CONTRACT
+}
+
+enum STATUS_TYPE {
+	NEW
+	FEATURED
+	CLOSED
+}
+
+type File {
+	id: ID!
+	url: String!
+}
+
+type AuthData {
+	user: User!
+	token: String!
+	expiresIn: Int!
+}
+
+type User {
+	id: ID!
+	email: String!
+	password: String
+	company: Company!
+	createdAt: String!
+}
+
+type Company {
+	id: ID!
+	createdBy: User
+	email: String!
+	name: String!
+	website: String!
+	logo: File
+	jobs: [Job!]!
+}
+
+type Job {
+	id: ID!
+	position: String!
+	location: String!
+	salary: Int!
+	job_type: JOB_TYPE!
+	status: STATUS_TYPE!
+	apply_url: String!
+	company: Company
+	company_name: String
+	company_email: String
+	company_website: String
+	createdAt: String!
+	description: String!
+	expiresIn: String!
+}
+
+input CreateJob {
+	position: String!
+	location: String!
+	salary: Int!
+	job_type: JOB_TYPE!
+	status: STATUS_TYPE!
+	apply_url: String!
+	description: String!
+	company: ID
+	company_name: String
+	company_email: String
+	company_website: String
+}
+
+input FileInput {
+	base64: String!
+	mimetype: String!
+}
+
+input CreateCompanyInput {
+	email: String!
+	name: String!
+	website: String!
+	logo: FileInput
+	job: CreateJob
+}
+
+input JobFilterInput {
+	location_contains: String
+	status_type: STATUS_TYPE
+	job_type: JOB_TYPE
+	createdAt_gte: String
+	createdAt_lte: String
+	first: Int
+	skip: Int
+}
+
+type Query {
+	getLoggedInUser: User!
+	company(id: ID!): Company
+	jobs(jobFilter:JobFilterInput): [Job!]!
+	job(id: ID!): Job!
+}
+
+type Mutation {
+	login(
+		email: String!
+		password: String!
+	): AuthData!
+
+	register(
+		email: String!
+		password: String!
+		company: CreateCompanyInput!
+	): AuthData!
+
+	updateUser(
+		email: String
+		password: String
+	): User!
+
+	updateCompany(
+		id: ID!
+		email: String
+		name: String
+		website: String
+		logo: FileInput
+	): Company!
+
+	createJob(
+		position: String!
+		location: String!
+		salary: Int!
+		job_type: JOB_TYPE!
+		status: STATUS_TYPE!
+		apply_url: String!
+		description: String
+		company: ID
+		company_name: String
+		company_email: String
+		company_website: String
+	): Job!
+	updateJob(
+		id: ID!
+		position: String
+		location: String
+		salary: Int
+		job_type: JOB_TYPE
+		status: STATUS_TYPE
+		apply_url: String
+		description: String
+	): Job!
+
+	deleteJob(
+		id: ID!
+	): Job!
+}
