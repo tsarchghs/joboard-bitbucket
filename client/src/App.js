@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Cookies from 'js-cookie';
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
@@ -15,7 +15,7 @@ import DashboardHeader from "./components/DashboardHeader";
 import CompanySettings from "./components/CompanySettings";
 import JobProfile from "./components/JobProfile";
 import { getQueryParams } from "./helpers";
-import {StripeProvider} from 'react-stripe-elements';
+import {StripeProvider,Elements} from 'react-stripe-elements';
 
 const client = new ApolloClient({
   uri: "http://localhost:4000",
@@ -37,9 +37,8 @@ class App extends Component {
     }
   }
   render() {
-    console.log(3213112);
     return (
-      <StripeProvider apiKey="12323">
+      <StripeProvider apiKey="pk_test_qPYFvOuAMinE3mIxP7Gpn70N">
         <ApolloProvider client={client}>
           <Router>
             <Query query={gql`
@@ -69,12 +68,10 @@ class App extends Component {
                 }
             `}>
               {({loading,error,data,refetch}) => {
-                console.log(data);
+                console.log("App re/rernder");
                 if (loading) return "Loading"
                 if (error){
-                  if (!(error.message === "GraphQL error: Not logged in")){
-                    return <p>{error.message}</p>
-                  }
+                  return <p>{error.message}</p>
                 }
                 let user = error ? undefined : data.getLoggedInUser
                 console.log(user,55);
@@ -102,7 +99,9 @@ class App extends Component {
                       return ( 
                         <div>
                           <Header user={user}/>
-                          <CreateJob user={user}/>
+                          <Elements>
+                            <CreateJob user={user}/>
+                          </Elements>
                         </div>
                         )
                     }}/>

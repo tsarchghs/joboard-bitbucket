@@ -31,7 +31,7 @@ class DashboardHeader extends React.Component {
 	              			? this.props.user.company.logo.url 
 	              			: 'url("/assets/toolkit/images/014-company.svg")'
 	              	}} />
-	              <img src="/assets/toolkit/images/gray-arrow.svg" alt />
+	              <img src="/assets/toolkit/images/gray-arrow.svg" alt=""/>
 	            </div>
 	            <div className="dashboard-header__dropdown">
 	              <a href="#" onClick={this.logout}>Logout</a>

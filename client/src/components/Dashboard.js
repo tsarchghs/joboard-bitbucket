@@ -1,9 +1,7 @@
 import React from "react";
-import Header from "./Header";
 import { loadToolKit, daysDifference } from "../helpers";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
-import Cookies from 'js-cookie';
 import DashboardHeader from "./DashboardHeader";
 import DashboardSidebar from "./DashboardSidebar";
 import { Link } from "react-router-dom";
@@ -72,14 +70,14 @@ class Dashboard extends React.Component {
 			              <div className="card-data">
 			                <div className="card-data__title">{user.company.name}</div>
 			                <div className="card-data__info">
-			                  <a href="#"><img src="/assets/toolkit/images/grid-world.svg" alt />{user.company.website}</a>
-			                  <a href="#"><img src="/assets/toolkit/images/envelope.svg" alt />{user.company.email}</a>
+			                  <a href="#"><img src="/assets/toolkit/images/grid-world.svg" alt="" />{user.company.website}</a>
+			                  <a href="#"><img src="/assets/toolkit/images/envelope.svg" alt="" />{user.company.email}</a>
 			                </div>
 			              </div>
 			            </div>		<div className="jobs-card">
 			              <div className="jobs-card__post">
 			                <div className="jobs-card__number">
-			                  <div className="jobs-card__icon"><img src="/assets/toolkit/images/listing.svg" alt /></div>
+			                  <div className="jobs-card__icon"><img src="/assets/toolkit/images/listing.svg" alt="" /></div>
 			                  <p>{user.company.jobs.length}</p>
 			                </div>
 			                <div className="jobs-card__title">Jobs posted</div>
@@ -113,12 +111,12 @@ class Dashboard extends React.Component {
 							              <div className="job-listing-table__time">
 								              {
 								              	new Date().getTime() < new Date(job.expiresIn).getTime() 
-								              	? <h5 className><img src="/assets/toolkit/images/time-left.svg" alt />
+								              	? <h5 className><img src="/assets/toolkit/images/time-left.svg" alt="" />
 								              		{`${daysDifference(new Date(),new Date(job.expiresIn))} days left`}
 								              	  </h5>
 								              	: ""
 								              }
-							                <h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt />{job.location}</h5>
+							                <h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt="" />{job.location}</h5>
 							              </div>
 							              <div className="job-listing-table__more">
 								              {
@@ -126,7 +124,7 @@ class Dashboard extends React.Component {
 								              	? ""
 								              	: <a href="#" class="button blue">Renew</a>
 								              }
-							                <a href="#"><img src="/assets/toolkit/images/more.svg" alt /></a>
+							                <a href="#"><img src="/assets/toolkit/images/more.svg" alt="" /></a>
 							              </div>
 							            </div>	
 			            			);

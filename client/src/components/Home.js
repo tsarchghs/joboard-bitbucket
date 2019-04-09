@@ -1,11 +1,33 @@
 import React from "react";
 import { loadToolKit } from "../helpers";
-import Header from "./Header";
 import { debounce } from "lodash";
-import { Query } from "react-apollo";
 import { withApollo } from 'react-apollo';
 import gql from "graphql-tag";
 import { Link } from "react-router-dom";
+
+
+// mutation {
+// 	register(
+//     email:"aaaaa"
+//     password:"aaaaa"
+//     company:{
+//       name:"DAS"
+//       email:"DAS"
+//       website:"DADAS"
+//       job:{
+//         salary:32112
+//         apply_url:"DAS"
+//         status:FEATURED
+//         job_type:CONTRACT
+//         description:"DAS"
+//         location:"DAS"
+//         position:"DSA"
+//       }
+//     }
+//   ){
+//     token
+//   }
+// }
 
 class Home extends React.Component {
 	constructor(props){
@@ -16,18 +38,14 @@ class Home extends React.Component {
 		}
 		this.searchRef = undefined;
 		this.jobTypeRef = undefined;
-		this.update = debounce(this.update.bind(this),500)
+		this.update = debounce(this.update.bind(this),250);
 		let today = new Date();
 		let noFormatYesterday = today.setDate(today.getDate()-1);
 		this.yesterday = new Date(noFormatYesterday).toISOString();  
 	}
 	componentDidMount(){
 		loadToolKit();
-		window.setInterval(() => {
-			console.log(11);
-			let el = document.querySelector('#root > div > div > div.master-layout > div.master-layout__header > div > label:nth-child(2) > div > div > a')
-			if (el) el.onclick = this.update;
-		},300) // interval because loadToolKit needs to be ran for the element to exist
+		this.jobTypeRef.onchange = this.update;
 		this.update();
 	}
 	async updateFromDate(createdType,date,first,to){
@@ -71,6 +89,7 @@ class Home extends React.Component {
 			today_jobs:undefined,
 			week_jobs:undefined
 		})
+		console.log("UPDATE");
 		this.updateFromDate("createdAt_gte",this.yesterday,3,"today_jobs");
 		this.updateFromDate("createdAt_lte",this.yesterday,10,"week_jobs");
 	}
@@ -90,20 +109,20 @@ class Home extends React.Component {
 	                	className="input" 
 	                	type="email" 
 	                	placeholder="Search for state, city" />
-	                <img src="../assets/toolkit/images/placeholder.svg" alt />				
+	                <img src="../assets/toolkit/images/placeholder.svg" alt=""/>				
 	              </div>
 	            </label>
 	            <label><span>Type of work</span>
 	              <div className="home__select">
-	                <select ref={node => this.jobTypeRef = node} data-placeholder="Full time/part time ..." className="chosen-select">
+	                <select onChange={this.update} ref={node => this.jobTypeRef = node} data-placeholder="Full time/part time ..." className="chosen-select">
 	                  <option value="ALL" default={true}>All</option>
 	                  <option value="FULL_TIME">Full Time</option>
 	                  <option value="PART_TIME">Part Time</option>
 	                  <option value="FREELANCE">Freelance</option>
 	                  <option value="CONTRACT">Contract</option>
 	                </select>
-	                <img className="home__select-before" src="../assets/toolkit/images/portfolio.svg" alt />
-	                <img className="home__select-after" src="../assets/toolkit/images/downwards-arrow-key.svg" alt />
+	                <img className="home__select-before" src="../assets/toolkit/images/portfolio.svg" alt=""/>
+	                <img className="home__select-after" src="../assets/toolkit/images/downwards-arrow-key.svg" alt=""/>
 	              </div>
 	            </label>
 	          </div>
@@ -112,7 +131,7 @@ class Home extends React.Component {
 	          <div className="home__table">
 	            <h4 className="home__table-title">Today</h4>
 	            {
-	            	!this.state.today_jobs ? <center><img src="http://localhost:3000/assets/toolkit/images/loading_blue.gif"/></center>
+	            	!this.state.today_jobs ? <center><img alt="" src="http://localhost:3000/assets/toolkit/images/loading_blue.gif"/></center>
 	            	: 
 	            	(
 	            		this.state.today_jobs.map(job => (
@@ -139,14 +158,14 @@ class Home extends React.Component {
 				                	? <span className="new blue"><img src="/assets/toolkit/images/blue-star.svg" alt=""/>Featured</span>
 				                	: <span className="new "><img src="/assets/toolkit/images/blue-star.svg" alt=""/>New</span>
 				                }
-			                  <h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt />{job.location}</h5>
+			                  <h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt=""/>{job.location}</h5>
 			                </div>
 		              	</div>
 	            		))
 	            	)
 	            }
 	            <h4 className="home__table-title">This week</h4>	            	
-					{ !this.state.week_jobs ? <center><img src="http://localhost:3000/assets/toolkit/images/loading_blue.gif"/></center>
+					{ !this.state.week_jobs ? <center><img alt="" src="http://localhost:3000/assets/toolkit/images/loading_blue.gif"/></center>
 	            	: 
 	            	(
 	            		this.state.week_jobs.map(job => (
@@ -170,10 +189,10 @@ class Home extends React.Component {
 			                <div className="job-listing-table__time">
 				                {
 				                	job.status === "FEATURED" 
-				                	? <span class="new blue"><img src="/assets/toolkit/images/blue-star.svg" alt=""/>Featured</span>
-				                	: <span class="new "><img src="/assets/toolkit/images/blue-star.svg" alt=""/>New</span>
+				                	? <span className="new blue"><img src="/assets/toolkit/images/blue-star.svg" alt=""/>Featured</span>
+				                	: <span className="new "><img src="/assets/toolkit/images/blue-star.svg" alt=""/>New</span>
 				                }
-			                  <h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt />{job.location}</h5>
+			                  <h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt=""/>{job.location}</h5>
 			                </div>
 		              	</div>
 	            		))

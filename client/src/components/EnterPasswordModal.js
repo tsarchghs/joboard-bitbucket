@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from 'react-dom';
 
 const EnterPasswordModal = (props) => {
-	console.log(props);
 	return ReactDOM.createPortal(
 	      <div className="reveal open-modal reset" id="modal2" data-reveal>
 	        <div className="modal__header">

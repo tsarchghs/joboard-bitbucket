@@ -1,4 +1,7 @@
 const permissions = require("./permissions");
+const configs = require("../configs");
+const stripe = require("stripe")(configs.stripe_secret_key);
+
 
 const job = async (root,args,context,info) => {
 	return await context.db.query.job({where:{id:args.id}},info);
@@ -26,6 +29,7 @@ const createJob = async (root,args,context,info) => {
 	let data = {
 		...args
 	}
+	delete data["stripe_token"];
 	if (!args.company && !(args.company_name && args.company_email && args.company_website)){
 		throw new Error("Must be related to a company");
 	}
@@ -42,10 +46,19 @@ const createJob = async (root,args,context,info) => {
 	if (args.status === "FEATURED"){
 		data["expiresIn"] = new Date(today.setDate(today.getDate() + 7));
 	}
+	try {
+		const charge = await stripe.charges.create({
+		    amount: args.status === "FEATURED" ? 9999 * 2 : 9999,
+		    currency: 'usd',
+		    description: 'Example charge',
+		    source: args.stripe_token,
+		  });
+	} catch (e) {
+		throw new Error("CardError");
+	}
 	let job = await context.db.mutation.createJob({
 		data
 	},info)
-	console.log(job);
 	if (!no_account && job.company.createdBy.id !== context.user.id){
 		context.db.mutation.deleteJob({where:{id:job.id}})
 		throw new Error("Unauthorized");

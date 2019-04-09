@@ -5,12 +5,14 @@ import { Redirect } from "react-router-dom";
 import SignUpQuestionModal from "./SignUpQuestionModal";
 import EnterPasswordModal from "./EnterPasswordModal";
 import ReactDOM from 'react-dom';
-
+import { loadToolKit } from "../helpers";
+import CardForm from "./CardForm";
+import { Elements, injectStripe } from "react-stripe-elements";
 
 // ReactDOM.render(<EnterPasswordModal/>,document.getElementById("EnterPasswordModal"));
 // ReactDOM.render(<SignUpQuestionModal/>,document.getElementById("SignUpQuestionModal"));
 
-class CreateJob extends React.Component {
+class _CreateJob extends React.Component {
 	constructor(props){
 		super(props);
 		this.job_type = "CONTRACT"
@@ -22,48 +24,64 @@ class CreateJob extends React.Component {
 		}
 		this.once = false
 		this.createJob = undefined;
+		this.position = undefined;
+		this.description = undefined;
+		this.location = undefined;
+		this.salary = undefined;
+		this.job_type = undefined;
+		this.status = undefined;
+		this.apply_url = undefined;
+		this.company = undefined;
+		this.company_name = undefined;
+		this.company_email = undefined;
+		this.company_website = undefined;
+		this.postModalButton = undefined;
 	}
-	render(){
-		let position;
-		let description;
-		let location;
-		let salary;
-		let job_type;
-		let status;
-		let apply_url;
-		let company;
-		let company_name;
-		let company_email;
-		let company_website;
-		if (!this.once){
-			window.setInterval(() => {
-				if (document.getElementById("post_job")){
-					document.getElementById("post_job").submitJob = async () => {
-						console.log(99);
-						console.log(this.job_type);
-						console.log(this.featured);
-						let variables = {
-							position:document.getElementById("position").value ,	
-							description: this.state.description,
-							location: this.remote ? "remote/anywhere" : document.getElementById("location").value,	
-							salary: Number(document.getElementById("salary").value),	
-							job_type: this.job_type,	
-							status: this.featured ? "FEATURED" : "NEW",	
-							apply_url:document.getElementById("apply_url").value
-						}
-						console.log(variables);
-						if (!this.props.user){
-							variables["company_name"] = document.getElementById("company_name").value
-							variables["company_email"] = document.getElementById("job_company_email").value
-							variables["company_website"] = document.getElementById("company_website").value
-						}
-						let data = await this.createJob({variables})
-						return data.data.createJob;
-					}
-				}
-			},500)
-			this.once = true;
+	componentDidUpdate(){
+		loadToolKit();
+	}
+	componentDidMount(){
+		loadToolKit();
+	}
+	async jobOnSubmit(e,createJob) {
+		e.preventDefault();
+		var tokenData = await this.props.stripe.createToken({currency:"usd",amount:500})
+		if (!tokenData.token || !tokenData.token.id){
+			return;
 		}
+		let variables = {
+			position:this.position.value ,	
+			description:this.description.value ,	
+			location: this.remote ? "remote/anywhere" : this.location.value,	
+			salary: Number(this.salary.value),	
+			job_type: this.job_type,	
+			status: this.featured ? "FEATURED" : "NEW",	
+			apply_url:this.apply_url.value,
+			stripe_token: (await this.props.stripe.createToken({currency:"usd",amount:500})).token.id
+		}
+		if (!this.props.user){
+			console.log(this.company_name,this.company_email,this.company_website)
+			variables["company_name"] = this.company_name.value
+			variables["company_email"] = this.company_email.value
+			variables["company_website"] = this.company_website.value
+		} else {
+			variables["company"] = this.props.user.company.id
+		}
+		console.log(variables);
+		try {
+			let data = await createJob({variables},() => window.location.href = `/job/${data.data.createJob.id}`)
+		} catch (e) {
+			console.log(e.message);
+			if (e.message === "GraphQL error: Your card was declined."){
+				document.querySelector('body > div:nth-child(17)').click() // background modal to close
+				this.setState({
+					card_denied: true
+				})
+			}
+		}
+	}
+
+	render(){
 		return (
 			<div>
 			   <div className="create-job__layout">
@@ -72,7 +90,7 @@ class CreateJob extends React.Component {
 			   			$position: String!,$location: String!,$description: String!,
 			   			$job_type: JOB_TYPE!, $status: STATUS_TYPE!,$salary: Int!,
 			   			$apply_url: String!,$company: ID,$company_name: String,
-			   			$company_email: String, $company_website: String
+			   			$company_email: String, $company_website: String, $stripe_token: String!
 			   		){
 						createJob(
 						    position: $position
@@ -86,6 +104,7 @@ class CreateJob extends React.Component {
 							company_name: $company_name
 							company_email: $company_email
 							company_website: $company_website
+							stripe_token: $stripe_token
 						  ) {
 							    id
 							    position
@@ -109,39 +128,26 @@ class CreateJob extends React.Component {
 					if (data) {
 						return <Redirect to={`/job/${data.createJob.id}`}/>
 					}
-					console.log(this.state.company_email,111);
+					if (loading){
+						return <p>Loading</p>
+					}
 					return (
-						<form id="post_job" onSubmit={async (e) => {
-							console.log(99);
-							e.preventDefault();
-							console.log(this.job_type);
-							console.log(this.featured);
-							let data = await createJob({variables:{
-								position:position.value ,	
-								description:description.value ,	
-								location: this.remote ? "remote/anywhere" : location.value,	
-								salary: Number(salary.value),	
-								job_type: this.job_type,	
-								status: this.featured ? "FEATURED" : "NEW",	
-								apply_url:apply_url.value ,	
-								company:this.props.user.company.id
-							}})
-						}}>
+						<form id="post_job" onSubmit={(e) => this.	jobOnSubmit(e,createJob)}>
 				        <h4>Create job</h4>
 				        <div className="create-job">
 				          <h5>Your position</h5>
 				          <div className="create-job__input">
 				            <label className="create-job__input--label"><span className="create-job__input--span">Position</span>
-				              <input id="position" ref={node => position = node} className="input" type="ema" placeholder="Software engineer, mobile application developer..." />
+				              <input id="position" ref={node => this.position = node} className="input" type="ema" placeholder="Software engineer, mobile application developer..." />
 				            </label>
 				            <label className="create-job__input--label"><span className="create-job__input--span">JOB DESCRIPTION</span>
-				              <textarea onChange={e => this.setState({description:e.target.value})} ref={node => description = node} name id cols={30} rows={10} style={{height: '134px', width: '422px'}} defaultValue={""} />
+				              <textarea onChange={e => this.setState({description:e.target.value})} ref={node => this.description = node} name id cols={30} rows={10} style={{height: '134px', width: '422px'}} defaultValue={""} />
 				            </label>
 				            <label className="create-job__input--label"><span className="create-job__input--span">Location</span>
-				              <input id="location" readOnly ref={node => location = node} className="input" type="ema" placeholder="Location of the job" />
+				              <input id="location" readOnly ref={node => this.location = node} className="input" type="ema" placeholder="Location of the job" />
 				              <label className="checkbox-container">
 				                <input onChange={(e) => {
-				                	this.remote ? location.removeAttribute("readonly") : location.setAttribute("readonly",this.remote);
+				                	this.remote ? this.location.removeAttribute("readonly") : this.location.setAttribute("readonly",this.remote);
 				                	this.remote = !this.remote
 				                }}  type="checkbox" defaultChecked="checked" />
 				                <span className="checkmark" />
@@ -149,7 +155,7 @@ class CreateJob extends React.Component {
 				              </label>
 				            </label>
 				            <label className="create-job__input--label"><span className="create-job__input--span">Salary</span>
-				              <input id="salary" ref={node => salary = node} className="input" type="ema" placeholder="Type the salary here" />
+				              <input id="salary" ref={node => this.salary = node} className="input" type="ema" placeholder="Type the salary here" />
 				            </label>
 				            <label className="create-job__input--label less-margin"><span className="create-job__input--span">Job type</span></label>
 				            <div className="create-job__checkbox">
@@ -179,16 +185,14 @@ class CreateJob extends React.Component {
 				              </label>
 				            </div>
 				            <label className="create-job__input--label"><span className="create-job__input--span">Apply url</span>
-				              <input id="apply_url" ref={node => apply_url = node} className="input" type="ema" placeholder="Where people can apply" />
+				              <input id="apply_url" ref={node => this.apply_url = node} className="input" type="ema" placeholder="Where people can apply" />
 				              <label className="checkbox-container">
 				                <input type="checkbox" defaultChecked="checked" />
 				                <span onClick={() => {
 				              	this.featured = !this.featured
-				              	console.log(this.featured)
 				              }}  className="checkmark" />
 				                <p onClick={() => {
 					              	this.featured = !this.featured
-					              	console.log(this.featured)
 					              }} className="checkmark-text">Make my job vacancy featured for 7 days ( +99$) <span className="new blue"><img src="/assets/toolkit/images/blue-star.svg" alt />Featured</span></p>
 				              </label>
 				            </label>
@@ -203,41 +207,41 @@ class CreateJob extends React.Component {
 				            <div className="upload-image__img" style={{backgroundImage: 'url("/assets/toolkit/images/014-company.svg")'}} />
 				          </div>
 				          <label className="create-job__input--label"><span className="create-job__input--span">Company name</span>
-				            <input id="company_name" ref={node => company_name = node} className="input" type="ema" placeholder="Type your company name" />
+				            <input id="company_name" ref={node => this.company_name = node} className="input" type="ema" placeholder="Type your company name" />
 				          </label>
 				          <label className="create-job__input--label"><span className="create-job__input--span">Company email</span>
 				            <input 
 				            	onChange={e => this.setState({company_email:e.target.value})} 
-				            	ref={node => company_email = node} 
+				            	ref={node => this.company_email = node} 
 				            	id="job_company_email" 
 				            	className="input" 
 				            	type="ema" 
 				            	placeholder="Your Email here" />
 				          </label>
 				          <label className="create-job__input--label"><span className="create-job__input--span">Company website</span>
-				            <input id="company_website" ref={node => company_website = node} className="input" type="ema" placeholder="Company website" />
+				            <input id="company_website" ref={node => this.company_website = node} className="input" type="ema" placeholder="Company website" />
 				          </label>
-				          <label className="create-job__input--label"><span className="create-job__input--span">Company card</span>   
-				            <form action="/charge" method="post" id="payment-form">
-				              <div className="form-row">
-				                <div id="card-element">
-				                  {/* A Stripe Element will be inserted here. */}
-				                </div>
-				                {/* Used to display form errors. */}
-				                <div id="card-errors" role="alert" />
-				              </div>
-				            </form>
-				          </label>
+								<CardForm card_denied={this.state.card_denied}/>
 				        </div> 
 				        }
-						<SignUpQuestionModal/>
+						<SignUpQuestionModal noOnClick={(e) => this.jobOnSubmit(e,createJob)}/>
 						<EnterPasswordModal email={this.state.company_email}/>
 				          <div className="text-center">
 				          {
 				          	this.props.user 
 				          	? <button className="button blue">Post this job</button>
-				          	: <button data-open="modal1" type="button" className="button blue">Post this job</button>
+				          	: <button onClick={async (e) => {
+				          		e.preventDefault();
+								var tokenData = await this.props.stripe.createToken({currency:"usd",amount:500})
+								if (!tokenData.token || !tokenData.token.id){
+									return;
+								}
+								console.log(this.postModalButton);
+								this.postModalButton.click();
+				          	}} type="button" className="button blue">Post this job</button>
 				          }
+				          	<button id="bbb" ref={node => this.postModalButton = node} style={{display:"none"}} data-open="modal1" type="button" className="button blue">Post this job</button>
+
 				          </div>
 				     </form>
 				     )
@@ -249,4 +253,6 @@ class CreateJob extends React.Component {
 	}
 }
 
-export default CreateJob;
+const CreateJob = injectStripe(_CreateJob);
+
+export default injectStripe(CreateJob);

@@ -5,6 +5,7 @@ const prismaTypeDefs = require("./generated/prisma-client/prisma-schema.js").typ
 const jwt = require("jsonwebtoken");
 const configs = require("./configs");
 const cron = require('node-cron');
+const logger = require("morgan");
 
 const prismaDb = new Prisma({
 	typeDefs:prismaTypeDefs,
@@ -41,5 +42,5 @@ const server = new graphqlServer({
 		}
 	}
 });
-
+server.express.use(logger("dev"));
 server.start(() => console.log("Running on 4000"));

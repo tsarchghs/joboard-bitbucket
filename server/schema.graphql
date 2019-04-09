@@ -96,7 +96,7 @@ input JobFilterInput {
 }
 
 type Query {
-	getLoggedInUser: User!
+	getLoggedInUser: User
 	company(id: ID!): Company
 	jobs(jobFilter:JobFilterInput): [Job!]!
 	job(id: ID!): Job!
@@ -139,6 +139,7 @@ type Mutation {
 		company_name: String
 		company_email: String
 		company_website: String
+		stripe_token: String
 	): Job!
 	updateJob(
 		id: ID!

@@ -4,5 +4,6 @@ module.exports = {
 	jwt_forgotPassword_secret: "uhhSoSecret",
 	mailgun:{
 		apiKey:"DSADAS"
-	}
+	},
+	stripe_secret_key: "sk_test_EP0OmYeR6C05xL2Z45BYmhaj"
 }

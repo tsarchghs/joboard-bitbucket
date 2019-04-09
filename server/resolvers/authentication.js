@@ -61,12 +61,20 @@ const register = async (root,args,context,info) => {
 			}
 		}
 	}
+	delete userParams["company"]["create"]["job"];
+	if (args.company.job){
+		delete args.company.job["company"]
+		userParams["company"]["create"]["jobs"] = {
+			create: {...args.company.job,expiresIn:new Date()}
+		}
+	}
 	if (logo){
 		userParams["company"]["create"]["logo"] = {
 			connect: { id: logo.id }
 		}
 	}
-	let user = await context.db.mutation.createUser({data:userParams},info);
+	console.log(userParams);
+	let user = await context.db.mutation.createUser({data:userParams});
 	console.log(user,context.db.mutation.createUser,33);
 	return {
 		user,

@@ -41,7 +41,7 @@ class Payments extends React.Component {
 	                    <td>**** **** **** 4590</td>
 	                    <td className="td-bold">$299</td>
 	                    <td className="td-green">Paid</td>
-	                    <td className="td-blue"><a href="#"><img src="/assets/toolkit/images/pdf-file.svg" alt />Download pdf</a></td>
+	                    <td className="td-blue"><a href="#"><img src="/assets/toolkit/images/pdf-file.svg" alt=""/>Download pdf</a></td>
 	                  </tr>
 	                  <tr>
 	                    <td>12 Jan 2019</td>
@@ -49,7 +49,7 @@ class Payments extends React.Component {
 	                    <td>**** **** **** 4590</td>
 	                    <td className="td-bold">$299</td>
 	                    <td className="td-green">Paid</td>
-	                    <td className="td-blue"><a href="#"><img src="/assets/toolkit/images/pdf-file.svg" alt />Download pdf</a></td>
+	                    <td className="td-blue"><a href="#"><img src="/assets/toolkit/images/pdf-file.svg" alt=""/>Download pdf</a></td>
 	                  </tr>
 	                  <tr>
 	                    <td>12 Jan 2019</td>
@@ -57,7 +57,7 @@ class Payments extends React.Component {
 	                    <td>**** **** **** 4590</td>
 	                    <td className="td-bold">$299</td>
 	                    <td className="td-green">Paid</td>
-	                    <td className="td-blue"><a href="#"><img src="/assets/toolkit/images/pdf-file.svg" alt />Download pdf</a></td>
+	                    <td className="td-blue"><a href="#"><img src="/assets/toolkit/images/pdf-file.svg" alt=""/>Download pdf</a></td>
 	                  </tr>
 	                  <tr>
 	                    <td>12 Jan 2019</td>
@@ -65,7 +65,7 @@ class Payments extends React.Component {
 	                    <td>**** **** **** 4590</td>
 	                    <td className="td-bold">$29239</td>
 	                    <td className>Waiting</td>
-	                    <td className="td-blue"><a href="#"><img src="/assets/toolkit/images/pdf-file.svg" alt />Download pdf</a></td>
+	                    <td className="td-blue"><a href="#"><img src="/assets/toolkit/images/pdf-file.svg" alt=""/>Download pdf</a></td>
 	                  </tr>
 	                  <tr>
 	                    <td>12 Jan 2019</td>
@@ -73,7 +73,7 @@ class Payments extends React.Component {
 	                    <td>**** **** **** 4590</td>
 	                    <td className="td-bold">$299</td>
 	                    <td className="td-green">Paid</td>
-	                    <td className="td-blue"><a href="#"><img src="/assets/toolkit/images/pdf-file.svg" alt />Download pdf</a></td>
+	                    <td className="td-blue"><a href="#"><img src="/assets/toolkit/images/pdf-file.svg" alt=""/>Download pdf</a></td>
 	                  </tr>
 	                </tbody>
 	              </table>
