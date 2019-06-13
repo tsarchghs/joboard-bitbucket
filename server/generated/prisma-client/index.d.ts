@@ -62,6 +62,7 @@ export interface Prisma {
       last?: Int;
     }
   ) => CompanyConnectionPromise;
+  file: (where: FileWhereUniqueInput) => FilePromise;
   files: (
     args?: {
       where?: FileWhereInput;
@@ -153,9 +154,20 @@ export interface Prisma {
   deleteCompany: (where: CompanyWhereUniqueInput) => CompanyPromise;
   deleteManyCompanies: (where?: CompanyWhereInput) => BatchPayloadPromise;
   createFile: (data: FileCreateInput) => FilePromise;
+  updateFile: (
+    args: { data: FileUpdateInput; where: FileWhereUniqueInput }
+  ) => FilePromise;
   updateManyFiles: (
     args: { data: FileUpdateManyMutationInput; where?: FileWhereInput }
   ) => BatchPayloadPromise;
+  upsertFile: (
+    args: {
+      where: FileWhereUniqueInput;
+      create: FileCreateInput;
+      update: FileUpdateInput;
+    }
+  ) => FilePromise;
+  deleteFile: (where: FileWhereUniqueInput) => FilePromise;
   deleteManyFiles: (where?: FileWhereInput) => BatchPayloadPromise;
   createJob: (data: JobCreateInput) => JobPromise;
   updateJob: (
@@ -222,7 +234,7 @@ export interface ClientConstructor<T> {
 
 export type JOB_TYPE = "FULL_TIME" | "PART_TIME" | "FREELANCE" | "CONTRACT";
 
-export type STATUS_TYPE = "NEW" | "FEATURED" | "CLOSED";
+export type STATUS_TYPE = "FEATURED" | "NEW" | "OLD" | "CLOSED";
 
 export type JobOrderByInput =
   | "id_ASC"
@@ -247,10 +259,10 @@ export type JobOrderByInput =
   | "company_email_DESC"
   | "company_website_ASC"
   | "company_website_DESC"
+  | "expiresAt_ASC"
+  | "expiresAt_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
-  | "expiresIn_ASC"
-  | "expiresIn_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
@@ -269,12 +281,12 @@ export type CompanyOrderByInput =
   | "updatedAt_DESC";
 
 export type FileOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
   | "base64_ASC"
   | "base64_DESC"
   | "mimetype_ASC"
   | "mimetype_DESC"
-  | "id_ASC"
-  | "id_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -308,7 +320,7 @@ export interface CompanyCreateOneWithoutJobsInput {
   connect?: CompanyWhereUniqueInput;
 }
 
-export interface FileUpdateManyMutationInput {
+export interface FileUpdateInput {
   base64?: String;
   mimetype?: String;
 }
@@ -370,6 +382,14 @@ export interface UserWhereInput {
   createdAt_lte?: DateTimeInput;
   createdAt_gt?: DateTimeInput;
   createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
   AND?: UserWhereInput[] | UserWhereInput;
   OR?: UserWhereInput[] | UserWhereInput;
   NOT?: UserWhereInput[] | UserWhereInput;
@@ -423,6 +443,7 @@ export interface UserUpdateManyMutationInput {
 
 export interface FileCreateOneInput {
   create?: FileCreateInput;
+  connect?: FileWhereUniqueInput;
 }
 
 export interface CompanyUpdateWithoutCreatedByDataInput {
@@ -438,20 +459,21 @@ export interface FileCreateInput {
   mimetype: String;
 }
 
-export interface UserUpdateInput {
-  email?: String;
-  password?: String;
-  company?: CompanyUpdateOneRequiredWithoutCreatedByInput;
-}
+export type FileWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface JobCreateManyWithoutCompanyInput {
   create?: JobCreateWithoutCompanyInput[] | JobCreateWithoutCompanyInput;
   connect?: JobWhereUniqueInput[] | JobWhereUniqueInput;
 }
 
-export interface CompanyCreateOneWithoutCreatedByInput {
-  create?: CompanyCreateWithoutCreatedByInput;
-  connect?: CompanyWhereUniqueInput;
+export interface CompanyCreateWithoutCreatedByInput {
+  email: String;
+  name: String;
+  website: String;
+  logo?: FileCreateOneInput;
+  jobs?: JobCreateManyWithoutCompanyInput;
 }
 
 export interface JobCreateWithoutCompanyInput {
@@ -465,12 +487,14 @@ export interface JobCreateWithoutCompanyInput {
   company_name?: String;
   company_email?: String;
   company_website?: String;
-  expiresIn: DateTimeInput;
+  expiresAt: DateTimeInput;
 }
 
-export type JobWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface UserCreateInput {
+  email: String;
+  password: String;
+  company: CompanyCreateOneWithoutCreatedByInput;
+}
 
 export interface CompanyUpdateInput {
   createdBy?: UserUpdateOneRequiredWithoutCompanyInput;
@@ -481,9 +505,18 @@ export interface CompanyUpdateInput {
   jobs?: JobUpdateManyWithoutCompanyInput;
 }
 
-export interface CompanyUpsertWithoutJobsInput {
-  update: CompanyUpdateWithoutJobsDataInput;
-  create: CompanyCreateWithoutJobsInput;
+export interface JobUpdateManyMutationInput {
+  position?: String;
+  location?: String;
+  salary?: Int;
+  description?: String;
+  job_type?: JOB_TYPE;
+  status?: STATUS_TYPE;
+  apply_url?: String;
+  company_name?: String;
+  company_email?: String;
+  company_website?: String;
+  expiresAt?: DateTimeInput;
 }
 
 export interface UserUpdateOneRequiredWithoutCompanyInput {
@@ -493,10 +526,13 @@ export interface UserUpdateOneRequiredWithoutCompanyInput {
   connect?: UserWhereUniqueInput;
 }
 
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
+export interface CompanyUpdateWithoutJobsDataInput {
+  createdBy?: UserUpdateOneRequiredWithoutCompanyInput;
   email?: String;
-}>;
+  name?: String;
+  website?: String;
+  logo?: FileUpdateOneInput;
+}
 
 export interface JobCreateInput {
   position: String;
@@ -510,22 +546,16 @@ export interface JobCreateInput {
   company_name?: String;
   company_email?: String;
   company_website?: String;
-  expiresIn: DateTimeInput;
+  expiresAt: DateTimeInput;
 }
 
-export interface JobUpdateInput {
-  position?: String;
-  location?: String;
-  salary?: Int;
-  description?: String;
-  job_type?: JOB_TYPE;
-  status?: STATUS_TYPE;
-  apply_url?: String;
-  company?: CompanyUpdateOneWithoutJobsInput;
-  company_name?: String;
-  company_email?: String;
-  company_website?: String;
-  expiresIn?: DateTimeInput;
+export interface CompanyUpdateOneWithoutJobsInput {
+  create?: CompanyCreateWithoutJobsInput;
+  update?: CompanyUpdateWithoutJobsDataInput;
+  upsert?: CompanyUpsertWithoutJobsInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: CompanyWhereUniqueInput;
 }
 
 export interface UserUpsertWithoutCompanyInput {
@@ -533,7 +563,24 @@ export interface UserUpsertWithoutCompanyInput {
   create: UserCreateWithoutCompanyInput;
 }
 
-export interface CompanyWhereInput {
+export interface CompanyCreateWithoutJobsInput {
+  createdBy: UserCreateOneWithoutCompanyInput;
+  email: String;
+  name: String;
+  website: String;
+  logo?: FileCreateOneInput;
+}
+
+export interface FileUpdateOneInput {
+  create?: FileCreateInput;
+  update?: FileUpdateDataInput;
+  upsert?: FileUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: FileWhereUniqueInput;
+}
+
+export interface FileWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -548,75 +595,53 @@ export interface CompanyWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  createdBy?: UserWhereInput;
-  email?: String;
-  email_not?: String;
-  email_in?: String[] | String;
-  email_not_in?: String[] | String;
-  email_lt?: String;
-  email_lte?: String;
-  email_gt?: String;
-  email_gte?: String;
-  email_contains?: String;
-  email_not_contains?: String;
-  email_starts_with?: String;
-  email_not_starts_with?: String;
-  email_ends_with?: String;
-  email_not_ends_with?: String;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  website?: String;
-  website_not?: String;
-  website_in?: String[] | String;
-  website_not_in?: String[] | String;
-  website_lt?: String;
-  website_lte?: String;
-  website_gt?: String;
-  website_gte?: String;
-  website_contains?: String;
-  website_not_contains?: String;
-  website_starts_with?: String;
-  website_not_starts_with?: String;
-  website_ends_with?: String;
-  website_not_ends_with?: String;
-  logo?: FileWhereInput;
-  jobs_every?: JobWhereInput;
-  jobs_some?: JobWhereInput;
-  jobs_none?: JobWhereInput;
-  AND?: CompanyWhereInput[] | CompanyWhereInput;
-  OR?: CompanyWhereInput[] | CompanyWhereInput;
-  NOT?: CompanyWhereInput[] | CompanyWhereInput;
-}
-
-export interface FileUpdateOneInput {
-  create?: FileCreateInput;
-  update?: FileUpdateDataInput;
-  upsert?: FileUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-}
-
-export interface JobSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: JobWhereInput;
-  AND?: JobSubscriptionWhereInput[] | JobSubscriptionWhereInput;
-  OR?: JobSubscriptionWhereInput[] | JobSubscriptionWhereInput;
-  NOT?: JobSubscriptionWhereInput[] | JobSubscriptionWhereInput;
+  base64?: String;
+  base64_not?: String;
+  base64_in?: String[] | String;
+  base64_not_in?: String[] | String;
+  base64_lt?: String;
+  base64_lte?: String;
+  base64_gt?: String;
+  base64_gte?: String;
+  base64_contains?: String;
+  base64_not_contains?: String;
+  base64_starts_with?: String;
+  base64_not_starts_with?: String;
+  base64_ends_with?: String;
+  base64_not_ends_with?: String;
+  mimetype?: String;
+  mimetype_not?: String;
+  mimetype_in?: String[] | String;
+  mimetype_not_in?: String[] | String;
+  mimetype_lt?: String;
+  mimetype_lte?: String;
+  mimetype_gt?: String;
+  mimetype_gte?: String;
+  mimetype_contains?: String;
+  mimetype_not_contains?: String;
+  mimetype_starts_with?: String;
+  mimetype_not_starts_with?: String;
+  mimetype_ends_with?: String;
+  mimetype_not_ends_with?: String;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  AND?: FileWhereInput[] | FileWhereInput;
+  OR?: FileWhereInput[] | FileWhereInput;
+  NOT?: FileWhereInput[] | FileWhereInput;
 }
 
 export interface FileUpdateDataInput {
@@ -624,9 +649,15 @@ export interface FileUpdateDataInput {
   mimetype?: String;
 }
 
-export interface CompanyUpsertWithoutCreatedByInput {
-  update: CompanyUpdateWithoutCreatedByDataInput;
-  create: CompanyCreateWithoutCreatedByInput;
+export interface CompanySubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: CompanyWhereInput;
+  AND?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
+  OR?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
+  NOT?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
 }
 
 export interface JobWhereInput {
@@ -759,6 +790,14 @@ export interface JobWhereInput {
   company_website_not_starts_with?: String;
   company_website_ends_with?: String;
   company_website_not_ends_with?: String;
+  expiresAt?: DateTimeInput;
+  expiresAt_not?: DateTimeInput;
+  expiresAt_in?: DateTimeInput[] | DateTimeInput;
+  expiresAt_not_in?: DateTimeInput[] | DateTimeInput;
+  expiresAt_lt?: DateTimeInput;
+  expiresAt_lte?: DateTimeInput;
+  expiresAt_gt?: DateTimeInput;
+  expiresAt_gte?: DateTimeInput;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
   createdAt_in?: DateTimeInput[] | DateTimeInput;
@@ -767,25 +806,24 @@ export interface JobWhereInput {
   createdAt_lte?: DateTimeInput;
   createdAt_gt?: DateTimeInput;
   createdAt_gte?: DateTimeInput;
-  expiresIn?: DateTimeInput;
-  expiresIn_not?: DateTimeInput;
-  expiresIn_in?: DateTimeInput[] | DateTimeInput;
-  expiresIn_not_in?: DateTimeInput[] | DateTimeInput;
-  expiresIn_lt?: DateTimeInput;
-  expiresIn_lte?: DateTimeInput;
-  expiresIn_gt?: DateTimeInput;
-  expiresIn_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
   AND?: JobWhereInput[] | JobWhereInput;
   OR?: JobWhereInput[] | JobWhereInput;
   NOT?: JobWhereInput[] | JobWhereInput;
 }
 
-export interface CompanyCreateWithoutCreatedByInput {
-  email: String;
-  name: String;
-  website: String;
-  logo?: FileCreateOneInput;
-  jobs?: JobCreateManyWithoutCompanyInput;
+export interface CompanyUpdateOneRequiredWithoutCreatedByInput {
+  create?: CompanyCreateWithoutCreatedByInput;
+  update?: CompanyUpdateWithoutCreatedByDataInput;
+  upsert?: CompanyUpsertWithoutCreatedByInput;
+  connect?: CompanyWhereUniqueInput;
 }
 
 export interface JobUpdateManyWithoutCompanyInput {
@@ -806,18 +844,9 @@ export interface JobUpdateManyWithoutCompanyInput {
     | JobUpdateManyWithWhereNestedInput;
 }
 
-export interface JobUpdateManyMutationInput {
-  position?: String;
-  location?: String;
-  salary?: Int;
-  description?: String;
-  job_type?: JOB_TYPE;
-  status?: STATUS_TYPE;
-  apply_url?: String;
-  company_name?: String;
-  company_email?: String;
-  company_website?: String;
-  expiresIn?: DateTimeInput;
+export interface CompanyCreateOneWithoutCreatedByInput {
+  create?: CompanyCreateWithoutCreatedByInput;
+  connect?: CompanyWhereUniqueInput;
 }
 
 export interface JobUpdateWithWhereUniqueWithoutCompanyInput {
@@ -825,13 +854,9 @@ export interface JobUpdateWithWhereUniqueWithoutCompanyInput {
   data: JobUpdateWithoutCompanyDataInput;
 }
 
-export interface CompanyUpdateOneWithoutJobsInput {
-  create?: CompanyCreateWithoutJobsInput;
-  update?: CompanyUpdateWithoutJobsDataInput;
-  upsert?: CompanyUpsertWithoutJobsInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: CompanyWhereUniqueInput;
+export interface CompanyUpsertWithoutJobsInput {
+  update: CompanyUpdateWithoutJobsDataInput;
+  create: CompanyCreateWithoutJobsInput;
 }
 
 export interface JobUpdateWithoutCompanyDataInput {
@@ -845,41 +870,22 @@ export interface JobUpdateWithoutCompanyDataInput {
   company_name?: String;
   company_email?: String;
   company_website?: String;
-  expiresIn?: DateTimeInput;
+  expiresAt?: DateTimeInput;
 }
 
-export interface FileWhereInput {
-  base64?: String;
-  base64_not?: String;
-  base64_in?: String[] | String;
-  base64_not_in?: String[] | String;
-  base64_lt?: String;
-  base64_lte?: String;
-  base64_gt?: String;
-  base64_gte?: String;
-  base64_contains?: String;
-  base64_not_contains?: String;
-  base64_starts_with?: String;
-  base64_not_starts_with?: String;
-  base64_ends_with?: String;
-  base64_not_ends_with?: String;
-  mimetype?: String;
-  mimetype_not?: String;
-  mimetype_in?: String[] | String;
-  mimetype_not_in?: String[] | String;
-  mimetype_lt?: String;
-  mimetype_lte?: String;
-  mimetype_gt?: String;
-  mimetype_gte?: String;
-  mimetype_contains?: String;
-  mimetype_not_contains?: String;
-  mimetype_starts_with?: String;
-  mimetype_not_starts_with?: String;
-  mimetype_ends_with?: String;
-  mimetype_not_ends_with?: String;
-  AND?: FileWhereInput[] | FileWhereInput;
-  OR?: FileWhereInput[] | FileWhereInput;
-  NOT?: FileWhereInput[] | FileWhereInput;
+export interface JobUpdateInput {
+  position?: String;
+  location?: String;
+  salary?: Int;
+  description?: String;
+  job_type?: JOB_TYPE;
+  status?: STATUS_TYPE;
+  apply_url?: String;
+  company?: CompanyUpdateOneWithoutJobsInput;
+  company_name?: String;
+  company_email?: String;
+  company_website?: String;
+  expiresAt?: DateTimeInput;
 }
 
 export interface JobUpsertWithWhereUniqueWithoutCompanyInput {
@@ -888,36 +894,15 @@ export interface JobUpsertWithWhereUniqueWithoutCompanyInput {
   create: JobCreateWithoutCompanyInput;
 }
 
-export interface CompanyUpdateOneRequiredWithoutCreatedByInput {
-  create?: CompanyCreateWithoutCreatedByInput;
-  update?: CompanyUpdateWithoutCreatedByDataInput;
-  upsert?: CompanyUpsertWithoutCreatedByInput;
-  connect?: CompanyWhereUniqueInput;
-}
-
-export interface CompanyUpdateManyMutationInput {
-  email?: String;
-  name?: String;
-  website?: String;
-}
-
-export interface JobUpdateManyDataInput {
-  position?: String;
-  location?: String;
-  salary?: Int;
-  description?: String;
-  job_type?: JOB_TYPE;
-  status?: STATUS_TYPE;
-  apply_url?: String;
-  company_name?: String;
-  company_email?: String;
-  company_website?: String;
-  expiresIn?: DateTimeInput;
-}
-
-export interface JobUpdateManyWithWhereNestedInput {
-  where: JobScalarWhereInput;
-  data: JobUpdateManyDataInput;
+export interface JobSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: JobWhereInput;
+  AND?: JobSubscriptionWhereInput[] | JobSubscriptionWhereInput;
+  OR?: JobSubscriptionWhereInput[] | JobSubscriptionWhereInput;
+  NOT?: JobSubscriptionWhereInput[] | JobSubscriptionWhereInput;
 }
 
 export interface JobScalarWhereInput {
@@ -1049,6 +1034,14 @@ export interface JobScalarWhereInput {
   company_website_not_starts_with?: String;
   company_website_ends_with?: String;
   company_website_not_ends_with?: String;
+  expiresAt?: DateTimeInput;
+  expiresAt_not?: DateTimeInput;
+  expiresAt_in?: DateTimeInput[] | DateTimeInput;
+  expiresAt_not_in?: DateTimeInput[] | DateTimeInput;
+  expiresAt_lt?: DateTimeInput;
+  expiresAt_lte?: DateTimeInput;
+  expiresAt_gt?: DateTimeInput;
+  expiresAt_gte?: DateTimeInput;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
   createdAt_in?: DateTimeInput[] | DateTimeInput;
@@ -1057,51 +1050,151 @@ export interface JobScalarWhereInput {
   createdAt_lte?: DateTimeInput;
   createdAt_gt?: DateTimeInput;
   createdAt_gte?: DateTimeInput;
-  expiresIn?: DateTimeInput;
-  expiresIn_not?: DateTimeInput;
-  expiresIn_in?: DateTimeInput[] | DateTimeInput;
-  expiresIn_not_in?: DateTimeInput[] | DateTimeInput;
-  expiresIn_lt?: DateTimeInput;
-  expiresIn_lte?: DateTimeInput;
-  expiresIn_gt?: DateTimeInput;
-  expiresIn_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
   AND?: JobScalarWhereInput[] | JobScalarWhereInput;
   OR?: JobScalarWhereInput[] | JobScalarWhereInput;
   NOT?: JobScalarWhereInput[] | JobScalarWhereInput;
 }
 
-export interface UserCreateInput {
-  email: String;
-  password: String;
-  company: CompanyCreateOneWithoutCreatedByInput;
+export interface UserUpdateInput {
+  email?: String;
+  password?: String;
+  company?: CompanyUpdateOneRequiredWithoutCreatedByInput;
 }
 
-export interface CompanySubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: CompanyWhereInput;
-  AND?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
-  OR?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
-  NOT?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
+export interface FileUpdateManyMutationInput {
+  base64?: String;
+  mimetype?: String;
 }
 
-export interface CompanyCreateWithoutJobsInput {
-  createdBy: UserCreateOneWithoutCompanyInput;
-  email: String;
-  name: String;
-  website: String;
-  logo?: FileCreateOneInput;
-}
-
-export interface CompanyUpdateWithoutJobsDataInput {
-  createdBy?: UserUpdateOneRequiredWithoutCompanyInput;
+export interface CompanyUpdateManyMutationInput {
   email?: String;
   name?: String;
   website?: String;
-  logo?: FileUpdateOneInput;
 }
+
+export interface JobUpdateManyDataInput {
+  position?: String;
+  location?: String;
+  salary?: Int;
+  description?: String;
+  job_type?: JOB_TYPE;
+  status?: STATUS_TYPE;
+  apply_url?: String;
+  company_name?: String;
+  company_email?: String;
+  company_website?: String;
+  expiresAt?: DateTimeInput;
+}
+
+export interface JobUpdateManyWithWhereNestedInput {
+  where: JobScalarWhereInput;
+  data: JobUpdateManyDataInput;
+}
+
+export type JobWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface CompanyUpsertWithoutCreatedByInput {
+  update: CompanyUpdateWithoutCreatedByDataInput;
+  create: CompanyCreateWithoutCreatedByInput;
+}
+
+export interface CompanyWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdBy?: UserWhereInput;
+  email?: String;
+  email_not?: String;
+  email_in?: String[] | String;
+  email_not_in?: String[] | String;
+  email_lt?: String;
+  email_lte?: String;
+  email_gt?: String;
+  email_gte?: String;
+  email_contains?: String;
+  email_not_contains?: String;
+  email_starts_with?: String;
+  email_not_starts_with?: String;
+  email_ends_with?: String;
+  email_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  website?: String;
+  website_not?: String;
+  website_in?: String[] | String;
+  website_not_in?: String[] | String;
+  website_lt?: String;
+  website_lte?: String;
+  website_gt?: String;
+  website_gte?: String;
+  website_contains?: String;
+  website_not_contains?: String;
+  website_starts_with?: String;
+  website_not_starts_with?: String;
+  website_ends_with?: String;
+  website_not_ends_with?: String;
+  logo?: FileWhereInput;
+  jobs_every?: JobWhereInput;
+  jobs_some?: JobWhereInput;
+  jobs_none?: JobWhereInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  AND?: CompanyWhereInput[] | CompanyWhereInput;
+  OR?: CompanyWhereInput[] | CompanyWhereInput;
+  NOT?: CompanyWhereInput[] | CompanyWhereInput;
+}
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  email?: String;
+}>;
 
 export interface NodeNode {
   id: ID_Output;
@@ -1112,6 +1205,7 @@ export interface UserPreviousValues {
   email: String;
   password: String;
   createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
 }
 
 export interface UserPreviousValuesPromise
@@ -1121,6 +1215,7 @@ export interface UserPreviousValuesPromise
   email: () => Promise<String>;
   password: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
 }
 
 export interface UserPreviousValuesSubscription
@@ -1130,23 +1225,33 @@ export interface UserPreviousValuesSubscription
   email: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 export interface File {
+  id: ID_Output;
   base64: String;
   mimetype: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
 }
 
 export interface FilePromise extends Promise<File>, Fragmentable {
+  id: () => Promise<ID_Output>;
   base64: () => Promise<String>;
   mimetype: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
 }
 
 export interface FileSubscription
   extends Promise<AsyncIterator<File>>,
     Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
   base64: () => Promise<AsyncIterator<String>>;
   mimetype: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 export interface Job {
@@ -1161,8 +1266,9 @@ export interface Job {
   company_name?: String;
   company_email?: String;
   company_website?: String;
+  expiresAt: DateTimeOutput;
   createdAt: DateTimeOutput;
-  expiresIn: DateTimeOutput;
+  updatedAt: DateTimeOutput;
 }
 
 export interface JobPromise extends Promise<Job>, Fragmentable {
@@ -1178,8 +1284,9 @@ export interface JobPromise extends Promise<Job>, Fragmentable {
   company_name: () => Promise<String>;
   company_email: () => Promise<String>;
   company_website: () => Promise<String>;
+  expiresAt: () => Promise<DateTimeOutput>;
   createdAt: () => Promise<DateTimeOutput>;
-  expiresIn: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
 }
 
 export interface JobSubscription
@@ -1197,8 +1304,9 @@ export interface JobSubscription
   company_name: () => Promise<AsyncIterator<String>>;
   company_email: () => Promise<AsyncIterator<String>>;
   company_website: () => Promise<AsyncIterator<String>>;
+  expiresAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  expiresIn: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 export interface AggregateCompany {
@@ -1278,8 +1386,9 @@ export interface JobPreviousValues {
   company_name?: String;
   company_email?: String;
   company_website?: String;
+  expiresAt: DateTimeOutput;
   createdAt: DateTimeOutput;
-  expiresIn: DateTimeOutput;
+  updatedAt: DateTimeOutput;
 }
 
 export interface JobPreviousValuesPromise
@@ -1296,8 +1405,9 @@ export interface JobPreviousValuesPromise
   company_name: () => Promise<String>;
   company_email: () => Promise<String>;
   company_website: () => Promise<String>;
+  expiresAt: () => Promise<DateTimeOutput>;
   createdAt: () => Promise<DateTimeOutput>;
-  expiresIn: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
 }
 
 export interface JobPreviousValuesSubscription
@@ -1314,8 +1424,9 @@ export interface JobPreviousValuesSubscription
   company_name: () => Promise<AsyncIterator<String>>;
   company_email: () => Promise<AsyncIterator<String>>;
   company_website: () => Promise<AsyncIterator<String>>;
+  expiresAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  expiresIn: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 export interface UserConnection {
@@ -1425,6 +1536,8 @@ export interface Company {
   email: String;
   name: String;
   website: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
 }
 
 export interface CompanyPromise extends Promise<Company>, Fragmentable {
@@ -1445,6 +1558,8 @@ export interface CompanyPromise extends Promise<Company>, Fragmentable {
       last?: Int;
     }
   ) => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
 }
 
 export interface CompanySubscription
@@ -1467,6 +1582,8 @@ export interface CompanySubscription
       last?: Int;
     }
   ) => T;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 export interface FileEdge {
@@ -1541,6 +1658,7 @@ export interface User {
   email: String;
   password: String;
   createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
 }
 
 export interface UserPromise extends Promise<User>, Fragmentable {
@@ -1549,6 +1667,7 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   password: () => Promise<String>;
   company: <T = CompanyPromise>() => T;
   createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
 }
 
 export interface UserSubscription
@@ -1559,25 +1678,35 @@ export interface UserSubscription
   password: () => Promise<AsyncIterator<String>>;
   company: <T = CompanySubscription>() => T;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 export interface FilePreviousValues {
+  id: ID_Output;
   base64: String;
   mimetype: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
 }
 
 export interface FilePreviousValuesPromise
   extends Promise<FilePreviousValues>,
     Fragmentable {
+  id: () => Promise<ID_Output>;
   base64: () => Promise<String>;
   mimetype: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
 }
 
 export interface FilePreviousValuesSubscription
   extends Promise<AsyncIterator<FilePreviousValues>>,
     Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
   base64: () => Promise<AsyncIterator<String>>;
   mimetype: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 export interface FileSubscriptionPayload {
@@ -1635,6 +1764,8 @@ export interface CompanyPreviousValues {
   email: String;
   name: String;
   website: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
 }
 
 export interface CompanyPreviousValuesPromise
@@ -1644,6 +1775,8 @@ export interface CompanyPreviousValuesPromise
   email: () => Promise<String>;
   name: () => Promise<String>;
   website: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
 }
 
 export interface CompanyPreviousValuesSubscription
@@ -1653,6 +1786,8 @@ export interface CompanyPreviousValuesSubscription
   email: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
   website: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 export interface JobEdge {

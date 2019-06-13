@@ -31,6 +31,8 @@ type Company {
   website: String!
   logo: File
   jobs(where: JobWhereInput, orderBy: JobOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Job!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type CompanyConnection {
@@ -99,6 +101,8 @@ type CompanyPreviousValues {
   email: String!
   name: String!
   website: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type CompanySubscriptionPayload {
@@ -238,6 +242,22 @@ input CompanyWhereInput {
   jobs_every: JobWhereInput
   jobs_some: JobWhereInput
   jobs_none: JobWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [CompanyWhereInput!]
   OR: [CompanyWhereInput!]
   NOT: [CompanyWhereInput!]
@@ -250,8 +270,11 @@ input CompanyWhereUniqueInput {
 scalar DateTime
 
 type File {
+  id: ID!
   base64: String!
   mimetype: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type FileConnection {
@@ -267,6 +290,7 @@ input FileCreateInput {
 
 input FileCreateOneInput {
   create: FileCreateInput
+  connect: FileWhereUniqueInput
 }
 
 type FileEdge {
@@ -275,12 +299,12 @@ type FileEdge {
 }
 
 enum FileOrderByInput {
+  id_ASC
+  id_DESC
   base64_ASC
   base64_DESC
   mimetype_ASC
   mimetype_DESC
-  id_ASC
-  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -288,8 +312,11 @@ enum FileOrderByInput {
 }
 
 type FilePreviousValues {
+  id: ID!
   base64: String!
   mimetype: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type FileSubscriptionPayload {
@@ -315,6 +342,11 @@ input FileUpdateDataInput {
   mimetype: String
 }
 
+input FileUpdateInput {
+  base64: String
+  mimetype: String
+}
+
 input FileUpdateManyMutationInput {
   base64: String
   mimetype: String
@@ -326,6 +358,7 @@ input FileUpdateOneInput {
   upsert: FileUpsertNestedInput
   delete: Boolean
   disconnect: Boolean
+  connect: FileWhereUniqueInput
 }
 
 input FileUpsertNestedInput {
@@ -334,6 +367,20 @@ input FileUpsertNestedInput {
 }
 
 input FileWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
   base64: String
   base64_not: String
   base64_in: [String!]
@@ -362,9 +409,29 @@ input FileWhereInput {
   mimetype_not_starts_with: String
   mimetype_ends_with: String
   mimetype_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [FileWhereInput!]
   OR: [FileWhereInput!]
   NOT: [FileWhereInput!]
+}
+
+input FileWhereUniqueInput {
+  id: ID
 }
 
 type Job {
@@ -380,8 +447,9 @@ type Job {
   company_name: String
   company_email: String
   company_website: String
+  expiresAt: DateTime!
   createdAt: DateTime!
-  expiresIn: DateTime!
+  updatedAt: DateTime!
 }
 
 enum JOB_TYPE {
@@ -409,7 +477,7 @@ input JobCreateInput {
   company_name: String
   company_email: String
   company_website: String
-  expiresIn: DateTime!
+  expiresAt: DateTime!
 }
 
 input JobCreateManyWithoutCompanyInput {
@@ -428,7 +496,7 @@ input JobCreateWithoutCompanyInput {
   company_name: String
   company_email: String
   company_website: String
-  expiresIn: DateTime!
+  expiresAt: DateTime!
 }
 
 type JobEdge {
@@ -459,10 +527,10 @@ enum JobOrderByInput {
   company_email_DESC
   company_website_ASC
   company_website_DESC
+  expiresAt_ASC
+  expiresAt_DESC
   createdAt_ASC
   createdAt_DESC
-  expiresIn_ASC
-  expiresIn_DESC
   updatedAt_ASC
   updatedAt_DESC
 }
@@ -479,8 +547,9 @@ type JobPreviousValues {
   company_name: String
   company_email: String
   company_website: String
+  expiresAt: DateTime!
   createdAt: DateTime!
-  expiresIn: DateTime!
+  updatedAt: DateTime!
 }
 
 input JobScalarWhereInput {
@@ -612,6 +681,14 @@ input JobScalarWhereInput {
   company_website_not_starts_with: String
   company_website_ends_with: String
   company_website_not_ends_with: String
+  expiresAt: DateTime
+  expiresAt_not: DateTime
+  expiresAt_in: [DateTime!]
+  expiresAt_not_in: [DateTime!]
+  expiresAt_lt: DateTime
+  expiresAt_lte: DateTime
+  expiresAt_gt: DateTime
+  expiresAt_gte: DateTime
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -620,14 +697,14 @@ input JobScalarWhereInput {
   createdAt_lte: DateTime
   createdAt_gt: DateTime
   createdAt_gte: DateTime
-  expiresIn: DateTime
-  expiresIn_not: DateTime
-  expiresIn_in: [DateTime!]
-  expiresIn_not_in: [DateTime!]
-  expiresIn_lt: DateTime
-  expiresIn_lte: DateTime
-  expiresIn_gt: DateTime
-  expiresIn_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [JobScalarWhereInput!]
   OR: [JobScalarWhereInput!]
   NOT: [JobScalarWhereInput!]
@@ -663,7 +740,7 @@ input JobUpdateInput {
   company_name: String
   company_email: String
   company_website: String
-  expiresIn: DateTime
+  expiresAt: DateTime
 }
 
 input JobUpdateManyDataInput {
@@ -677,7 +754,7 @@ input JobUpdateManyDataInput {
   company_name: String
   company_email: String
   company_website: String
-  expiresIn: DateTime
+  expiresAt: DateTime
 }
 
 input JobUpdateManyMutationInput {
@@ -691,7 +768,7 @@ input JobUpdateManyMutationInput {
   company_name: String
   company_email: String
   company_website: String
-  expiresIn: DateTime
+  expiresAt: DateTime
 }
 
 input JobUpdateManyWithoutCompanyInput {
@@ -722,7 +799,7 @@ input JobUpdateWithoutCompanyDataInput {
   company_name: String
   company_email: String
   company_website: String
-  expiresIn: DateTime
+  expiresAt: DateTime
 }
 
 input JobUpdateWithWhereUniqueWithoutCompanyInput {
@@ -866,6 +943,14 @@ input JobWhereInput {
   company_website_not_starts_with: String
   company_website_ends_with: String
   company_website_not_ends_with: String
+  expiresAt: DateTime
+  expiresAt_not: DateTime
+  expiresAt_in: [DateTime!]
+  expiresAt_not_in: [DateTime!]
+  expiresAt_lt: DateTime
+  expiresAt_lte: DateTime
+  expiresAt_gt: DateTime
+  expiresAt_gte: DateTime
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -874,14 +959,14 @@ input JobWhereInput {
   createdAt_lte: DateTime
   createdAt_gt: DateTime
   createdAt_gte: DateTime
-  expiresIn: DateTime
-  expiresIn_not: DateTime
-  expiresIn_in: [DateTime!]
-  expiresIn_not_in: [DateTime!]
-  expiresIn_lt: DateTime
-  expiresIn_lte: DateTime
-  expiresIn_gt: DateTime
-  expiresIn_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [JobWhereInput!]
   OR: [JobWhereInput!]
   NOT: [JobWhereInput!]
@@ -901,7 +986,10 @@ type Mutation {
   deleteCompany(where: CompanyWhereUniqueInput!): Company
   deleteManyCompanies(where: CompanyWhereInput): BatchPayload!
   createFile(data: FileCreateInput!): File!
+  updateFile(data: FileUpdateInput!, where: FileWhereUniqueInput!): File
   updateManyFiles(data: FileUpdateManyMutationInput!, where: FileWhereInput): BatchPayload!
+  upsertFile(where: FileWhereUniqueInput!, create: FileCreateInput!, update: FileUpdateInput!): File!
+  deleteFile(where: FileWhereUniqueInput!): File
   deleteManyFiles(where: FileWhereInput): BatchPayload!
   createJob(data: JobCreateInput!): Job!
   updateJob(data: JobUpdateInput!, where: JobWhereUniqueInput!): Job
@@ -938,6 +1026,7 @@ type Query {
   company(where: CompanyWhereUniqueInput!): Company
   companies(where: CompanyWhereInput, orderBy: CompanyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Company]!
   companiesConnection(where: CompanyWhereInput, orderBy: CompanyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CompanyConnection!
+  file(where: FileWhereUniqueInput!): File
   files(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File]!
   filesConnection(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FileConnection!
   job(where: JobWhereUniqueInput!): Job
@@ -950,8 +1039,9 @@ type Query {
 }
 
 enum STATUS_TYPE {
-  NEW
   FEATURED
+  NEW
+  OLD
   CLOSED
 }
 
@@ -968,6 +1058,7 @@ type User {
   password: String!
   company: Company!
   createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type UserConnection {
@@ -1015,6 +1106,7 @@ type UserPreviousValues {
   email: String!
   password: String!
   createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type UserSubscriptionPayload {
@@ -1115,6 +1207,14 @@ input UserWhereInput {
   createdAt_lte: DateTime
   createdAt_gt: DateTime
   createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

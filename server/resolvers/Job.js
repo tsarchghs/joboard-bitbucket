@@ -2,7 +2,6 @@ const permissions = require("./permissions");
 const configs = require("../configs");
 const stripe = require("stripe")(configs.stripe_secret_key);
 
-
 const job = async (root,args,context,info) => {
 	return await context.db.query.job({where:{id:args.id}},info);
 }
@@ -10,17 +9,19 @@ const job = async (root,args,context,info) => {
 const jobs = async (root,args,context,info) => {
 	where = {}
 	if (args.jobFilter){
-		args.jobFilter.location_contains ? where["location_contains"] = args.jobFilter.location_contains : ""
-		args.jobFilter.status_type ? where["status"] = args.jobFilter.status_type : ""
-		args.jobFilter.job_type ? where["job_type"] = args.jobFilter.job_type : ""
-		args.jobFilter.createdAt_gte ? where["createdAt_gte"] = args.jobFilter.createdAt_gte : ""	
-		args.jobFilter.createdAt_lte ? where["createdAt_lte"] = args.jobFilter.createdAt_lte : ""	
+		args.jobFilter.location_contains ? where["location_contains"] = args.jobFilter.location_contains :  null
+		args.jobFilter.status_type ? where["status"] = args.jobFilter.status_type :  null
+		args.jobFilter.job_type ? where["job_type"] = args.jobFilter.job_type :  null
+		args.jobFilter.createdAt_gte ? where["createdAt_gte"] = args.jobFilter.createdAt_gte :  null	
+		args.jobFilter.createdAt_lte ? where["createdAt_lte"] = args.jobFilter.createdAt_lte :  null
+		args.jobFilter.id_not_in ? where["id_not_in"] = args.jobFilter.id_not_in :  null
+		args.jobFilter.status_not_in ? where["status_not_in"] = args.jobFilter.status_not_in : null
 	}
 	return await context.db.query.jobs({
 		where,
 		first: args.jobFilter ? args.jobFilter.first : undefined,
-		skip: args.jobFilter ? args.jobFilter.skip : undefined
-
+		skip: args.jobFilter ? args.jobFilter.skip : undefined,
+		orderBy: args.jobFilter ? args.jobFilter.orderBy : undefined
 	}
 	,info);
 }
@@ -42,9 +43,9 @@ const createJob = async (root,args,context,info) => {
 		data["company"] = {connect:{id:args.company}}
 	}
 	let today = new Date();
-	data["expiresIn"] = today
+	data["expiresAt"] = today
 	if (args.status === "FEATURED"){
-		data["expiresIn"] = new Date(today.setDate(today.getDate() + 7));
+		data["expiresAt"] = new Date(today.setDate(today.getDate() + 7));
 	}
 	try {
 		const charge = await stripe.charges.create({

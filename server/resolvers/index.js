@@ -2,6 +2,7 @@ const authResolvers = require("./authentication");
 const userResolvers = require("./User");
 const companyResolvers = require("./Company"); 
 const jobResolvers = require("./Job");
+const { forwardTo } = require('prisma-binding')
 
 module.exports = {
 	Query: {

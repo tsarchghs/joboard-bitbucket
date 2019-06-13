@@ -7,8 +7,9 @@ enum JOB_TYPE {
 }
 
 enum STATUS_TYPE {
-	NEW
 	FEATURED
+	NEW
+	OLD
 	CLOSED
 }
 
@@ -55,7 +56,7 @@ type Job {
 	company_website: String
 	createdAt: String!
 	description: String!
-	expiresIn: String!
+	expiresAt: String!
 }
 
 input CreateJob {
@@ -90,6 +91,8 @@ input CreateCompanyInput {
 }
 
 input JobFilterInput {
+	id_not_in: [ID!]
+	status_not_in: [STATUS_TYPE!]
 	location_contains: String
 	status_type: STATUS_TYPE
 	job_type: JOB_TYPE
@@ -97,6 +100,7 @@ input JobFilterInput {
 	createdAt_lte: String
 	first: Int
 	skip: Int
+	orderBy: String
 }
 
 type Query {

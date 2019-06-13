@@ -7,36 +7,43 @@ enum JOB_TYPE {
 }
 
 enum STATUS_TYPE {
-	NEW
 	FEATURED
+	NEW
+	OLD
 	CLOSED
 }
 
 type User {
-	id: ID! @unique
+	id: ID! @id
 	email: String! @unique
 	password: String!
 	company: Company!
-	createdAt: DateTime!
+	createdAt: DateTime! @createdAt
+	updatedAt: DateTime! @updatedAt
 }
 
 type File {
+	id: ID! @id
 	base64: String!
 	mimetype: String!	
+	createdAt: DateTime! @createdAt
+	updatedAt: DateTime! @updatedAt
 }
 
 type Company {
-	id: ID! @unique
-	createdBy: User!
+	id: ID! @id
+	createdBy: User! @relation(link: TABLE)
 	email: String!
 	name: String!
 	website: String!
 	logo: File
 	jobs: [Job!]!
+	createdAt: DateTime! @createdAt
+	updatedAt: DateTime! @updatedAt
 }
 
 type Job {
-	id: ID! @unique
+	id: ID! @id
 	position: String!
 	location: String!
 	salary: Int!
@@ -44,10 +51,11 @@ type Job {
 	job_type: JOB_TYPE!
 	status: STATUS_TYPE!
 	apply_url: String!
-	company: Company
+	company: Company 
 	company_name: String
 	company_email: String
 	company_website: String
-	createdAt: DateTime!
-	expiresIn: DateTime!
+	expiresAt: DateTime!
+	createdAt: DateTime! @createdAt
+	updatedAt: DateTime! @updatedAt
 }
