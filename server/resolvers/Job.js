@@ -48,17 +48,29 @@ const createJob = async (root,args,context,info) => {
 	}
 	try {
 		const charge = await stripe.charges.create({
-		    amount: args.status === "FEATURED" ? 9999 * 2 : 9999,
+			amount: args.status === "FEATURED" ? 100 * 249 : 100 * 199 ,
 		    currency: 'usd',
-		    description: 'Example charge',
-		    source: args.stripe_token,
-		  });
+		    description: args.position,
+			source: args.stripe_token,
+			customer: context.user ? context.user.id : undefined
+		});
+		console.log(JSON.stringify(charge))
 	} catch (e) {
-		throw new Error("CardError");
+		throw new Error(`CardError:${e.message}`);
 	}
 	let job = await context.db.mutation.createJob({
 		data
-	},info)
+	},`
+		{
+			id
+			company {
+				id
+				createdBy {
+					id
+				}
+			}
+		}
+	`)
 	if (!no_account && job.company.createdBy.id !== context.user.id){
 		context.db.mutation.deleteJob({where:{id:job.id}})
 		throw new Error("Unauthorized");

@@ -14,7 +14,7 @@ module.exports = {
 		login: authResolvers.login,
 		register: authResolvers.register,
 		updateUser: () => {},
-		updateCompany: () => {},
+		updateCompany: companyResolvers.updateCompany,
 		createJob: jobResolvers.createJob,
 		updateJob: () => {},
 		deleteJob: () => {}

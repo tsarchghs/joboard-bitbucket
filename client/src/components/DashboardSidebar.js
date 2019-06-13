@@ -11,7 +11,9 @@ class DashboardSidebar extends React.Component {
 		console.log(url);
 		return (
 	        <div className="sidebar">
+			<Link to="/">
 	          <h3 className="sidebar__title">Flutter.jobs</h3>
+			</Link>
 	          <div className="sidebar__ul">
 	            <Link to="/dashboard" className={url === "dashboard" ? "active" : ""}>
 	            	<img src="/assets/toolkit/images/listing.svg" alt /><span>Job listing</span>

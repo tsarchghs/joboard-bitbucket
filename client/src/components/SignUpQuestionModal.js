@@ -1,6 +1,49 @@
 import React from "react";
 import ReactDOM from 'react-dom';
 import { Redirect } from "react-router-dom";
+import { Mutation } from "react-apollo";
+import gql from "graphql-tag";
+
+/*<Mutation mutation={gql`
+	mutation CreateJob(
+		$position: String!,$location: String!,$description: String!,
+		$job_type: JOB_TYPE!, $status: STATUS_TYPE!,$salary: Int!,
+		$apply_url: String!,$company: ID,$company_name: String,
+		$company_email: String, $company_website: String, $stripe_token: String!
+	){
+	createJob(
+	    position: $position
+	    location: $location
+	    description: $description
+	    job_type: $job_type
+	    status: $status
+	    salary: $salary
+	    apply_url: $apply_url
+	    company: $company
+		company_name: $company_name
+		company_email: $company_email
+		company_website: $company_website
+		stripe_token: $stripe_token
+	  ) {
+		    id
+		    position
+		    location
+		    company {
+		    	createdBy {
+		    		id
+		    	}
+		    }
+		    description
+		    apply_url
+			company_name
+			company_email
+			company_website
+	  }
+	}
+`}
+>
+{(createJob,{loading,error,data}) => {
+*/
 
 class SignUpQuestionModal extends React.Component {
 	constructor(props){
@@ -38,7 +81,50 @@ class SignUpQuestionModal extends React.Component {
 			        </div>
 			        <div className="modal__footer">
 			          <div className="modal__footer-buttons">
-			            <a onClick={this.props.noOnClick} href="#" className="button gray" data-close aria-label="Close modal">No I don’t want</a>
+						<Mutation mutation={gql`
+								mutation CreateJob(
+									$position: String!,$location: String!,$description: String!,
+									$job_type: JOB_TYPE!, $status: STATUS_TYPE!,$salary: Int!,
+									$apply_url: String!,$company: ID,$company_name: String,
+									$company_email: String, $company_website: String, $stripe_token: String!
+								){
+								createJob(
+								    position: $position
+								    location: $location
+								    description: $description
+								    job_type: $job_type
+								    status: $status
+								    salary: $salary
+								    apply_url: $apply_url
+								    company: $company
+									company_name: $company_name
+									company_email: $company_email
+									company_website: $company_website
+									stripe_token: $stripe_token
+								  ) {
+									    id
+									    position
+									    location
+									    company {
+									    	createdBy {
+									    		id
+									    	}
+									    }
+									    description
+									    apply_url
+										company_name
+										company_email
+										company_website
+								  }
+								}
+							`}
+							>
+							{(createJob,{loading,error,data}) => {
+				            	return (
+				            		<a onClick={(e) => createJob(e,this.props.variables)} href="#" className="button gray" data-close aria-label="Close modal">No I don’t want</a>
+								);
+				           }}
+			           </Mutation>
 			            <a onClick={() => console.log(1)} data-open="modal2" href="#" className="button blue">Yes, I want to create account</a>
 			          </div>
 			          <p className="gray">*By not creating account you will not be able to edit the job listing.</p>

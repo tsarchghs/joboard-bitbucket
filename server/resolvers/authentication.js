@@ -74,7 +74,21 @@ const register = async (root,args,context,info) => {
 		}
 	}
 	console.log(userParams);
-	let user = await context.db.mutation.createUser({data:userParams});
+	let user = await context.db.mutation.createUser({data:userParams},`
+		{
+			id
+			company {
+				id
+			}
+		}
+	`);
+	console.log(user.company)
+	let job = await context.db.mutation.updateJob({
+		where:{id: args.job},
+		data: {
+			company: { connect: { id: user.company.id } }
+		}
+	})
 	console.log(user,context.db.mutation.createUser,33);
 	return {
 		user,

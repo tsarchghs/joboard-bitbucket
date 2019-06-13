@@ -69,7 +69,7 @@ class App extends Component {
             `}>
               {({loading,error,data,refetch}) => {
                 console.log("App re/rernder");
-                if (loading) return "Loading"
+                if (loading) return <div className="master-layout" style={{ width: window.innerWidth, height: window.innerHeight}}></div>
                 if (error){
                   return <p>{error.message}</p>
                 }
@@ -100,7 +100,7 @@ class App extends Component {
                         <div>
                           <Header user={user}/>
                           <Elements>
-                            <CreateJob user={user}/>
+                            <CreateJob refetchApp={refetch} user={user}/>
                           </Elements>
                         </div>
                         )
@@ -112,7 +112,7 @@ class App extends Component {
                       return (
                           <div>
                             <DashboardHeader user={user} refetchApp={refetch}/>
-                            <Dashboard/>
+                            <Dashboard user={user}/>
                           </div>
                         )
                     }}/>

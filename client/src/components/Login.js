@@ -5,6 +5,13 @@ import gql from "graphql-tag";
 import Cookies from 'js-cookie';
 
 class Login extends React.Component {
+	constructor(props){
+		super(props)
+		this.state = {
+			email: "",
+			password: ""
+		}
+	}
 	render(){
 		return (
 			<Mutation 
@@ -34,7 +41,7 @@ class Login extends React.Component {
 				 return (
 				 	<form onSubmit={async (e) => {
 				 		e.preventDefault();
-				 		data = await login({variables:{email:email.value,password:password.value}})
+				 		data = await login({variables:{email:this.state.email,password:this.state.password}})
 						Cookies.set("token",data.data.login.token);
 				 		this.props.refetchApp();
 				 	}}>
@@ -49,10 +56,10 @@ class Login extends React.Component {
 				            	:
 				            	<div>
 					            	<label><span>Email</span>
-						              <input ref={node => email=node} className="input" type="" placeholder="youremail@domain.com" />
+						              <input value={this.state.email} onChange={(e) => this.setState({email:e.target.value})} className="input" type="text" placeholder="youremail@domain.com" />
 						            </label>
 						            <label><span>Password</span>
-						              <input ref={node => password=node} className="input" type="password" placeholder="Your password here" />
+						              <input value={this.state.password} onChange={(e) => this.setState({password:e.target.value})} className="input" type="password" placeholder="Your password here" />
 						            </label>
 				          <button className="button blue">Sign in</button>
 						         </div>

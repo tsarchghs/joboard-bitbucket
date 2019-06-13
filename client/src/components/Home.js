@@ -91,7 +91,7 @@ class Home extends React.Component {
 		})
 		console.log("UPDATE");
 		this.updateFromDate("createdAt_gte",this.yesterday,3,"today_jobs");
-		this.updateFromDate("createdAt_lte",this.yesterday,10,"week_jobs");
+		this.updateFromDate("createdAt_lte",3,10,"week_jobs");
 	}
 	render(){
 		return (

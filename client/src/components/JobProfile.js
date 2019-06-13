@@ -29,6 +29,8 @@ class JobProfile extends React.Component {
 							company_website
 							company_email
 							createdAt
+							job_type
+							status
 						}
 					}
 				`}
@@ -51,21 +53,21 @@ class JobProfile extends React.Component {
 						              		backgroundImage: 
 						              			job.company && job.company.logo 
 						              			? job.company.logo.url 
-						              			: 'url("http://www.courmayeur-montblanc.com/themes/funivie/img/gourmet/no_logo.jpg")'
+						              			: 'url("/assets/toolkit/images/	014-company.svg")'
 					                  }} />
 					                  <div className="card-data">
 					                    <div className="card-data__title"><a href="#" className="card-data__title">{job.position}</a></div>
 					                    <div className="card-data__subtitle"><a href="#" className="card-data__subtitle">{job.company ? job.company.name : job.company_name}</a></div>
 					                    <div className="card-data__info">
 					                      <p><img src="/assets/toolkit/images/gray-placeholder.svg" alt />{job.location}</p>
-					                      <p><img src="/assets/toolkit/images/gray-portfolio.svg" alt />{job.company ? job.company.email : job.company_email }</p>
-					                      <a href="#"><img src="/assets/toolkit/images/grid-world.svg" alt />{job.company ? job.company.website : job.company_website}</a>
+					                      <p><img src="/assets/toolkit/images/gray-portfolio.svg" alt />{job.job_type}</p>
+					                      <a href="#"><img src="/assets/toolkit/images/grid-world.svg" alt />{job.company ? job.company.website : job.company_website }</a>
 					                    </div>
 					                  </div>
 					                </div>
 					                <div className="card__button">
 					                  <p style={{marginLeft:10}} className="gray">{new Date(job.createdAt).toLocaleDateString()} {new Date(job.expiresIn).toLocaleDateString()}</p>
-					                  <a target="_blank"  href={job.apply_url} className="button blue">Apply for this job</a>
+					                  <a target="_blank"  href={job.apply_url} className="button blue">Apply for this job ({job.status})</a>
 					                </div>
 					              </div>
 					              <div className="inside-page__description">

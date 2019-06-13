@@ -77,6 +77,10 @@ input FileInput {
 	mimetype: String!
 }
 
+type BasicInfo {
+	success: Boolean!
+}
+
 input CreateCompanyInput {
 	email: String!
 	name: String!
@@ -112,6 +116,7 @@ type Mutation {
 		email: String!
 		password: String!
 		company: CreateCompanyInput!
+		job: ID!
 	): AuthData!
 
 	updateUser(
@@ -120,12 +125,11 @@ type Mutation {
 	): User!
 
 	updateCompany(
-		id: ID!
 		email: String
 		name: String
 		website: String
 		logo: FileInput
-	): Company!
+	): BasicInfo!
 
 	createJob(
 		position: String!
@@ -139,7 +143,7 @@ type Mutation {
 		company_name: String
 		company_email: String
 		company_website: String
-		stripe_token: String
+		stripe_token: String!
 	): Job!
 	updateJob(
 		id: ID!
