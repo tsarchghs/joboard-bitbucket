@@ -21,7 +21,7 @@ class JobProfile extends React.Component {
 								website
 								email
 							}
-							expiresIn
+							expiresAt
 							description
 							apply_url
 							location
@@ -66,7 +66,7 @@ class JobProfile extends React.Component {
 					                  </div>
 					                </div>
 					                <div className="card__button">
-					                  <p style={{marginLeft:10}} className="gray">{new Date(job.createdAt).toLocaleDateString()} {new Date(job.expiresIn).toLocaleDateString()}</p>
+					                  <p style={{marginLeft:10}} className="gray">{new Date(job.createdAt).toLocaleDateString()} {new Date(job.expiresAt).toLocaleDateString()}</p>
 					                  <a target="_blank"  href={job.apply_url} className="button blue">Apply for this job ({job.status})</a>
 					                </div>
 					              </div>

@@ -7,6 +7,14 @@ const loadToolKit = () => {
       console.log(script);
 }
 
+const loadAfterHomeMount = () => {
+  let script = document.createElement("script");
+  script.src = "/assets/toolkit/scripts/afterMountHome.js"
+  script.async = true;
+  document.body.appendChild(script);
+  console.log(script);
+}
+
 var getQueryParams = (url) => {
   var params = {};
   var parser = document.createElement('a');
@@ -29,7 +37,8 @@ var daysDifference = (data1,data2) => {
     return diffDays
 }
 export {
-	loadToolKit,
+  loadToolKit,
+  loadAfterHomeMount,
 	getQueryParams,
   daysDifference
 }
