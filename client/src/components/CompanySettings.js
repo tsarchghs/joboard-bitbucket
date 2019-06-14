@@ -82,7 +82,7 @@ class CompanySettings extends React.Component {
 									<div>
 									{
 										loading
-										? <img style={{width:"15%"}} alt="" src="http://localhost:3000/assets/toolkit/images/loading_blue.gif" /> 
+												? <img style={{ width: "15%" }} alt="" src="./assets/toolkit/images/loading_blue.gif" /> 
 										: <button type="submit" className="button blue">Save changes</button>
 									}
 									</div>

@@ -319,7 +319,7 @@ class _CreateJob extends React.Component {
 					</label>
 					<div className="text-center">
 					{
-						this.state.loading ? <img alt="" src="http://localhost:3000/assets/toolkit/images/loading_blue.gif"/>
+								this.state.loading ? <img alt="" src="./assets/toolkit/images/loading_blue.gif"/>
 						: <button style={{width:"100%"}} type="submit" className="button blue">Post this job ({this.state.featured ? "249" : "199"}$)</button>
 					}
 					</div>

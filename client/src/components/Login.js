@@ -52,7 +52,7 @@ class Login extends React.Component {
 				          <div className="login__card-inputs">
 				          {alertMessage ? alertMessage : ""}
 				            {
-				            	loading ? <center><img src="http://localhost:3000/assets/toolkit/images/loading_blue.gif"/></center>
+										 loading ? <center><img src="./assets/toolkit/images/loading_blue.gif"/></center>
 				            	:
 				            	<div>
 					            	<label><span>Email</span>

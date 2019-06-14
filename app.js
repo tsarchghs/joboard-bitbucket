@@ -93,7 +93,7 @@ const server = new graphqlServer({
 	}
 });
 
-server.express.use('/static', static(path.join(__dirname, 'public')))
+server.express.use('/assets', static(path.join(__dirname, 'public')))
 server.express.use(static(path.join(__dirname, 'build')));
 
 server.express.use(logger("dev"));

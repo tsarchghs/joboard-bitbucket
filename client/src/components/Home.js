@@ -125,7 +125,7 @@ class Home extends React.Component {
 	          <div className="home__table">
 				<h4 className="home__table-title">Featured</h4>
 				{
-					!this.state.featured_jobs ? <center><img alt="" src="http://localhost:3000/assets/toolkit/images/loading_blue.gif" /></center>
+					!this.state.featured_jobs ? <center><img alt="" src="./assets/toolkit/images/loading_blue.gif" /></center>
 						:
 						(
 							this.state.featured_jobs.map(job => (
@@ -161,7 +161,7 @@ class Home extends React.Component {
 
 	            <h4 className="home__table-title">Today</h4>
 	            {
-	            	!this.state.today_jobs ? <center><img alt="" src="http://localhost:3000/assets/toolkit/images/loading_blue.gif"/></center>
+	            	!this.state.today_jobs ? <center><img alt="" src="./assets/toolkit/images/loading_blue.gif"/></center>
 	            	: 
 	            	(
 	            		this.state.today_jobs.map(job => (
@@ -195,7 +195,7 @@ class Home extends React.Component {
 	            	)
 	            }
 	            <h4 className="home__table-title">This week</h4>	            	
-					{ !this.state.other_jobs ? <center><img alt="" src="http://localhost:3000/assets/toolkit/images/loading_blue.gif"/></center>
+					{ !this.state.other_jobs ? <center><img alt="" src="./assets/toolkit/images/loading_blue.gif"/></center>
 	            	: 
 	            	(
 	            		this.state.other_jobs.map(job => (
