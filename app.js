@@ -6,6 +6,8 @@ const jwt = require("jsonwebtoken");
 const configs = require("./configs");
 const logger = require("morgan");
 var cron = require('node-cron');
+const { static } = require("express");
+const path = require("path");
 
 const prismaDb = new Prisma({
 	typeDefs:prismaTypeDefs,
@@ -90,6 +92,9 @@ const server = new graphqlServer({
 		}
 	}
 });
+
+server.express.use('/static', static(path.join(__dirname, 'public')))
+server.express.use(static(path.join(__dirname, 'build')));
 
 server.express.use(logger("dev"));
 server.start({
