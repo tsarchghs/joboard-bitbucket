@@ -65,6 +65,11 @@ class CompanySettings extends React.Component {
 									{
 										this.state.success && <h3>Changed company settings!</h3>
 									}
+									{
+										error && error.message === "GraphQL error: Email is taken"
+										? <h3>Email is already taken</h3>
+										: null
+									}
 									<label className="create-job__input--label"><span className="create-job__input--span">Company name</span>
 										<input className="input" type="text" value={this.state.name} onChange={e => this.setState({"name":e.target.value})} placeholder="Type your company name" />
 									</label>
@@ -75,7 +80,11 @@ class CompanySettings extends React.Component {
 										<input className="input" type="text" value={this.state.website} onChange={e => this.setState({"website":e.target.value})} placeholder="Company website" />
 									</label>
 									<div>
-										<button type="submit" className="button blue">Save changes</button>
+									{
+										loading
+										? <img style={{width:"15%"}} alt="" src="http://localhost:3000/assets/toolkit/images/loading_blue.gif" /> 
+										: <button type="submit" className="button blue">Save changes</button>
+									}
 									</div>
 								</form>
 							)

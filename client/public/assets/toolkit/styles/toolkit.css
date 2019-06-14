@@ -6185,7 +6185,7 @@ a:focus {
   display: -ms-flexbox;
   display: flex;
   padding: 20px 0px;
-  border-bottom: 2px solid #d3d9e5;
+  border-bottom: 1px solid #d3d9e5;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center; }
@@ -6196,7 +6196,7 @@ a:focus {
           -ms-flex-direction: column;
               flex-direction: column; } }
   .job-listing-table__list.no-border {
-    border-top: 2px solid #d3d9e5; }
+    border-top: 1px solid #d3d9e5; }
   .job-listing-table__list.home-table .job-listing-table__time {
     min-height: 68px;
     display: -webkit-box;

@@ -6,6 +6,18 @@ const company = async (root,args,context,info) => {
 
 const updateCompany = async (root,args,context,info) => {
 	permissions.loginPermissions(context);
+	const user = await context.db.query.user({where:{email: args.email}})
+	if (user && user.id !== context.user.id){
+		throw new Error("Email is taken")
+	}
+	context.db.mutation.updateUser({
+		where:{
+			id: context.user.id
+		},
+		data:{
+			email: args.email
+		}
+	})
 	await context.db.mutation.updateManyCompanies({
 		where:{
 			createdBy: {

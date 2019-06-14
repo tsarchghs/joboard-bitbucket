@@ -33,7 +33,7 @@ class Home extends React.Component {
 				status_not_in,
 				location_contains: this.state.search_value,
 				status_type,
-				job_type: this.jobTypeRef.value === "ALL" ? undefined : this.jobTypeRef.value,
+				job_type: this.jobTypeRef && this.jobTypeRef.value === "ALL" ? undefined : this.jobTypeRef.value,
 				createdAt_gte,
 				createdAt_lte,
 				first,
@@ -129,7 +129,7 @@ class Home extends React.Component {
 						:
 						(
 							this.state.featured_jobs.map(job => (
-								<div className="job-listing-table__list home-table no-border">
+								<div key={job.id} className={`job-listing-table__list home-table ${this.state.featured_jobs[0].id === job.id ? "no-border" : ""}`}>
 									<div className="job-listing-table__logo"
 										style={{
 											backgroundImage:
@@ -165,7 +165,7 @@ class Home extends React.Component {
 	            	: 
 	            	(
 	            		this.state.today_jobs.map(job => (
-			              <div className="job-listing-table__list home-table no-border">
+			              <div key={job.id} className={`job-listing-table__list home-table ${this.state.today_jobs[0].id === job.id ? "no-border" : ""}`}>
 			                <div className="job-listing-table__logo" 
 			                style={{
 			                	backgroundImage: 
@@ -199,7 +199,7 @@ class Home extends React.Component {
 	            	: 
 	            	(
 	            		this.state.other_jobs.map(job => (
-			              <div className="job-listing-table__list home-table no-border">
+			              <div key={job.id} className={`job-listing-table__list home-table ${this.state.other_jobs[0].id === job.id ? "no-border" : ""}`}>
 			                <div className="job-listing-table__logo" 
 			                style={{
 			                	backgroundImage: 
@@ -209,19 +209,14 @@ class Home extends React.Component {
 			                <div className="job-listing-table__info">
 			                	<Link to={`/job/${job.id}`}>
 				                  <h4>
-				                    <a href="#">{job.position}</a>
+				                    <p>{job.position}</p>
 				                  </h4>
 				                  <h5>
-				                    <a href="#">{job.company ? job.company.name : job.company_name}</a>
+				                    <p>{job.company ? job.company.name : job.company_name}</p>
 				                  </h5>
 				                </Link>
 			                </div>
 			                <div className="job-listing-table__time">
-				                {
-				                	job.status === "FEATURED" 
-				                	? <span className="new blue"><img src="/assets/toolkit/images/blue-star.svg" alt=""/>Featured</span>
-				                	: <span className="new "><img src="/assets/toolkit/images/blue-star.svg" alt=""/>New</span>
-				                }
 			                  <h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt=""/>{job.location}</h5>
 			                </div>
 		              	</div>

@@ -16,6 +16,7 @@ import CompanySettings from "./components/CompanySettings";
 import JobProfile from "./components/JobProfile";
 import { getQueryParams } from "./helpers";
 import {StripeProvider,Elements} from 'react-stripe-elements';
+import { GET_LOGGED_IN_USER } from "./Queries"
 
 const client = new ApolloClient({
   uri: "http://localhost:4000",
@@ -41,32 +42,7 @@ class App extends Component {
       <StripeProvider apiKey="pk_test_qPYFvOuAMinE3mIxP7Gpn70N">
         <ApolloProvider client={client}>
           <Router>
-            <Query query={gql`
-                query {
-                  getLoggedInUser{
-                    id
-                    company {
-                      id
-                      name
-                      website
-                      email
-                      logo {
-                        id
-                        url
-                      }
-                      jobs {
-                          id
-                          location
-                          position
-                          status
-                          status
-                          job_type
-
-                      }
-                    }
-                  }
-                }
-            `}>
+            <Query query={GET_LOGGED_IN_USER}>
               {({loading,error,data,refetch}) => {
                 console.log("App re/rernder");
                 if (loading) return <div className="master-layout" style={{ width: window.innerWidth, height: window.innerHeight}}></div>

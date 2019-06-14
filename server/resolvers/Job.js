@@ -26,6 +26,19 @@ const jobs = async (root,args,context,info) => {
 	,info);
 }
 
+const createInvoice = async (context,charge,job_id, featured) => {
+	return await context.db.mutation.createInvoice({
+		data: {
+			price: featured ? 249 : 199,
+			last_four_digits: Number(charge["source"]["last4"]),
+			job: {
+				connect: { id: job_id }
+			},
+			status: "Paid"
+		}
+	}).catch(console.log)
+}
+
 const createJob = async (root,args,context,info) => {
 	let data = {
 		...args
@@ -43,27 +56,28 @@ const createJob = async (root,args,context,info) => {
 		data["company"] = {connect:{id:args.company}}
 	}
 	let today = new Date();
-	data["expiresAt"] = today
-	if (args.status === "FEATURED"){
-		data["expiresAt"] = new Date(today.setDate(today.getDate() + 7));
-	}
+	data["expiresAt"] = new Date(today.setDate(today.getDate() + 7));
+	let charge;
 	try {
-		const charge = await stripe.charges.create({
+		charge = await stripe.charges.create({
 			amount: args.status === "FEATURED" ? 100 * 249 : 100 * 199 ,
 		    currency: 'usd',
 		    description: args.position,
-			source: args.stripe_token,
-			customer: context.user ? context.user.id : undefined
+			source: args.stripe_token
 		});
-		console.log(JSON.stringify(charge))
 	} catch (e) {
 		throw new Error(`CardError:${e.message}`);
 	}
 	let job = await context.db.mutation.createJob({
 		data
 	},`
-		{
+		{	
 			id
+			location
+			position
+			status
+			job_type
+			expiresAt
 			company {
 				id
 				createdBy {
@@ -72,6 +86,7 @@ const createJob = async (root,args,context,info) => {
 			}
 		}
 	`)
+	createInvoice(context,charge,job.id, args.status === "FEATURED")
 	if (!no_account && job.company.createdBy.id !== context.user.id){
 		context.db.mutation.deleteJob({where:{id:job.id}})
 		throw new Error("Unauthorized");
@@ -79,8 +94,37 @@ const createJob = async (root,args,context,info) => {
 	return job;
 }
 
+const renewJob = async (root,args,context,info) => {
+	await permissions.loginPermissions(context)
+	let job = await context.db.query.job({where:{id:args.id}})
+	let charge;
+	try {
+		charge = await stripe.charges.create({
+			amount: args.featured ? 100 * 249 : 100 * 199,
+			currency: 'usd',
+			description: job.position,
+			source: args.stripe_token
+		});
+	} catch (e) {
+		throw new Error(`CardError:${e.message}`);
+	}
+	createInvoice(context, charge,job.id,args.featured)
+	let today = new Date();
+	await context.db.mutation.updateJob({
+		where:{
+			id: job.id
+		},
+		data: {
+			expiresAt: new Date(today.setDate(today.getDate() + 7)),
+			status: args.featured ? "FEATURED" : "NEW"
+		}
+	},info)
+	return job;
+}
+
 module.exports = {
 	job,
 	jobs,
-	createJob
+	createJob,
+	renewJob
 }

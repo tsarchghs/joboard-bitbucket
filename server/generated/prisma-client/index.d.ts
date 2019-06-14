@@ -16,6 +16,7 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
 export interface Exists {
   company: (where?: CompanyWhereInput) => Promise<boolean>;
   file: (where?: FileWhereInput) => Promise<boolean>;
+  invoice: (where?: InvoiceWhereInput) => Promise<boolean>;
   job: (where?: JobWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
@@ -85,6 +86,29 @@ export interface Prisma {
       last?: Int;
     }
   ) => FileConnectionPromise;
+  invoice: (where: InvoiceWhereUniqueInput) => InvoicePromise;
+  invoices: (
+    args?: {
+      where?: InvoiceWhereInput;
+      orderBy?: InvoiceOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<Invoice>;
+  invoicesConnection: (
+    args?: {
+      where?: InvoiceWhereInput;
+      orderBy?: InvoiceOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => InvoiceConnectionPromise;
   job: (where: JobWhereUniqueInput) => JobPromise;
   jobs: (
     args?: {
@@ -169,6 +193,22 @@ export interface Prisma {
   ) => FilePromise;
   deleteFile: (where: FileWhereUniqueInput) => FilePromise;
   deleteManyFiles: (where?: FileWhereInput) => BatchPayloadPromise;
+  createInvoice: (data: InvoiceCreateInput) => InvoicePromise;
+  updateInvoice: (
+    args: { data: InvoiceUpdateInput; where: InvoiceWhereUniqueInput }
+  ) => InvoicePromise;
+  updateManyInvoices: (
+    args: { data: InvoiceUpdateManyMutationInput; where?: InvoiceWhereInput }
+  ) => BatchPayloadPromise;
+  upsertInvoice: (
+    args: {
+      where: InvoiceWhereUniqueInput;
+      create: InvoiceCreateInput;
+      update: InvoiceUpdateInput;
+    }
+  ) => InvoicePromise;
+  deleteInvoice: (where: InvoiceWhereUniqueInput) => InvoicePromise;
+  deleteManyInvoices: (where?: InvoiceWhereInput) => BatchPayloadPromise;
   createJob: (data: JobCreateInput) => JobPromise;
   updateJob: (
     args: { data: JobUpdateInput; where: JobWhereUniqueInput }
@@ -216,6 +256,9 @@ export interface Subscription {
   file: (
     where?: FileSubscriptionWhereInput
   ) => FileSubscriptionPayloadSubscription;
+  invoice: (
+    where?: InvoiceSubscriptionWhereInput
+  ) => InvoiceSubscriptionPayloadSubscription;
   job: (
     where?: JobSubscriptionWhereInput
   ) => JobSubscriptionPayloadSubscription;
@@ -266,6 +309,20 @@ export type JobOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
+export type InvoiceOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "last_four_digits_ASC"
+  | "last_four_digits_DESC"
+  | "price_ASC"
+  | "price_DESC"
+  | "status_ASC"
+  | "status_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
 export type CompanyOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -306,235 +363,21 @@ export type UserOrderByInput =
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export interface UserUpdateWithoutCompanyDataInput {
-  email?: String;
-  password?: String;
+export interface FileUpsertNestedInput {
+  update: FileUpdateDataInput;
+  create: FileCreateInput;
 }
 
 export type CompanyWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
-export interface CompanyCreateOneWithoutJobsInput {
-  create?: CompanyCreateWithoutJobsInput;
-  connect?: CompanyWhereUniqueInput;
-}
-
-export interface FileUpdateInput {
-  base64?: String;
-  mimetype?: String;
-}
-
-export interface FileUpsertNestedInput {
-  update: FileUpdateDataInput;
-  create: FileCreateInput;
-}
-
-export interface UserWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  email?: String;
-  email_not?: String;
-  email_in?: String[] | String;
-  email_not_in?: String[] | String;
-  email_lt?: String;
-  email_lte?: String;
-  email_gt?: String;
-  email_gte?: String;
-  email_contains?: String;
-  email_not_contains?: String;
-  email_starts_with?: String;
-  email_not_starts_with?: String;
-  email_ends_with?: String;
-  email_not_ends_with?: String;
-  password?: String;
-  password_not?: String;
-  password_in?: String[] | String;
-  password_not_in?: String[] | String;
-  password_lt?: String;
-  password_lte?: String;
-  password_gt?: String;
-  password_gte?: String;
-  password_contains?: String;
-  password_not_contains?: String;
-  password_starts_with?: String;
-  password_not_starts_with?: String;
-  password_ends_with?: String;
-  password_not_ends_with?: String;
-  company?: CompanyWhereInput;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  AND?: UserWhereInput[] | UserWhereInput;
-  OR?: UserWhereInput[] | UserWhereInput;
-  NOT?: UserWhereInput[] | UserWhereInput;
-}
-
-export interface CompanyCreateInput {
-  createdBy: UserCreateOneWithoutCompanyInput;
-  email: String;
-  name: String;
-  website: String;
-  logo?: FileCreateOneInput;
-  jobs?: JobCreateManyWithoutCompanyInput;
-}
-
-export interface UserSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UserWhereInput;
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-}
-
-export interface UserCreateOneWithoutCompanyInput {
-  create?: UserCreateWithoutCompanyInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface FileSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: FileWhereInput;
-  AND?: FileSubscriptionWhereInput[] | FileSubscriptionWhereInput;
-  OR?: FileSubscriptionWhereInput[] | FileSubscriptionWhereInput;
-  NOT?: FileSubscriptionWhereInput[] | FileSubscriptionWhereInput;
-}
-
 export interface UserCreateWithoutCompanyInput {
   email: String;
   password: String;
 }
 
-export interface UserUpdateManyMutationInput {
-  email?: String;
-  password?: String;
-}
-
-export interface FileCreateOneInput {
-  create?: FileCreateInput;
-  connect?: FileWhereUniqueInput;
-}
-
-export interface CompanyUpdateWithoutCreatedByDataInput {
-  email?: String;
-  name?: String;
-  website?: String;
-  logo?: FileUpdateOneInput;
-  jobs?: JobUpdateManyWithoutCompanyInput;
-}
-
-export interface FileCreateInput {
-  base64: String;
-  mimetype: String;
-}
-
-export type FileWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface JobCreateManyWithoutCompanyInput {
-  create?: JobCreateWithoutCompanyInput[] | JobCreateWithoutCompanyInput;
-  connect?: JobWhereUniqueInput[] | JobWhereUniqueInput;
-}
-
-export interface CompanyCreateWithoutCreatedByInput {
-  email: String;
-  name: String;
-  website: String;
-  logo?: FileCreateOneInput;
-  jobs?: JobCreateManyWithoutCompanyInput;
-}
-
-export interface JobCreateWithoutCompanyInput {
-  position: String;
-  location: String;
-  salary: Int;
-  description: String;
-  job_type: JOB_TYPE;
-  status: STATUS_TYPE;
-  apply_url: String;
-  company_name?: String;
-  company_email?: String;
-  company_website?: String;
-  expiresAt: DateTimeInput;
-}
-
-export interface UserCreateInput {
-  email: String;
-  password: String;
-  company: CompanyCreateOneWithoutCreatedByInput;
-}
-
-export interface CompanyUpdateInput {
-  createdBy?: UserUpdateOneRequiredWithoutCompanyInput;
-  email?: String;
-  name?: String;
-  website?: String;
-  logo?: FileUpdateOneInput;
-  jobs?: JobUpdateManyWithoutCompanyInput;
-}
-
-export interface JobUpdateManyMutationInput {
-  position?: String;
-  location?: String;
-  salary?: Int;
-  description?: String;
-  job_type?: JOB_TYPE;
-  status?: STATUS_TYPE;
-  apply_url?: String;
-  company_name?: String;
-  company_email?: String;
-  company_website?: String;
-  expiresAt?: DateTimeInput;
-}
-
-export interface UserUpdateOneRequiredWithoutCompanyInput {
-  create?: UserCreateWithoutCompanyInput;
-  update?: UserUpdateWithoutCompanyDataInput;
-  upsert?: UserUpsertWithoutCompanyInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface CompanyUpdateWithoutJobsDataInput {
-  createdBy?: UserUpdateOneRequiredWithoutCompanyInput;
-  email?: String;
-  name?: String;
-  website?: String;
-  logo?: FileUpdateOneInput;
-}
-
-export interface JobCreateInput {
+export interface JobCreateWithoutInvoicesInput {
   position: String;
   location: String;
   salary: Int;
@@ -549,35 +392,19 @@ export interface JobCreateInput {
   expiresAt: DateTimeInput;
 }
 
-export interface CompanyUpdateOneWithoutJobsInput {
-  create?: CompanyCreateWithoutJobsInput;
-  update?: CompanyUpdateWithoutJobsDataInput;
-  upsert?: CompanyUpsertWithoutJobsInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: CompanyWhereUniqueInput;
-}
-
-export interface UserUpsertWithoutCompanyInput {
-  update: UserUpdateWithoutCompanyDataInput;
-  create: UserCreateWithoutCompanyInput;
-}
-
-export interface CompanyCreateWithoutJobsInput {
-  createdBy: UserCreateOneWithoutCompanyInput;
-  email: String;
-  name: String;
-  website: String;
-  logo?: FileCreateOneInput;
-}
-
-export interface FileUpdateOneInput {
+export interface FileCreateOneInput {
   create?: FileCreateInput;
-  update?: FileUpdateDataInput;
-  upsert?: FileUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
   connect?: FileWhereUniqueInput;
+}
+
+export interface InvoiceUpdateWithWhereUniqueWithoutJobInput {
+  where: InvoiceWhereUniqueInput;
+  data: InvoiceUpdateWithoutJobDataInput;
+}
+
+export interface FileCreateInput {
+  base64: String;
+  mimetype: String;
 }
 
 export interface FileWhereInput {
@@ -644,20 +471,9 @@ export interface FileWhereInput {
   NOT?: FileWhereInput[] | FileWhereInput;
 }
 
-export interface FileUpdateDataInput {
-  base64?: String;
-  mimetype?: String;
-}
-
-export interface CompanySubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: CompanyWhereInput;
-  AND?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
-  OR?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
-  NOT?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
+export interface JobCreateManyWithoutCompanyInput {
+  create?: JobCreateWithoutCompanyInput[] | JobCreateWithoutCompanyInput;
+  connect?: JobWhereUniqueInput[] | JobWhereUniqueInput;
 }
 
 export interface JobWhereInput {
@@ -790,6 +606,9 @@ export interface JobWhereInput {
   company_website_not_starts_with?: String;
   company_website_ends_with?: String;
   company_website_not_ends_with?: String;
+  invoices_every?: InvoiceWhereInput;
+  invoices_some?: InvoiceWhereInput;
+  invoices_none?: InvoiceWhereInput;
   expiresAt?: DateTimeInput;
   expiresAt_not?: DateTimeInput;
   expiresAt_in?: DateTimeInput[] | DateTimeInput;
@@ -819,11 +638,166 @@ export interface JobWhereInput {
   NOT?: JobWhereInput[] | JobWhereInput;
 }
 
-export interface CompanyUpdateOneRequiredWithoutCreatedByInput {
-  create?: CompanyCreateWithoutCreatedByInput;
-  update?: CompanyUpdateWithoutCreatedByDataInput;
-  upsert?: CompanyUpsertWithoutCreatedByInput;
-  connect?: CompanyWhereUniqueInput;
+export interface JobCreateWithoutCompanyInput {
+  position: String;
+  location: String;
+  salary: Int;
+  description: String;
+  job_type: JOB_TYPE;
+  status: STATUS_TYPE;
+  apply_url: String;
+  company_name?: String;
+  company_email?: String;
+  company_website?: String;
+  invoices?: InvoiceCreateManyWithoutJobInput;
+  expiresAt: DateTimeInput;
+}
+
+export interface JobSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: JobWhereInput;
+  AND?: JobSubscriptionWhereInput[] | JobSubscriptionWhereInput;
+  OR?: JobSubscriptionWhereInput[] | JobSubscriptionWhereInput;
+  NOT?: JobSubscriptionWhereInput[] | JobSubscriptionWhereInput;
+}
+
+export interface InvoiceCreateManyWithoutJobInput {
+  create?: InvoiceCreateWithoutJobInput[] | InvoiceCreateWithoutJobInput;
+  connect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput;
+}
+
+export interface FileSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: FileWhereInput;
+  AND?: FileSubscriptionWhereInput[] | FileSubscriptionWhereInput;
+  OR?: FileSubscriptionWhereInput[] | FileSubscriptionWhereInput;
+  NOT?: FileSubscriptionWhereInput[] | FileSubscriptionWhereInput;
+}
+
+export interface InvoiceCreateWithoutJobInput {
+  last_four_digits: Int;
+  price: Int;
+  status?: String;
+}
+
+export interface UserUpdateManyMutationInput {
+  email?: String;
+  password?: String;
+}
+
+export interface CompanyUpdateInput {
+  createdBy?: UserUpdateOneRequiredWithoutCompanyInput;
+  email?: String;
+  name?: String;
+  website?: String;
+  logo?: FileUpdateOneInput;
+  jobs?: JobUpdateManyWithoutCompanyInput;
+}
+
+export interface CompanyUpdateWithoutCreatedByDataInput {
+  email?: String;
+  name?: String;
+  website?: String;
+  logo?: FileUpdateOneInput;
+  jobs?: JobUpdateManyWithoutCompanyInput;
+}
+
+export interface UserUpdateOneRequiredWithoutCompanyInput {
+  create?: UserCreateWithoutCompanyInput;
+  update?: UserUpdateWithoutCompanyDataInput;
+  upsert?: UserUpsertWithoutCompanyInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export type FileWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UserUpdateWithoutCompanyDataInput {
+  email?: String;
+  password?: String;
+}
+
+export interface CompanyCreateWithoutCreatedByInput {
+  email: String;
+  name: String;
+  website: String;
+  logo?: FileCreateOneInput;
+  jobs?: JobCreateManyWithoutCompanyInput;
+}
+
+export interface UserUpsertWithoutCompanyInput {
+  update: UserUpdateWithoutCompanyDataInput;
+  create: UserCreateWithoutCompanyInput;
+}
+
+export interface UserCreateInput {
+  email: String;
+  password: String;
+  company: CompanyCreateOneWithoutCreatedByInput;
+}
+
+export interface FileUpdateOneInput {
+  create?: FileCreateInput;
+  update?: FileUpdateDataInput;
+  upsert?: FileUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: FileWhereUniqueInput;
+}
+
+export interface JobUpdateManyMutationInput {
+  position?: String;
+  location?: String;
+  salary?: Int;
+  description?: String;
+  job_type?: JOB_TYPE;
+  status?: STATUS_TYPE;
+  apply_url?: String;
+  company_name?: String;
+  company_email?: String;
+  company_website?: String;
+  expiresAt?: DateTimeInput;
+}
+
+export interface FileUpdateDataInput {
+  base64?: String;
+  mimetype?: String;
+}
+
+export interface JobCreateInput {
+  position: String;
+  location: String;
+  salary: Int;
+  description: String;
+  job_type: JOB_TYPE;
+  status: STATUS_TYPE;
+  apply_url: String;
+  company?: CompanyCreateOneWithoutJobsInput;
+  company_name?: String;
+  company_email?: String;
+  company_website?: String;
+  invoices?: InvoiceCreateManyWithoutJobInput;
+  expiresAt: DateTimeInput;
+}
+
+export interface InvoiceUpdateInput {
+  job?: JobUpdateOneRequiredWithoutInvoicesInput;
+  last_four_digits?: Int;
+  price?: Int;
+  status?: String;
+}
+
+export interface InvoiceUpdateManyMutationInput {
+  last_four_digits?: Int;
+  price?: Int;
+  status?: String;
 }
 
 export interface JobUpdateManyWithoutCompanyInput {
@@ -844,9 +818,9 @@ export interface JobUpdateManyWithoutCompanyInput {
     | JobUpdateManyWithWhereNestedInput;
 }
 
-export interface CompanyCreateOneWithoutCreatedByInput {
-  create?: CompanyCreateWithoutCreatedByInput;
-  connect?: CompanyWhereUniqueInput;
+export interface CompanyUpsertWithoutJobsInput {
+  update: CompanyUpdateWithoutJobsDataInput;
+  create: CompanyCreateWithoutJobsInput;
 }
 
 export interface JobUpdateWithWhereUniqueWithoutCompanyInput {
@@ -854,9 +828,12 @@ export interface JobUpdateWithWhereUniqueWithoutCompanyInput {
   data: JobUpdateWithoutCompanyDataInput;
 }
 
-export interface CompanyUpsertWithoutJobsInput {
-  update: CompanyUpdateWithoutJobsDataInput;
-  create: CompanyCreateWithoutJobsInput;
+export interface CompanyUpdateWithoutJobsDataInput {
+  createdBy?: UserUpdateOneRequiredWithoutCompanyInput;
+  email?: String;
+  name?: String;
+  website?: String;
+  logo?: FileUpdateOneInput;
 }
 
 export interface JobUpdateWithoutCompanyDataInput {
@@ -870,10 +847,11 @@ export interface JobUpdateWithoutCompanyDataInput {
   company_name?: String;
   company_email?: String;
   company_website?: String;
+  invoices?: InvoiceUpdateManyWithoutJobInput;
   expiresAt?: DateTimeInput;
 }
 
-export interface JobUpdateInput {
+export interface JobUpdateWithoutInvoicesDataInput {
   position?: String;
   location?: String;
   salary?: Int;
@@ -888,22 +866,308 @@ export interface JobUpdateInput {
   expiresAt?: DateTimeInput;
 }
 
+export interface InvoiceUpdateManyWithoutJobInput {
+  create?: InvoiceCreateWithoutJobInput[] | InvoiceCreateWithoutJobInput;
+  delete?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput;
+  connect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput;
+  set?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput;
+  disconnect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput;
+  update?:
+    | InvoiceUpdateWithWhereUniqueWithoutJobInput[]
+    | InvoiceUpdateWithWhereUniqueWithoutJobInput;
+  upsert?:
+    | InvoiceUpsertWithWhereUniqueWithoutJobInput[]
+    | InvoiceUpsertWithWhereUniqueWithoutJobInput;
+  deleteMany?: InvoiceScalarWhereInput[] | InvoiceScalarWhereInput;
+  updateMany?:
+    | InvoiceUpdateManyWithWhereNestedInput[]
+    | InvoiceUpdateManyWithWhereNestedInput;
+}
+
+export interface UserCreateOneWithoutCompanyInput {
+  create?: UserCreateWithoutCompanyInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface CompanyWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdBy?: UserWhereInput;
+  email?: String;
+  email_not?: String;
+  email_in?: String[] | String;
+  email_not_in?: String[] | String;
+  email_lt?: String;
+  email_lte?: String;
+  email_gt?: String;
+  email_gte?: String;
+  email_contains?: String;
+  email_not_contains?: String;
+  email_starts_with?: String;
+  email_not_starts_with?: String;
+  email_ends_with?: String;
+  email_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  website?: String;
+  website_not?: String;
+  website_in?: String[] | String;
+  website_not_in?: String[] | String;
+  website_lt?: String;
+  website_lte?: String;
+  website_gt?: String;
+  website_gte?: String;
+  website_contains?: String;
+  website_not_contains?: String;
+  website_starts_with?: String;
+  website_not_starts_with?: String;
+  website_ends_with?: String;
+  website_not_ends_with?: String;
+  logo?: FileWhereInput;
+  jobs_every?: JobWhereInput;
+  jobs_some?: JobWhereInput;
+  jobs_none?: JobWhereInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  AND?: CompanyWhereInput[] | CompanyWhereInput;
+  OR?: CompanyWhereInput[] | CompanyWhereInput;
+  NOT?: CompanyWhereInput[] | CompanyWhereInput;
+}
+
+export interface InvoiceWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  job?: JobWhereInput;
+  last_four_digits?: Int;
+  last_four_digits_not?: Int;
+  last_four_digits_in?: Int[] | Int;
+  last_four_digits_not_in?: Int[] | Int;
+  last_four_digits_lt?: Int;
+  last_four_digits_lte?: Int;
+  last_four_digits_gt?: Int;
+  last_four_digits_gte?: Int;
+  price?: Int;
+  price_not?: Int;
+  price_in?: Int[] | Int;
+  price_not_in?: Int[] | Int;
+  price_lt?: Int;
+  price_lte?: Int;
+  price_gt?: Int;
+  price_gte?: Int;
+  status?: String;
+  status_not?: String;
+  status_in?: String[] | String;
+  status_not_in?: String[] | String;
+  status_lt?: String;
+  status_lte?: String;
+  status_gt?: String;
+  status_gte?: String;
+  status_contains?: String;
+  status_not_contains?: String;
+  status_starts_with?: String;
+  status_not_starts_with?: String;
+  status_ends_with?: String;
+  status_not_ends_with?: String;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  AND?: InvoiceWhereInput[] | InvoiceWhereInput;
+  OR?: InvoiceWhereInput[] | InvoiceWhereInput;
+  NOT?: InvoiceWhereInput[] | InvoiceWhereInput;
+}
+
+export interface InvoiceUpdateWithoutJobDataInput {
+  last_four_digits?: Int;
+  price?: Int;
+  status?: String;
+}
+
+export interface InvoiceSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: InvoiceWhereInput;
+  AND?: InvoiceSubscriptionWhereInput[] | InvoiceSubscriptionWhereInput;
+  OR?: InvoiceSubscriptionWhereInput[] | InvoiceSubscriptionWhereInput;
+  NOT?: InvoiceSubscriptionWhereInput[] | InvoiceSubscriptionWhereInput;
+}
+
+export interface InvoiceUpsertWithWhereUniqueWithoutJobInput {
+  where: InvoiceWhereUniqueInput;
+  update: InvoiceUpdateWithoutJobDataInput;
+  create: InvoiceCreateWithoutJobInput;
+}
+
+export interface CompanyUpsertWithoutCreatedByInput {
+  update: CompanyUpdateWithoutCreatedByDataInput;
+  create: CompanyCreateWithoutCreatedByInput;
+}
+
+export interface InvoiceScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  last_four_digits?: Int;
+  last_four_digits_not?: Int;
+  last_four_digits_in?: Int[] | Int;
+  last_four_digits_not_in?: Int[] | Int;
+  last_four_digits_lt?: Int;
+  last_four_digits_lte?: Int;
+  last_four_digits_gt?: Int;
+  last_four_digits_gte?: Int;
+  price?: Int;
+  price_not?: Int;
+  price_in?: Int[] | Int;
+  price_not_in?: Int[] | Int;
+  price_lt?: Int;
+  price_lte?: Int;
+  price_gt?: Int;
+  price_gte?: Int;
+  status?: String;
+  status_not?: String;
+  status_in?: String[] | String;
+  status_not_in?: String[] | String;
+  status_lt?: String;
+  status_lte?: String;
+  status_gt?: String;
+  status_gte?: String;
+  status_contains?: String;
+  status_not_contains?: String;
+  status_starts_with?: String;
+  status_not_starts_with?: String;
+  status_ends_with?: String;
+  status_not_ends_with?: String;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  AND?: InvoiceScalarWhereInput[] | InvoiceScalarWhereInput;
+  OR?: InvoiceScalarWhereInput[] | InvoiceScalarWhereInput;
+  NOT?: InvoiceScalarWhereInput[] | InvoiceScalarWhereInput;
+}
+
+export interface UserUpdateInput {
+  email?: String;
+  password?: String;
+  company?: CompanyUpdateOneRequiredWithoutCreatedByInput;
+}
+
+export interface InvoiceUpdateManyWithWhereNestedInput {
+  where: InvoiceScalarWhereInput;
+  data: InvoiceUpdateManyDataInput;
+}
+
+export type InvoiceWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface InvoiceUpdateManyDataInput {
+  last_four_digits?: Int;
+  price?: Int;
+  status?: String;
+}
+
+export type JobWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
 export interface JobUpsertWithWhereUniqueWithoutCompanyInput {
   where: JobWhereUniqueInput;
   update: JobUpdateWithoutCompanyDataInput;
   create: JobCreateWithoutCompanyInput;
 }
 
-export interface JobSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: JobWhereInput;
-  AND?: JobSubscriptionWhereInput[] | JobSubscriptionWhereInput;
-  OR?: JobSubscriptionWhereInput[] | JobSubscriptionWhereInput;
-  NOT?: JobSubscriptionWhereInput[] | JobSubscriptionWhereInput;
-}
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  email?: String;
+}>;
 
 export interface JobScalarWhereInput {
   id?: ID_Input;
@@ -1063,35 +1327,11 @@ export interface JobScalarWhereInput {
   NOT?: JobScalarWhereInput[] | JobScalarWhereInput;
 }
 
-export interface UserUpdateInput {
-  email?: String;
-  password?: String;
-  company?: CompanyUpdateOneRequiredWithoutCreatedByInput;
-}
-
-export interface FileUpdateManyMutationInput {
-  base64?: String;
-  mimetype?: String;
-}
-
-export interface CompanyUpdateManyMutationInput {
-  email?: String;
-  name?: String;
-  website?: String;
-}
-
-export interface JobUpdateManyDataInput {
-  position?: String;
-  location?: String;
-  salary?: Int;
-  description?: String;
-  job_type?: JOB_TYPE;
-  status?: STATUS_TYPE;
-  apply_url?: String;
-  company_name?: String;
-  company_email?: String;
-  company_website?: String;
-  expiresAt?: DateTimeInput;
+export interface JobUpdateOneRequiredWithoutInvoicesInput {
+  create?: JobCreateWithoutInvoicesInput;
+  update?: JobUpdateWithoutInvoicesDataInput;
+  upsert?: JobUpsertWithoutInvoicesInput;
+  connect?: JobWhereUniqueInput;
 }
 
 export interface JobUpdateManyWithWhereNestedInput {
@@ -1099,16 +1339,7 @@ export interface JobUpdateManyWithWhereNestedInput {
   data: JobUpdateManyDataInput;
 }
 
-export type JobWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface CompanyUpsertWithoutCreatedByInput {
-  update: CompanyUpdateWithoutCreatedByDataInput;
-  create: CompanyCreateWithoutCreatedByInput;
-}
-
-export interface CompanyWhereInput {
+export interface UserWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -1123,7 +1354,6 @@ export interface CompanyWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  createdBy?: UserWhereInput;
   email?: String;
   email_not?: String;
   email_in?: String[] | String;
@@ -1138,38 +1368,21 @@ export interface CompanyWhereInput {
   email_not_starts_with?: String;
   email_ends_with?: String;
   email_not_ends_with?: String;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  website?: String;
-  website_not?: String;
-  website_in?: String[] | String;
-  website_not_in?: String[] | String;
-  website_lt?: String;
-  website_lte?: String;
-  website_gt?: String;
-  website_gte?: String;
-  website_contains?: String;
-  website_not_contains?: String;
-  website_starts_with?: String;
-  website_not_starts_with?: String;
-  website_ends_with?: String;
-  website_not_ends_with?: String;
-  logo?: FileWhereInput;
-  jobs_every?: JobWhereInput;
-  jobs_some?: JobWhereInput;
-  jobs_none?: JobWhereInput;
+  password?: String;
+  password_not?: String;
+  password_in?: String[] | String;
+  password_not_in?: String[] | String;
+  password_lt?: String;
+  password_lte?: String;
+  password_gt?: String;
+  password_gte?: String;
+  password_contains?: String;
+  password_not_contains?: String;
+  password_starts_with?: String;
+  password_not_starts_with?: String;
+  password_ends_with?: String;
+  password_not_ends_with?: String;
+  company?: CompanyWhereInput;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
   createdAt_in?: DateTimeInput[] | DateTimeInput;
@@ -1186,15 +1399,138 @@ export interface CompanyWhereInput {
   updatedAt_lte?: DateTimeInput;
   updatedAt_gt?: DateTimeInput;
   updatedAt_gte?: DateTimeInput;
-  AND?: CompanyWhereInput[] | CompanyWhereInput;
-  OR?: CompanyWhereInput[] | CompanyWhereInput;
-  NOT?: CompanyWhereInput[] | CompanyWhereInput;
+  AND?: UserWhereInput[] | UserWhereInput;
+  OR?: UserWhereInput[] | UserWhereInput;
+  NOT?: UserWhereInput[] | UserWhereInput;
 }
 
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
+export interface JobUpdateManyDataInput {
+  position?: String;
+  location?: String;
+  salary?: Int;
+  description?: String;
+  job_type?: JOB_TYPE;
+  status?: STATUS_TYPE;
+  apply_url?: String;
+  company_name?: String;
+  company_email?: String;
+  company_website?: String;
+  expiresAt?: DateTimeInput;
+}
+
+export interface CompanySubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: CompanyWhereInput;
+  AND?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
+  OR?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
+  NOT?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
+}
+
+export interface CompanyUpdateManyMutationInput {
   email?: String;
-}>;
+  name?: String;
+  website?: String;
+}
+
+export interface CompanyCreateOneWithoutCreatedByInput {
+  create?: CompanyCreateWithoutCreatedByInput;
+  connect?: CompanyWhereUniqueInput;
+}
+
+export interface CompanyCreateWithoutJobsInput {
+  createdBy: UserCreateOneWithoutCompanyInput;
+  email: String;
+  name: String;
+  website: String;
+  logo?: FileCreateOneInput;
+}
+
+export interface JobUpsertWithoutInvoicesInput {
+  update: JobUpdateWithoutInvoicesDataInput;
+  create: JobCreateWithoutInvoicesInput;
+}
+
+export interface CompanyCreateOneWithoutJobsInput {
+  create?: CompanyCreateWithoutJobsInput;
+  connect?: CompanyWhereUniqueInput;
+}
+
+export interface CompanyCreateInput {
+  createdBy: UserCreateOneWithoutCompanyInput;
+  email: String;
+  name: String;
+  website: String;
+  logo?: FileCreateOneInput;
+  jobs?: JobCreateManyWithoutCompanyInput;
+}
+
+export interface JobCreateOneWithoutInvoicesInput {
+  create?: JobCreateWithoutInvoicesInput;
+  connect?: JobWhereUniqueInput;
+}
+
+export interface InvoiceCreateInput {
+  job: JobCreateOneWithoutInvoicesInput;
+  last_four_digits: Int;
+  price: Int;
+  status?: String;
+}
+
+export interface FileUpdateManyMutationInput {
+  base64?: String;
+  mimetype?: String;
+}
+
+export interface FileUpdateInput {
+  base64?: String;
+  mimetype?: String;
+}
+
+export interface UserSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UserWhereInput;
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+}
+
+export interface CompanyUpdateOneWithoutJobsInput {
+  create?: CompanyCreateWithoutJobsInput;
+  update?: CompanyUpdateWithoutJobsDataInput;
+  upsert?: CompanyUpsertWithoutJobsInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: CompanyWhereUniqueInput;
+}
+
+export interface JobUpdateInput {
+  position?: String;
+  location?: String;
+  salary?: Int;
+  description?: String;
+  job_type?: JOB_TYPE;
+  status?: STATUS_TYPE;
+  apply_url?: String;
+  company?: CompanyUpdateOneWithoutJobsInput;
+  company_name?: String;
+  company_email?: String;
+  company_website?: String;
+  invoices?: InvoiceUpdateManyWithoutJobInput;
+  expiresAt?: DateTimeInput;
+}
+
+export interface CompanyUpdateOneRequiredWithoutCreatedByInput {
+  create?: CompanyCreateWithoutCreatedByInput;
+  update?: CompanyUpdateWithoutCreatedByDataInput;
+  upsert?: CompanyUpsertWithoutCreatedByInput;
+  connect?: CompanyWhereUniqueInput;
+}
 
 export interface NodeNode {
   id: ID_Output;
@@ -1224,32 +1560,6 @@ export interface UserPreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   email: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface File {
-  id: ID_Output;
-  base64: String;
-  mimetype: String;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface FilePromise extends Promise<File>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  base64: () => Promise<String>;
-  mimetype: () => Promise<String>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface FileSubscription
-  extends Promise<AsyncIterator<File>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  base64: () => Promise<AsyncIterator<String>>;
-  mimetype: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -1284,6 +1594,17 @@ export interface JobPromise extends Promise<Job>, Fragmentable {
   company_name: () => Promise<String>;
   company_email: () => Promise<String>;
   company_website: () => Promise<String>;
+  invoices: <T = FragmentableArray<Invoice>>(
+    args?: {
+      where?: InvoiceWhereInput;
+      orderBy?: InvoiceOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
   expiresAt: () => Promise<DateTimeOutput>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
@@ -1304,7 +1625,44 @@ export interface JobSubscription
   company_name: () => Promise<AsyncIterator<String>>;
   company_email: () => Promise<AsyncIterator<String>>;
   company_website: () => Promise<AsyncIterator<String>>;
+  invoices: <T = Promise<AsyncIterator<InvoiceSubscription>>>(
+    args?: {
+      where?: InvoiceWhereInput;
+      orderBy?: InvoiceOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
   expiresAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface File {
+  id: ID_Output;
+  base64: String;
+  mimetype: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface FilePromise extends Promise<File>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  base64: () => Promise<String>;
+  mimetype: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface FileSubscription
+  extends Promise<AsyncIterator<File>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  base64: () => Promise<AsyncIterator<String>>;
+  mimetype: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -1586,20 +1944,20 @@ export interface CompanySubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface FileEdge {
-  node: File;
+export interface InvoiceEdge {
+  node: Invoice;
   cursor: String;
 }
 
-export interface FileEdgePromise extends Promise<FileEdge>, Fragmentable {
-  node: <T = FilePromise>() => T;
+export interface InvoiceEdgePromise extends Promise<InvoiceEdge>, Fragmentable {
+  node: <T = InvoicePromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface FileEdgeSubscription
-  extends Promise<AsyncIterator<FileEdge>>,
+export interface InvoiceEdgeSubscription
+  extends Promise<AsyncIterator<InvoiceEdge>>,
     Fragmentable {
-  node: <T = FileSubscription>() => T;
+  node: <T = InvoiceSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
@@ -1628,135 +1986,20 @@ export interface CompanySubscriptionPayloadSubscription
   previousValues: <T = CompanyPreviousValuesSubscription>() => T;
 }
 
-export interface UserSubscriptionPayload {
-  mutation: MutationType;
-  node: User;
-  updatedFields: String[];
-  previousValues: UserPreviousValues;
+export interface AggregateFile {
+  count: Int;
 }
 
-export interface UserSubscriptionPayloadPromise
-  extends Promise<UserSubscriptionPayload>,
+export interface AggregateFilePromise
+  extends Promise<AggregateFile>,
     Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = UserPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = UserPreviousValuesPromise>() => T;
+  count: () => Promise<Int>;
 }
 
-export interface UserSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
+export interface AggregateFileSubscription
+  extends Promise<AsyncIterator<AggregateFile>>,
     Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = UserSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = UserPreviousValuesSubscription>() => T;
-}
-
-export interface User {
-  id: ID_Output;
-  email: String;
-  password: String;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface UserPromise extends Promise<User>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  email: () => Promise<String>;
-  password: () => Promise<String>;
-  company: <T = CompanyPromise>() => T;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface UserSubscription
-  extends Promise<AsyncIterator<User>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  email: () => Promise<AsyncIterator<String>>;
-  password: () => Promise<AsyncIterator<String>>;
-  company: <T = CompanySubscription>() => T;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface FilePreviousValues {
-  id: ID_Output;
-  base64: String;
-  mimetype: String;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface FilePreviousValuesPromise
-  extends Promise<FilePreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  base64: () => Promise<String>;
-  mimetype: () => Promise<String>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface FilePreviousValuesSubscription
-  extends Promise<AsyncIterator<FilePreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  base64: () => Promise<AsyncIterator<String>>;
-  mimetype: () => Promise<AsyncIterator<String>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface FileSubscriptionPayload {
-  mutation: MutationType;
-  node: File;
-  updatedFields: String[];
-  previousValues: FilePreviousValues;
-}
-
-export interface FileSubscriptionPayloadPromise
-  extends Promise<FileSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = FilePromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = FilePreviousValuesPromise>() => T;
-}
-
-export interface FileSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<FileSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = FileSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = FilePreviousValuesSubscription>() => T;
-}
-
-export interface JobSubscriptionPayload {
-  mutation: MutationType;
-  node: Job;
-  updatedFields: String[];
-  previousValues: JobPreviousValues;
-}
-
-export interface JobSubscriptionPayloadPromise
-  extends Promise<JobSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = JobPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = JobPreviousValuesPromise>() => T;
-}
-
-export interface JobSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<JobSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = JobSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = JobPreviousValuesSubscription>() => T;
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface CompanyPreviousValues {
@@ -1790,40 +2033,6 @@ export interface CompanyPreviousValuesSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface JobEdge {
-  node: Job;
-  cursor: String;
-}
-
-export interface JobEdgePromise extends Promise<JobEdge>, Fragmentable {
-  node: <T = JobPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface JobEdgeSubscription
-  extends Promise<AsyncIterator<JobEdge>>,
-    Fragmentable {
-  node: <T = JobSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface UserEdge {
-  node: User;
-  cursor: String;
-}
-
-export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
-  node: <T = UserPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdge>>,
-    Fragmentable {
-  node: <T = UserSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
 export interface FileConnection {
   pageInfo: PageInfo;
   edges: FileEdge[];
@@ -1845,20 +2054,310 @@ export interface FileConnectionSubscription
   aggregate: <T = AggregateFileSubscription>() => T;
 }
 
-export interface AggregateFile {
+export interface JobSubscriptionPayload {
+  mutation: MutationType;
+  node: Job;
+  updatedFields: String[];
+  previousValues: JobPreviousValues;
+}
+
+export interface JobSubscriptionPayloadPromise
+  extends Promise<JobSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = JobPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = JobPreviousValuesPromise>() => T;
+}
+
+export interface JobSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<JobSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = JobSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = JobPreviousValuesSubscription>() => T;
+}
+
+export interface UserEdge {
+  node: User;
+  cursor: String;
+}
+
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
+    Fragmentable {
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface FileSubscriptionPayload {
+  mutation: MutationType;
+  node: File;
+  updatedFields: String[];
+  previousValues: FilePreviousValues;
+}
+
+export interface FileSubscriptionPayloadPromise
+  extends Promise<FileSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = FilePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = FilePreviousValuesPromise>() => T;
+}
+
+export interface FileSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<FileSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = FileSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = FilePreviousValuesSubscription>() => T;
+}
+
+export interface JobEdge {
+  node: Job;
+  cursor: String;
+}
+
+export interface JobEdgePromise extends Promise<JobEdge>, Fragmentable {
+  node: <T = JobPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface JobEdgeSubscription
+  extends Promise<AsyncIterator<JobEdge>>,
+    Fragmentable {
+  node: <T = JobSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface InvoiceConnection {
+  pageInfo: PageInfo;
+  edges: InvoiceEdge[];
+}
+
+export interface InvoiceConnectionPromise
+  extends Promise<InvoiceConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<InvoiceEdge>>() => T;
+  aggregate: <T = AggregateInvoicePromise>() => T;
+}
+
+export interface InvoiceConnectionSubscription
+  extends Promise<AsyncIterator<InvoiceConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<InvoiceEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateInvoiceSubscription>() => T;
+}
+
+export interface InvoicePreviousValues {
+  id: ID_Output;
+  last_four_digits: Int;
+  price: Int;
+  status: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface InvoicePreviousValuesPromise
+  extends Promise<InvoicePreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  last_four_digits: () => Promise<Int>;
+  price: () => Promise<Int>;
+  status: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface InvoicePreviousValuesSubscription
+  extends Promise<AsyncIterator<InvoicePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  last_four_digits: () => Promise<AsyncIterator<Int>>;
+  price: () => Promise<AsyncIterator<Int>>;
+  status: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface InvoiceSubscriptionPayload {
+  mutation: MutationType;
+  node: Invoice;
+  updatedFields: String[];
+  previousValues: InvoicePreviousValues;
+}
+
+export interface InvoiceSubscriptionPayloadPromise
+  extends Promise<InvoiceSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = InvoicePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = InvoicePreviousValuesPromise>() => T;
+}
+
+export interface InvoiceSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<InvoiceSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = InvoiceSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = InvoicePreviousValuesSubscription>() => T;
+}
+
+export interface Invoice {
+  id: ID_Output;
+  last_four_digits: Int;
+  price: Int;
+  status: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface InvoicePromise extends Promise<Invoice>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  job: <T = JobPromise>() => T;
+  last_four_digits: () => Promise<Int>;
+  price: () => Promise<Int>;
+  status: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface InvoiceSubscription
+  extends Promise<AsyncIterator<Invoice>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  job: <T = JobSubscription>() => T;
+  last_four_digits: () => Promise<AsyncIterator<Int>>;
+  price: () => Promise<AsyncIterator<Int>>;
+  status: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface FilePreviousValues {
+  id: ID_Output;
+  base64: String;
+  mimetype: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface FilePreviousValuesPromise
+  extends Promise<FilePreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  base64: () => Promise<String>;
+  mimetype: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface FilePreviousValuesSubscription
+  extends Promise<AsyncIterator<FilePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  base64: () => Promise<AsyncIterator<String>>;
+  mimetype: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface FileEdge {
+  node: File;
+  cursor: String;
+}
+
+export interface FileEdgePromise extends Promise<FileEdge>, Fragmentable {
+  node: <T = FilePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface FileEdgeSubscription
+  extends Promise<AsyncIterator<FileEdge>>,
+    Fragmentable {
+  node: <T = FileSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateInvoice {
   count: Int;
 }
 
-export interface AggregateFilePromise
-  extends Promise<AggregateFile>,
+export interface AggregateInvoicePromise
+  extends Promise<AggregateInvoice>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateFileSubscription
-  extends Promise<AsyncIterator<AggregateFile>>,
+export interface AggregateInvoiceSubscription
+  extends Promise<AsyncIterator<AggregateInvoice>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface User {
+  id: ID_Output;
+  email: String;
+  password: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface UserPromise extends Promise<User>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  email: () => Promise<String>;
+  password: () => Promise<String>;
+  company: <T = CompanyPromise>() => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface UserSubscription
+  extends Promise<AsyncIterator<User>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  email: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+  company: <T = CompanySubscription>() => T;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface UserSubscriptionPayload {
+  mutation: MutationType;
+  node: User;
+  updatedFields: String[];
+  previousValues: UserPreviousValues;
+}
+
+export interface UserSubscriptionPayloadPromise
+  extends Promise<UserSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = UserPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = UserPreviousValuesPromise>() => T;
+}
+
+export interface UserSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = UserSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = UserPreviousValuesSubscription>() => T;
 }
 
 /*
@@ -1909,6 +2408,10 @@ export const models: Model[] = [
   },
   {
     name: "Company",
+    embedded: false
+  },
+  {
+    name: "Invoice",
     embedded: false
   },
   {

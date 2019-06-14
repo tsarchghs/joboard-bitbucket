@@ -42,6 +42,16 @@ type Company {
 	updatedAt: DateTime! @updatedAt
 }
 
+type Invoice {
+	id: ID! @id
+	job: Job! @relation(link: TABLE)
+	last_four_digits: Int!
+	price: Int!
+	status: String! @default(value:"Paid")
+	createdAt: DateTime! @createdAt
+	updatedAt: DateTime! @updatedAt
+}
+
 type Job {
 	id: ID! @id
 	position: String!
@@ -55,6 +65,7 @@ type Job {
 	company_name: String
 	company_email: String
 	company_website: String
+	invoices: [Invoice!]!
 	expiresAt: DateTime!
 	createdAt: DateTime! @createdAt
 	updatedAt: DateTime! @updatedAt

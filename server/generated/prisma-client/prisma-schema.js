@@ -11,6 +11,10 @@ type AggregateFile {
   count: Int!
 }
 
+type AggregateInvoice {
+  count: Int!
+}
+
 type AggregateJob {
   count: Int!
 }
@@ -434,6 +438,277 @@ input FileWhereUniqueInput {
   id: ID
 }
 
+type Invoice {
+  id: ID!
+  job: Job!
+  last_four_digits: Int!
+  price: Int!
+  status: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type InvoiceConnection {
+  pageInfo: PageInfo!
+  edges: [InvoiceEdge]!
+  aggregate: AggregateInvoice!
+}
+
+input InvoiceCreateInput {
+  job: JobCreateOneWithoutInvoicesInput!
+  last_four_digits: Int!
+  price: Int!
+  status: String
+}
+
+input InvoiceCreateManyWithoutJobInput {
+  create: [InvoiceCreateWithoutJobInput!]
+  connect: [InvoiceWhereUniqueInput!]
+}
+
+input InvoiceCreateWithoutJobInput {
+  last_four_digits: Int!
+  price: Int!
+  status: String
+}
+
+type InvoiceEdge {
+  node: Invoice!
+  cursor: String!
+}
+
+enum InvoiceOrderByInput {
+  id_ASC
+  id_DESC
+  last_four_digits_ASC
+  last_four_digits_DESC
+  price_ASC
+  price_DESC
+  status_ASC
+  status_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type InvoicePreviousValues {
+  id: ID!
+  last_four_digits: Int!
+  price: Int!
+  status: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input InvoiceScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  last_four_digits: Int
+  last_four_digits_not: Int
+  last_four_digits_in: [Int!]
+  last_four_digits_not_in: [Int!]
+  last_four_digits_lt: Int
+  last_four_digits_lte: Int
+  last_four_digits_gt: Int
+  last_four_digits_gte: Int
+  price: Int
+  price_not: Int
+  price_in: [Int!]
+  price_not_in: [Int!]
+  price_lt: Int
+  price_lte: Int
+  price_gt: Int
+  price_gte: Int
+  status: String
+  status_not: String
+  status_in: [String!]
+  status_not_in: [String!]
+  status_lt: String
+  status_lte: String
+  status_gt: String
+  status_gte: String
+  status_contains: String
+  status_not_contains: String
+  status_starts_with: String
+  status_not_starts_with: String
+  status_ends_with: String
+  status_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [InvoiceScalarWhereInput!]
+  OR: [InvoiceScalarWhereInput!]
+  NOT: [InvoiceScalarWhereInput!]
+}
+
+type InvoiceSubscriptionPayload {
+  mutation: MutationType!
+  node: Invoice
+  updatedFields: [String!]
+  previousValues: InvoicePreviousValues
+}
+
+input InvoiceSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: InvoiceWhereInput
+  AND: [InvoiceSubscriptionWhereInput!]
+  OR: [InvoiceSubscriptionWhereInput!]
+  NOT: [InvoiceSubscriptionWhereInput!]
+}
+
+input InvoiceUpdateInput {
+  job: JobUpdateOneRequiredWithoutInvoicesInput
+  last_four_digits: Int
+  price: Int
+  status: String
+}
+
+input InvoiceUpdateManyDataInput {
+  last_four_digits: Int
+  price: Int
+  status: String
+}
+
+input InvoiceUpdateManyMutationInput {
+  last_four_digits: Int
+  price: Int
+  status: String
+}
+
+input InvoiceUpdateManyWithoutJobInput {
+  create: [InvoiceCreateWithoutJobInput!]
+  delete: [InvoiceWhereUniqueInput!]
+  connect: [InvoiceWhereUniqueInput!]
+  set: [InvoiceWhereUniqueInput!]
+  disconnect: [InvoiceWhereUniqueInput!]
+  update: [InvoiceUpdateWithWhereUniqueWithoutJobInput!]
+  upsert: [InvoiceUpsertWithWhereUniqueWithoutJobInput!]
+  deleteMany: [InvoiceScalarWhereInput!]
+  updateMany: [InvoiceUpdateManyWithWhereNestedInput!]
+}
+
+input InvoiceUpdateManyWithWhereNestedInput {
+  where: InvoiceScalarWhereInput!
+  data: InvoiceUpdateManyDataInput!
+}
+
+input InvoiceUpdateWithoutJobDataInput {
+  last_four_digits: Int
+  price: Int
+  status: String
+}
+
+input InvoiceUpdateWithWhereUniqueWithoutJobInput {
+  where: InvoiceWhereUniqueInput!
+  data: InvoiceUpdateWithoutJobDataInput!
+}
+
+input InvoiceUpsertWithWhereUniqueWithoutJobInput {
+  where: InvoiceWhereUniqueInput!
+  update: InvoiceUpdateWithoutJobDataInput!
+  create: InvoiceCreateWithoutJobInput!
+}
+
+input InvoiceWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  job: JobWhereInput
+  last_four_digits: Int
+  last_four_digits_not: Int
+  last_four_digits_in: [Int!]
+  last_four_digits_not_in: [Int!]
+  last_four_digits_lt: Int
+  last_four_digits_lte: Int
+  last_four_digits_gt: Int
+  last_four_digits_gte: Int
+  price: Int
+  price_not: Int
+  price_in: [Int!]
+  price_not_in: [Int!]
+  price_lt: Int
+  price_lte: Int
+  price_gt: Int
+  price_gte: Int
+  status: String
+  status_not: String
+  status_in: [String!]
+  status_not_in: [String!]
+  status_lt: String
+  status_lte: String
+  status_gt: String
+  status_gte: String
+  status_contains: String
+  status_not_contains: String
+  status_starts_with: String
+  status_not_starts_with: String
+  status_ends_with: String
+  status_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [InvoiceWhereInput!]
+  OR: [InvoiceWhereInput!]
+  NOT: [InvoiceWhereInput!]
+}
+
+input InvoiceWhereUniqueInput {
+  id: ID
+}
+
 type Job {
   id: ID!
   position: String!
@@ -447,6 +722,7 @@ type Job {
   company_name: String
   company_email: String
   company_website: String
+  invoices(where: InvoiceWhereInput, orderBy: InvoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Invoice!]
   expiresAt: DateTime!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -477,12 +753,18 @@ input JobCreateInput {
   company_name: String
   company_email: String
   company_website: String
+  invoices: InvoiceCreateManyWithoutJobInput
   expiresAt: DateTime!
 }
 
 input JobCreateManyWithoutCompanyInput {
   create: [JobCreateWithoutCompanyInput!]
   connect: [JobWhereUniqueInput!]
+}
+
+input JobCreateOneWithoutInvoicesInput {
+  create: JobCreateWithoutInvoicesInput
+  connect: JobWhereUniqueInput
 }
 
 input JobCreateWithoutCompanyInput {
@@ -493,6 +775,22 @@ input JobCreateWithoutCompanyInput {
   job_type: JOB_TYPE!
   status: STATUS_TYPE!
   apply_url: String!
+  company_name: String
+  company_email: String
+  company_website: String
+  invoices: InvoiceCreateManyWithoutJobInput
+  expiresAt: DateTime!
+}
+
+input JobCreateWithoutInvoicesInput {
+  position: String!
+  location: String!
+  salary: Int!
+  description: String!
+  job_type: JOB_TYPE!
+  status: STATUS_TYPE!
+  apply_url: String!
+  company: CompanyCreateOneWithoutJobsInput
   company_name: String
   company_email: String
   company_website: String
@@ -740,6 +1038,7 @@ input JobUpdateInput {
   company_name: String
   company_email: String
   company_website: String
+  invoices: InvoiceUpdateManyWithoutJobInput
   expiresAt: DateTime
 }
 
@@ -788,6 +1087,13 @@ input JobUpdateManyWithWhereNestedInput {
   data: JobUpdateManyDataInput!
 }
 
+input JobUpdateOneRequiredWithoutInvoicesInput {
+  create: JobCreateWithoutInvoicesInput
+  update: JobUpdateWithoutInvoicesDataInput
+  upsert: JobUpsertWithoutInvoicesInput
+  connect: JobWhereUniqueInput
+}
+
 input JobUpdateWithoutCompanyDataInput {
   position: String
   location: String
@@ -799,12 +1105,33 @@ input JobUpdateWithoutCompanyDataInput {
   company_name: String
   company_email: String
   company_website: String
+  invoices: InvoiceUpdateManyWithoutJobInput
+  expiresAt: DateTime
+}
+
+input JobUpdateWithoutInvoicesDataInput {
+  position: String
+  location: String
+  salary: Int
+  description: String
+  job_type: JOB_TYPE
+  status: STATUS_TYPE
+  apply_url: String
+  company: CompanyUpdateOneWithoutJobsInput
+  company_name: String
+  company_email: String
+  company_website: String
   expiresAt: DateTime
 }
 
 input JobUpdateWithWhereUniqueWithoutCompanyInput {
   where: JobWhereUniqueInput!
   data: JobUpdateWithoutCompanyDataInput!
+}
+
+input JobUpsertWithoutInvoicesInput {
+  update: JobUpdateWithoutInvoicesDataInput!
+  create: JobCreateWithoutInvoicesInput!
 }
 
 input JobUpsertWithWhereUniqueWithoutCompanyInput {
@@ -943,6 +1270,9 @@ input JobWhereInput {
   company_website_not_starts_with: String
   company_website_ends_with: String
   company_website_not_ends_with: String
+  invoices_every: InvoiceWhereInput
+  invoices_some: InvoiceWhereInput
+  invoices_none: InvoiceWhereInput
   expiresAt: DateTime
   expiresAt_not: DateTime
   expiresAt_in: [DateTime!]
@@ -991,6 +1321,12 @@ type Mutation {
   upsertFile(where: FileWhereUniqueInput!, create: FileCreateInput!, update: FileUpdateInput!): File!
   deleteFile(where: FileWhereUniqueInput!): File
   deleteManyFiles(where: FileWhereInput): BatchPayload!
+  createInvoice(data: InvoiceCreateInput!): Invoice!
+  updateInvoice(data: InvoiceUpdateInput!, where: InvoiceWhereUniqueInput!): Invoice
+  updateManyInvoices(data: InvoiceUpdateManyMutationInput!, where: InvoiceWhereInput): BatchPayload!
+  upsertInvoice(where: InvoiceWhereUniqueInput!, create: InvoiceCreateInput!, update: InvoiceUpdateInput!): Invoice!
+  deleteInvoice(where: InvoiceWhereUniqueInput!): Invoice
+  deleteManyInvoices(where: InvoiceWhereInput): BatchPayload!
   createJob(data: JobCreateInput!): Job!
   updateJob(data: JobUpdateInput!, where: JobWhereUniqueInput!): Job
   updateManyJobs(data: JobUpdateManyMutationInput!, where: JobWhereInput): BatchPayload!
@@ -1029,6 +1365,9 @@ type Query {
   file(where: FileWhereUniqueInput!): File
   files(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File]!
   filesConnection(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FileConnection!
+  invoice(where: InvoiceWhereUniqueInput!): Invoice
+  invoices(where: InvoiceWhereInput, orderBy: InvoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Invoice]!
+  invoicesConnection(where: InvoiceWhereInput, orderBy: InvoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InvoiceConnection!
   job(where: JobWhereUniqueInput!): Job
   jobs(where: JobWhereInput, orderBy: JobOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Job]!
   jobsConnection(where: JobWhereInput, orderBy: JobOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): JobConnection!
@@ -1048,6 +1387,7 @@ enum STATUS_TYPE {
 type Subscription {
   company(where: CompanySubscriptionWhereInput): CompanySubscriptionPayload
   file(where: FileSubscriptionWhereInput): FileSubscriptionPayload
+  invoice(where: InvoiceSubscriptionWhereInput): InvoiceSubscriptionPayload
   job(where: JobSubscriptionWhereInput): JobSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }

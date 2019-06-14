@@ -5,15 +5,49 @@ import gql from "graphql-tag";
 import DashboardHeader from "./DashboardHeader";
 import DashboardSidebar from "./DashboardSidebar";
 import { Link } from "react-router-dom";
+import RenewJobModal from "./RenewJobModal";
+import { Elements } from 'react-stripe-elements';
 
 class Dashboard extends React.Component {
 	constructor(props){
 		super(props);
+		this.state = {
+			isRenewModalOpen: false,
+			renewJob: undefined
+		}
+		this.closeModal = this.closeModal.bind(this)
+	}
+	closeModal(e,success){
+		if (success){
+			this[`${this.state.renewJob.id}_job-listing-table__time`].outerHTML = `
+			<div class="job-listing-table__time"><h5><img src="/assets/toolkit/images/time-left.svg" alt="">7 days left</h5><h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt="">${this.state.renewJob.location}</h5></div>
+			`
+
+			this[`${this.state.renewJob.id}_job-listing-table__more`].outerHTML = ""
+		}
+		this.setState({
+			isRenewModalOpen: false,
+			renewJob: undefined
+		})
+	}
+	openModal(job){
+		console.log(job,123);
+		this.setState({
+			isRenewModalOpen: true,
+			renewJob: job
+		})
 	}
 	render(){
 		return (
 			<div>
 				<DashboardSidebar />
+				<Elements>
+					<RenewJobModal
+						modalIsOpen={this.state.isRenewModalOpen}
+						closeModal={this.closeModal}
+						job={this.state.renewJob}
+					/>
+				</Elements>
 				<div className="dashboard-layout">
 					<div className="dashboard-layout__header dashboard-jl">
 						<div className="card">
@@ -46,9 +80,9 @@ class Dashboard extends React.Component {
 						{
 							this.props.user.company.jobs.map(job => {
 								return (
-									<div className="job-listing-table__list no-border">
+									<div className={`job-listing-table__list ${this.props.user.company.jobs[0].id === job.id ? "no-border" : ""}`}>
 										<div className="job-listing-table__logo" style={{
-											backgroundImage:
+											backgroundImage:	
 												this.props.user.company.logo
 													? this.props.user.company.logo.url
 													: 'url("/assets/toolkit/images/014-company.svg")'
@@ -65,24 +99,25 @@ class Dashboard extends React.Component {
 												</Link>
 											</h5>
 										</div>
-										<div className="job-listing-table__time">
+										<div ref={node => this[`${job.id}_job-listing-table__time`] = node} className="job-listing-table__time">
 											{
-												new Date().getTime() < new Date(job.expiresIn).getTime()
+												job.status !== "CLOSED"
 													? <h5 className><img src="/assets/toolkit/images/time-left.svg" alt="" />
-														{`${daysDifference(new Date(), new Date(job.expiresIn))} days left`}
+														{`${daysDifference(new Date(), new Date(job.expiresAt))} days left`}
 													</h5>
-													: ""
+													: <h5 class="red"><img src="/assets/toolkit/images/time-left.svg" alt=""/>Job expired</h5>
 											}
 											<h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt="" />{job.location}</h5>
 										</div>
-										<div className="job-listing-table__more">
 											{
-												new Date().getTime() < new Date(job.expiresIn).getTime()
-													? ""
-													: <a href="#" class="button blue">Renew</a>
+												job.status === "CLOSED"
+													?
+													<div ref={node => this[`${job.id}_job-listing-table__more`] = node} className="job-listing-table__more" style={{marginRight:15}}>
+													 <p onClick={() => this.openModal(job)} class="button blue">Renew</p>
+													</div>
+													: ""
 											}
-											<a href="#"><img src="/assets/toolkit/images/more.svg" alt="" /></a>
-										</div>
+														<a href="#"><img src="/assets/toolkit/images/more.svg" alt="" /></a>
 									</div>
 								);
 							})

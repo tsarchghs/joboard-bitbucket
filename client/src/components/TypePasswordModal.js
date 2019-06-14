@@ -65,7 +65,7 @@ class TypePasswordModal extends React.Component{
                                 { (signUp,{loading,error,data}) => {
                                     let onClick = async () => {
                                         let variables = {}
-                                        variables.job = this.props.parent_state.job_id
+                                        variables.job = this.props.parent_state.job.id
                                         variables.email = this.props.parent_state.company_email
                                         variables.password = this.state.password
                                         variables.company = {

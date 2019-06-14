@@ -29,6 +29,7 @@ var getQueryParams = (url) => {
 };
 
 var daysDifference = (data1,data2) => {
+  console.log(data1,223,data2)
     // time difference
     var timeDiff = Math.abs(data1.getTime() - data2.getTime());
 

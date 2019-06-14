@@ -66,13 +66,14 @@ class JobProfile extends React.Component {
 					                  </div>
 					                </div>
 					                <div className="card__button">
-					                  <p style={{marginLeft:10}} className="gray">{new Date(job.createdAt).toLocaleDateString()} {new Date(job.expiresAt).toLocaleDateString()}</p>
-					                  <a target="_blank"  href={job.apply_url} className="button blue">Apply for this job ({job.status})</a>
+					                  <p style={{marginLeft:10}} className="gray"></p>
+					                  <a target="_blank"  href={job.apply_url} className="button blue">Apply for this job</a>
 					                </div>
 					              </div>
 					              <div className="inside-page__description">
-					                <div style={{"whiteSpace":"pre-line"}} className="inside-page__description-part">
-					                  {job.description ? job.description : "No description"}
+					                <div dangerouslySetInnerHTML={{
+										__html:job.description
+									}} style={{"whiteSpace":"pre-line"}} className="inside-page__description-part">
 					                </div>
 
 					              </div>

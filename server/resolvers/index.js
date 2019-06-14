@@ -2,14 +2,15 @@ const authResolvers = require("./authentication");
 const userResolvers = require("./User");
 const companyResolvers = require("./Company"); 
 const jobResolvers = require("./Job");
-const { forwardTo } = require('prisma-binding')
+const invoiceResolvers = require("./Invoice")
 
 module.exports = {
 	Query: {
 		getLoggedInUser: userResolvers.getLoggedInUser,
 		company: companyResolvers.company,
 		jobs: jobResolvers.jobs,
-		job: jobResolvers.job
+		job: jobResolvers.job,
+		invoices: invoiceResolvers.invoices
 	},
 	Mutation: {
 		login: authResolvers.login,
@@ -17,6 +18,7 @@ module.exports = {
 		updateUser: () => {},
 		updateCompany: companyResolvers.updateCompany,
 		createJob: jobResolvers.createJob,
+		renewJob: jobResolvers.renewJob,
 		updateJob: () => {},
 		deleteJob: () => {}
 	}

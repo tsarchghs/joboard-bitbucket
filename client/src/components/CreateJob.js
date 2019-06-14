@@ -9,6 +9,8 @@ import gql from "graphql-tag";
 import CreateAccountQuestionModal from "./CreateAccountQuestionModal";
 import TypePasswordModal from "./TypePasswordModal";
 import { withRouter } from "react-router";
+import { GET_LOGGED_IN_USER } from "../Queries";
+import { cloneDeep } from "lodash";
 
 class _CreateJob extends React.Component {
 	constructor(props){
@@ -29,7 +31,7 @@ class _CreateJob extends React.Component {
 			card_error: "",
 			loading: false,
 			currentModal: null,
-			job_id: undefined
+			job: undefined
 		}
 		this.onChange = this.onChange.bind(this)
 		this.toggleLocationInput = this.toggleLocationInput.bind(this)
@@ -102,17 +104,35 @@ class _CreateJob extends React.Component {
 							stripe_token: $stripe_token
 						){
 							id
+							location
+							position
+							status
+							job_type
+							expiresAt
 						}
 					}
 				`,
 				variables
 			})
 			if (this.props.user){
+				try {
+					let data = cloneDeep(this.props.client.readQuery({
+						query: GET_LOGGED_IN_USER
+					}))
+					data.getLoggedInUser.company.jobs.push(res.data.createJob)
+					this.props.client.writeQuery({
+						query: GET_LOGGED_IN_USER,
+						data: data
+					})
+				} catch (e) {
+					console.log(e)
+				}
 				this.props.history.push(`/job/${res.data.createJob.id}`)
+				return;
 			}
 			console.log(res)
 			this.setState({
-				job_id: res.data.createJob.id,
+				job: res.data.createJob,
 				currentModal: "CreateAccountQuestionModal"
 			})
 		} catch (e) {
@@ -300,7 +320,7 @@ class _CreateJob extends React.Component {
 					<div className="text-center">
 					{
 						this.state.loading ? <img alt="" src="http://localhost:3000/assets/toolkit/images/loading_blue.gif"/>
-						: <button style={{width:"100%"}} type="submit" className="button blue">Post this job ({this.state.featured ? "249" : "199"})</button>
+						: <button style={{width:"100%"}} type="submit" className="button blue">Post this job ({this.state.featured ? "249" : "199"}$)</button>
 					}
 					</div>
 					</div>
