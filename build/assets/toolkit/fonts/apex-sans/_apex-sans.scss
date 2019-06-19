@@ -1,0 +1,161 @@
+$font-path: '../fonts/apex-sans/';
+
+@font-face {
+    font-family: ApexSans-Bold;
+    src: url($font-path + 'ApexSans-Bold.eot');
+    src: url($font-path + 'ApexSans-Bold.eot?#iefix') format('embedded-opentype'),
+         url($font-path + 'ApexSans-Bold.woff') format('woff'),
+         url($font-path + 'ApexSans-Bold.ttf') format('truetype'),
+         url($font-path + 'ApexSans-Bold.svg#ApexSans-Bold') format('svg');
+    font-weight: normal;
+    font-style: normal; }
+
+@font-face {
+    font-family: ApexSans-BoldItalic;
+    src: url($font-path + 'ApexSans-BoldItalic.eot');
+    src: url($font-path + 'ApexSans-BoldItalic.eot?#iefix') format('embedded-opentype'),
+         url($font-path + 'ApexSans-BoldItalic.woff') format('woff'),
+         url($font-path + 'ApexSans-BoldItalic.ttf') format('truetype'),
+         url($font-path + 'ApexSans-BoldItalic.svg#ApexSans-BoldItalic') format('svg');
+    font-weight: normal;
+    font-style: normal; }
+
+@font-face {
+    font-family: ApexSans-Book;
+    src: url($font-path + 'ApexSans-Book.eot');
+    src: url($font-path + 'ApexSans-Book.eot?#iefix') format('embedded-opentype'),
+         url($font-path + 'ApexSans-Book.woff') format('woff'),
+         url($font-path + 'ApexSans-Book.ttf') format('truetype'),
+         url($font-path + 'ApexSans-Book.svg#ApexSans-Book') format('svg');
+    font-weight: normal;
+    font-style: normal; }
+
+@font-face {
+    font-family: ApexSans-BookItalic;
+    src: url($font-path + 'ApexSans-BookItalic.eot');
+    src: url($font-path + 'ApexSans-BookItalic.eot?#iefix') format('embedded-opentype'),
+         url($font-path + 'ApexSans-BookItalic.woff') format('woff'),
+         url($font-path + 'ApexSans-BookItalic.ttf') format('truetype'),
+         url($font-path + 'ApexSans-BookItalic.svg#ApexSans-BookItalic') format('svg');
+    font-weight: normal;
+    font-style: normal; }
+
+@font-face {
+    font-family: ApexSans-ExtraBold;
+    src: url($font-path + 'ApexSans-ExtraBold.eot');
+    src: url($font-path + 'ApexSans-ExtraBold.eot?#iefix') format('embedded-opentype'),
+         url($font-path + 'ApexSans-ExtraBold.woff') format('woff'),
+         url($font-path + 'ApexSans-ExtraBold.ttf') format('truetype'),
+         url($font-path + 'ApexSans-ExtraBold.svg#ApexSans-ExtraBold') format('svg');
+    font-weight: normal;
+    font-style: normal; }
+
+@font-face {
+    font-family: ApexSans-ExtraBoldItalic;
+    src: url($font-path + 'ApexSans-ExtraBoldItalic.eot');
+    src: url($font-path + 'ApexSans-ExtraBoldItalic.eot?#iefix') format('embedded-opentype'),
+         url($font-path + 'ApexSans-ExtraBoldItalic.woff') format('woff'),
+         url($font-path + 'ApexSans-ExtraBoldItalic.ttf') format('truetype'),
+         url($font-path + 'ApexSans-ExtraBoldItalic.svg#ApexSans-ExtraBoldItalic') format('svg');
+    font-weight: normal;
+    font-style: normal; }
+
+@font-face {
+    font-family: ApexSans-ExtraLight;
+    src: url($font-path + 'ApexSans-ExtraLight.eot');
+    src: url($font-path + 'ApexSans-ExtraLight.eot?#iefix') format('embedded-opentype'),
+         url($font-path + 'ApexSans-ExtraLight.woff') format('woff'),
+         url($font-path + 'ApexSans-ExtraLight.ttf') format('truetype'),
+         url($font-path + 'ApexSans-ExtraLight.svg#ApexSans-ExtraLight') format('svg');
+    font-weight: normal;
+    font-style: normal; }
+
+@font-face {
+    font-family: ApexSans-ExtraLightItalic;
+    src: url($font-path + 'ApexSans-ExtraLightItalic.eot');
+    src: url($font-path + 'ApexSans-ExtraLightItalic.eot?#iefix') format('embedded-opentype'),
+         url($font-path + 'ApexSans-ExtraLightItalic.woff') format('woff'),
+         url($font-path + 'ApexSans-ExtraLightItalic.ttf') format('truetype'),
+         url($font-path + 'ApexSans-ExtraLightItalic.svg#ApexSans-ExtraLightItalic') format('svg');
+    font-weight: normal;
+    font-style: normal; }
+
+@font-face {
+    font-family: ApexSans-Light;
+    src: url($font-path + 'ApexSans-Light.eot');
+    src: url($font-path + 'ApexSans-Light.eot?#iefix') format('embedded-opentype'),
+         url($font-path + 'ApexSans-Light.woff') format('woff'),
+         url($font-path + 'ApexSans-Light.ttf') format('truetype'),
+         url($font-path + 'ApexSans-Light.svg#ApexSans-Light') format('svg');
+    font-weight: normal;
+    font-style: normal; }
+
+@font-face {
+    font-family: ApexSans-LightItalic;
+    src: url($font-path + 'ApexSans-LightItalic.eot');
+    src: url($font-path + 'ApexSans-LightItalic.eot?#iefix') format('embedded-opentype'),
+         url($font-path + 'ApexSans-LightItalic.woff') format('woff'),
+         url($font-path + 'ApexSans-LightItalic.ttf') format('truetype'),
+         url($font-path + 'ApexSans-LightItalic.svg#ApexSans-LightItalic') format('svg');
+    font-weight: normal;
+    font-style: normal; }
+
+@font-face {
+    font-family: ApexSans-Medium;
+    src: url($font-path + 'ApexSans-Medium.eot');
+    src: url($font-path + 'ApexSans-Medium.eot?#iefix') format('embedded-opentype'),
+         url($font-path + 'ApexSans-Medium.woff') format('woff'),
+         url($font-path + 'ApexSans-Medium.ttf') format('truetype'),
+         url($font-path + 'ApexSans-Medium.svg#ApexSans-Medium') format('svg');
+    font-weight: normal;
+    font-style: normal; }
+
+@font-face {
+    font-family: ApexSans-MediumItalic;
+    src: url($font-path + 'ApexSans-MediumItalic.eot');
+    src: url($font-path + 'ApexSans-MediumItalic.eot?#iefix') format('embedded-opentype'),
+         url($font-path + 'ApexSans-MediumItalic.woff') format('woff'),
+         url($font-path + 'ApexSans-MediumItalic.ttf') format('truetype'),
+         url($font-path + 'ApexSans-MediumItalic.svg#ApexSans-MediumItalic') format('svg');
+    font-weight: normal;
+    font-style: normal; }
+    
+@font-face {
+    font-family: ApexSans-BookSC;
+    src: url($font-path + 'ApexSanBooC.eot');
+    src: url('AApexSanBooC.eot?#iefix') format('embedded-opentype'),
+         url($font-path + 'ApexSanBooC.woff') format('woff'),
+         url($font-path + 'ApexSans-BookSC.ttf') format('truetype'),
+         url($font-path + 'ApexSanBooC.svg#ApexSans-BookSC') format('svg');
+    font-weight: normal;
+    font-style: normal; }
+
+@font-face {
+    font-family: ApexSans-BookItalicSC;
+    src: url($font-path + 'ApexSanBooItaC.eot');
+    src: url($font-path + 'ApexSanBooItaC.eot?#iefix') format('embedded-opentype'),
+         url($font-path + 'ApexSanBooItaC.woff') format('woff'),
+         url($font-path + 'ApexSanBooItaC.ttf') format('truetype'),
+         url($font-path + 'ApexSanBooItaC.svg#ApexSans-BookItalicSC') format('svg');
+    font-weight: normal;
+    font-style: normal; }
+
+@font-face {
+    font-family: ApexSans-MediumSC;
+    src: url($font-path + 'ApexSanMedC.eot');
+    src: url($font-path + 'ApexSanMedC.eot?#iefix') format('embedded-opentype'),
+         url($font-path + 'ApexSanMedC.woff') format('woff'),
+         url($font-path + 'ApexSanMedC.ttf') format('truetype'),
+         url($font-path + 'ApexSanMedC.svg#ApexSans-MediumSC') format('svg');
+    font-weight: normal;
+    font-style: normal; }
+
+@font-face {
+    font-family: ApexSans-MediumItalicSC;
+    src: url($font-path + 'ApexSanMedItaC.eot');
+    src: url($font-path + 'ApexSanMedItaC.eot?#iefix') format('embedded-opentype'),
+         url($font-path + 'ApexSanMedItaC.woff') format('woff'),
+         url($font-path + 'ApexSanMedItaC.ttf') format('truetype'),
+         url($font-path + 'ApexSanMedItaC.svg#ApexSans-MediumItalicSC') format('svg');
+    font-weight: normal;
+    font-style: normal; }
