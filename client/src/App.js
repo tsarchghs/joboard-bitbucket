@@ -21,7 +21,7 @@ import {StripeProvider,Elements} from 'react-stripe-elements';
 import { GET_LOGGED_IN_USER } from "./Queries"
 
 const client = new ApolloClient({
-  uri: "http://localhost:4000",
+  uri: "https://frozen-refuge-32300.herokuapp.com",
   request: async (operation) => {
     const token = Cookies.get("token");
     operation.setContext({

@@ -5,7 +5,9 @@ const prismaTypeDefs = require("./generated/prisma-client/prisma-schema.js").typ
 const jwt = require("jsonwebtoken");
 const configs = require("./configs");
 const logger = require("morgan");
+const { static } = require("express");
 var cron = require('node-cron');
+const path = require("path");
 
 const prismaDb = new Prisma({
 	typeDefs:prismaTypeDefs,
@@ -90,6 +92,10 @@ const server = new graphqlServer({
 		}
 	}
 });
+
+server.express.use('/assets', static(path.join(__dirname, 'public')))
+server.express.use(static(path.join(__dirname, '/client/build')));
+
 
 server.express.use(logger("dev"));
 server.start({
