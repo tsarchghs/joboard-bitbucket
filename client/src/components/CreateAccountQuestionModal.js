@@ -2,6 +2,10 @@ import React from "react";
 import Modal from 'react-modal';
 
 const customStyles = {
+    overlay: {
+        'backgroundColor': 'rgba(40, 70, 100, 0.7)',
+        opacity: 1
+    },
   content : {
     top                   : '50%',
     left                  : '50%',

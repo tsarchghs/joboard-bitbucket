@@ -1,19 +1,24 @@
 
-const loadToolKit = () => {
-      let script = document.createElement("script");
-      script.src = "/assets/toolkit/scripts/toolkit.js"
-      script.async = true;
-      document.body.appendChild(script);
-      console.log(script);
-}
-
-const loadAfterHomeMount = () => {
+const loadJs = src => {
   let script = document.createElement("script");
-  script.src = "/assets/toolkit/scripts/afterMountHome.js"
+  script.src = src
   script.async = true;
   document.body.appendChild(script);
   console.log(script);
 }
+
+const loadCss = href => {
+  var link = document.createElement("link");
+  link.href = href;
+  link.type = "text/css";
+  link.rel = "stylesheet";
+  link.media = "screen,print";
+
+  document.getElementsByTagName("head")[0].appendChild(link);
+}
+
+const loadToolKit = () => loadJs("/assets/toolkit/scripts/toolkit.js")
+const loadAfterHomeMount = () => loadJs("/assets/toolkit/scripts/afterMountHome.js")
 
 var getQueryParams = (url) => {
   var params = {};
@@ -37,9 +42,28 @@ var daysDifference = (data1,data2) => {
     var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
     return diffDays
 }
+
+const handleUploadPhotoInput = (element, node) => {
+  var file = element.files[0];
+  var reader = new FileReader();
+  reader.onloadend = function () {
+    element.base64 = reader.result
+    console.log(reader.result);
+    if (node){
+      node.style.backgroundImage = `url("${element.base64}")`
+    }
+  }
+  try {
+    reader.readAsDataURL(file);
+  } catch (e) {
+    console.log("Failed to get dataurl");
+  }
+}
+
 export {
   loadToolKit,
   loadAfterHomeMount,
 	getQueryParams,
-  daysDifference
+  daysDifference,
+  handleUploadPhotoInput
 }

@@ -1,0 +1,18 @@
+.custom-dropdown {
+	display: none;
+	padding: 20px;
+	background-color: #fff;
+	border-radius: 6px;
+	right: 65px;
+	top: 60px;
+	border: 1px solid rgba(128, 128, 128, 0.23);
+	&.opened {
+		display: initial;
+	}
+	a {
+		color: #000;
+		&:hover, &:focus {
+			color: #000;
+		}
+	}
+}

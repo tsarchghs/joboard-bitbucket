@@ -1,7 +1,9 @@
 import React from "react";
 import DashboardSidebar from "./DashboardSidebar";
-import { Mutation } from "react-apollo";
+import { Mutation, withApollo } from "react-apollo";
 import gql from "graphql-tag";
+import { handleUploadPhotoInput } from "../helpers";
+import { GET_LOGGED_IN_USER } from "../Queries";
 
 class CompanySettings extends React.Component {
 	constructor(props){
@@ -12,6 +14,8 @@ class CompanySettings extends React.Component {
 			email: this.props.company.email,
 			website: this.props.company.website
 		}
+		this.companyLogoDiv = undefined;
+		this.companyLogoInput = undefined;
 	}
 	render(){
 		return (
@@ -25,13 +29,22 @@ class CompanySettings extends React.Component {
 						$name: String!
 						$email: String!
 						$website: String!
+						$logo: String
 					  ) {
 						  updateCompany(
 							name: $name
 							email: $email
 							website: $website
+							logo: $logo
 						  ){
-							  success
+								id
+								name
+								website
+								email
+								logo {
+									id
+									url
+								}
 						  }
 					  }
 					`}>
@@ -42,25 +55,84 @@ class CompanySettings extends React.Component {
 									this.setState({
 										success: undefined
 									})
+									console.log({
+										variables: {
+											email: this.state.email,
+											name: this.state.name,
+											website: this.state.website,
+											logo: this.companyLogoInput.base64
+										}
+									},33);
 									let res = await updateCompany({
 										variables:{
 											email: this.state.email,
 											name: this.state.name,
-											website: this.state.website
+											website: this.state.website,
+											logo: this.companyLogoInput.base64
 										}
 									})
-									if (res.data.updateCompany.success){
-										this.setState({success: true})
+									try {
+										let cached = this.props.client.readQuery({
+											query: GET_LOGGED_IN_USER
+										})
+										console.log(cached)
+										let cached_user = cached.getLoggedInUser;
+
+										let updated_company = res.data.updateCompany;
+
+										cached_user.company = {
+											jobs: cached_user.company.jobs,
+											...updated_company
+										}
+										console.log(updated_company.logo.url);
+										this.props.client.writeQuery({
+											query: GET_LOGGED_IN_USER,
+											data: cached
+										})
+									} catch (e) {
+										console.log(e);
 									}
+									this.setState({success: true})
 								}}>
 									<h5>Company settings</h5>
 									<div className="upload-image">
-										<div className="upload-image__img" style={{
+										<div className="upload-image__img" ref={node => this.companyLogoDiv = node} style={{
 											backgroundImage:
 												this.props.company.logo
-													? this.props.company.logo.url
-													: 'url("/assets/toolkit/images/014-company.svg")'
+													? `url("${this.props.company.logo.url}")`
+													: 'url("/assets/toolkit/images/014-comany.svg")'
 										}} />
+										<div className="upload-image">
+											<div style={{ display: "inline" }} style={{
+												position: "relative",
+												overflow: "hidden",
+												display: "inline-block"
+											}}>
+												<button style={{
+													border: "2px solid #00FFFF",
+													color: "#00FFFF",
+													backgroundColor: "white",
+													padding: "8px 20px",
+													borderRadius: "8px",
+													fontSize: "20px",
+													fontWeight: "bold",
+													marginTop: 5
+												}}>Upload a file</button>
+												<input style={{
+													fontSize: "100px",
+													position: "absolute",
+													left: 0,
+													top: 0,
+													opacity: 0
+												}}
+													ref={node => this.companyLogoInput = node}
+													onChange={e => {
+														e.persist();
+														handleUploadPhotoInput(e.target, this.companyLogoDiv);
+													}}
+													type="file" name="myfile" />
+											</div>
+											</div>
 									</div>
 									{
 										this.state.success && <h3>Changed company settings!</h3>
@@ -82,7 +154,7 @@ class CompanySettings extends React.Component {
 									<div>
 									{
 										loading
-										? <img style={{width:"15%"}} alt="" src="http://localhost:3000/assets/toolkit/images/loading_blue.gif" /> 
+										? <img style={{width:"15%"}} alt="" src="/assets/toolkit/images/loading_blue.gif" /> 
 										: <button type="submit" className="button blue">Save changes</button>
 									}
 									</div>
@@ -97,4 +169,4 @@ class CompanySettings extends React.Component {
 	}
 }
 
-export default CompanySettings;
+export default withApollo(CompanySettings);

@@ -9,7 +9,7 @@ class Payments extends React.Component {
  		  <div>
 	       	<DashboardSidebar/>
 	        <div className="dashboard-layout">
-	          <h4>Invoices</h4>
+	          <h4>Receipts</h4>
 	          <div className="dashboard-layout__hero scroll-x">
 	            <div className="table-content">
 	              <table className="unstriped payments-table">
@@ -19,8 +19,7 @@ class Payments extends React.Component {
 	                    <td>Job title</td>
 	                    <td>Credit Card</td>
 	                    <td>Price</td>
-	                    <td>status</td>
-	                    <td>PDF</td>
+	                    <td>Receipt</td>
 	                  </tr>
 	                </thead>
 	                <tbody>
@@ -35,7 +34,6 @@ class Payments extends React.Component {
 									<td>- - - - -- - - - -- - - - -</td>
 									<td>- - - - - - - - - - - - - - - - - - - - -</td>
 									<td className="td-bold">- - - -</td>
-									<td className="td-green">- - - - -</td>
 									<td className="td-blue"><a href="#"><img src="/assets/toolkit/images/pdf-file.svg" alt="" />Download pdf</a></td>
 								</tr>)
 							}
@@ -47,8 +45,7 @@ class Payments extends React.Component {
 										<td>{invoice.job.position}</td>
 										<td>**** **** **** {invoice.last_four_digits}</td>
 										<td className="td-bold">${invoice.price}</td>
-										<td className="td-green">{invoice.status}</td>
-										<td className="td-blue"><a href="#"><img src="/assets/toolkit/images/pdf-file.svg" alt=""/>Download pdf</a></td>
+										<td className="td-blue"><a href={invoice.receipt_url}><img src="/assets/toolkit/images/pdf-file.svg" alt=""/>View</a></td>
 									</tr>
 								)
 							})

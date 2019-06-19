@@ -8,12 +8,14 @@ import gql from "graphql-tag";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import CreateJob from "./components/CreateJob";
+import CreateJobAdmin from "./components/CreateJobAdmin";
 import Header from "./components/Header";
 import Dashboard from "./components/Dashboard";
 import Payments from "./components/Payments";
 import DashboardHeader from "./components/DashboardHeader";
 import CompanySettings from "./components/CompanySettings";
 import JobProfile from "./components/JobProfile";
+import UpdateJobProfile from "./components/UpdateJobProfile";
 import { getQueryParams } from "./helpers";
 import {StripeProvider,Elements} from 'react-stripe-elements';
 import { GET_LOGGED_IN_USER } from "./Queries"
@@ -81,6 +83,16 @@ class App extends Component {
                         </div>
                         )
                     }}/>
+                    <Route path="/create_job_for_free_cus_im_boss" exact component={() => {
+                      return (
+                        <div>
+                          <Header user={user} />
+                          <Elements>
+                            <CreateJobAdmin refetchApp={refetch} user={user} />
+                          </Elements>
+                        </div>
+                      )
+                    }} />
                     <Route path="/dashboard" exact component={() => {
                       if (!user){
                         return <Redirect to="/login?success:dashboard"/>
@@ -114,11 +126,20 @@ class App extends Component {
                       console.log(1);
                       return (
                         <div>
-                          <Header user={user}/>
-                          <JobProfile match={match}/>
+                          <Header user={user} />
+                          <JobProfile match={match} />
                         </div>
                       )
-                    }}/>
+                    }} />
+                    <Route path="/job/update/:id" exact component={({ match }) => {
+                      console.log(1);
+                      return (
+                        <div>
+                          <Header user={user} />
+                          <UpdateJobProfile match={match} />
+                        </div>
+                      )
+                    }} />
                   </div>
                 );
               }}

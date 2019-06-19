@@ -318,6 +318,8 @@ export type InvoiceOrderByInput =
   | "price_DESC"
   | "status_ASC"
   | "status_DESC"
+  | "receipt_url_ASC"
+  | "receipt_url_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -337,13 +339,19 @@ export type CompanyOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
+export type ROLE_TYPE = "NORMAL" | "ADMIN";
+
 export type FileOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "base64_ASC"
-  | "base64_DESC"
+  | "filename_ASC"
+  | "filename_DESC"
   | "mimetype_ASC"
   | "mimetype_DESC"
+  | "encoding_ASC"
+  | "encoding_DESC"
+  | "url_ASC"
+  | "url_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -356,6 +364,8 @@ export type UserOrderByInput =
   | "email_DESC"
   | "password_ASC"
   | "password_DESC"
+  | "role_ASC"
+  | "role_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -375,6 +385,7 @@ export type CompanyWhereUniqueInput = AtLeastOne<{
 export interface UserCreateWithoutCompanyInput {
   email: String;
   password: String;
+  role: ROLE_TYPE;
 }
 
 export interface JobCreateWithoutInvoicesInput {
@@ -386,6 +397,7 @@ export interface JobCreateWithoutInvoicesInput {
   status: STATUS_TYPE;
   apply_url: String;
   company?: CompanyCreateOneWithoutJobsInput;
+  company_logo?: FileCreateOneInput;
   company_name?: String;
   company_email?: String;
   company_website?: String;
@@ -403,8 +415,10 @@ export interface InvoiceUpdateWithWhereUniqueWithoutJobInput {
 }
 
 export interface FileCreateInput {
-  base64: String;
+  filename: String;
   mimetype: String;
+  encoding: String;
+  url: String;
 }
 
 export interface FileWhereInput {
@@ -422,20 +436,20 @@ export interface FileWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  base64?: String;
-  base64_not?: String;
-  base64_in?: String[] | String;
-  base64_not_in?: String[] | String;
-  base64_lt?: String;
-  base64_lte?: String;
-  base64_gt?: String;
-  base64_gte?: String;
-  base64_contains?: String;
-  base64_not_contains?: String;
-  base64_starts_with?: String;
-  base64_not_starts_with?: String;
-  base64_ends_with?: String;
-  base64_not_ends_with?: String;
+  filename?: String;
+  filename_not?: String;
+  filename_in?: String[] | String;
+  filename_not_in?: String[] | String;
+  filename_lt?: String;
+  filename_lte?: String;
+  filename_gt?: String;
+  filename_gte?: String;
+  filename_contains?: String;
+  filename_not_contains?: String;
+  filename_starts_with?: String;
+  filename_not_starts_with?: String;
+  filename_ends_with?: String;
+  filename_not_ends_with?: String;
   mimetype?: String;
   mimetype_not?: String;
   mimetype_in?: String[] | String;
@@ -450,6 +464,34 @@ export interface FileWhereInput {
   mimetype_not_starts_with?: String;
   mimetype_ends_with?: String;
   mimetype_not_ends_with?: String;
+  encoding?: String;
+  encoding_not?: String;
+  encoding_in?: String[] | String;
+  encoding_not_in?: String[] | String;
+  encoding_lt?: String;
+  encoding_lte?: String;
+  encoding_gt?: String;
+  encoding_gte?: String;
+  encoding_contains?: String;
+  encoding_not_contains?: String;
+  encoding_starts_with?: String;
+  encoding_not_starts_with?: String;
+  encoding_ends_with?: String;
+  encoding_not_ends_with?: String;
+  url?: String;
+  url_not?: String;
+  url_in?: String[] | String;
+  url_not_in?: String[] | String;
+  url_lt?: String;
+  url_lte?: String;
+  url_gt?: String;
+  url_gte?: String;
+  url_contains?: String;
+  url_not_contains?: String;
+  url_starts_with?: String;
+  url_not_starts_with?: String;
+  url_ends_with?: String;
+  url_not_ends_with?: String;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
   createdAt_in?: DateTimeInput[] | DateTimeInput;
@@ -564,6 +606,7 @@ export interface JobWhereInput {
   apply_url_ends_with?: String;
   apply_url_not_ends_with?: String;
   company?: CompanyWhereInput;
+  company_logo?: FileWhereInput;
   company_name?: String;
   company_name_not?: String;
   company_name_in?: String[] | String;
@@ -646,6 +689,7 @@ export interface JobCreateWithoutCompanyInput {
   job_type: JOB_TYPE;
   status: STATUS_TYPE;
   apply_url: String;
+  company_logo?: FileCreateOneInput;
   company_name?: String;
   company_email?: String;
   company_website?: String;
@@ -684,11 +728,13 @@ export interface InvoiceCreateWithoutJobInput {
   last_four_digits: Int;
   price: Int;
   status?: String;
+  receipt_url: String;
 }
 
 export interface UserUpdateManyMutationInput {
   email?: String;
   password?: String;
+  role?: ROLE_TYPE;
 }
 
 export interface CompanyUpdateInput {
@@ -717,11 +763,13 @@ export interface UserUpdateOneRequiredWithoutCompanyInput {
 
 export type FileWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
+  url?: String;
 }>;
 
 export interface UserUpdateWithoutCompanyDataInput {
   email?: String;
   password?: String;
+  role?: ROLE_TYPE;
 }
 
 export interface CompanyCreateWithoutCreatedByInput {
@@ -740,6 +788,7 @@ export interface UserUpsertWithoutCompanyInput {
 export interface UserCreateInput {
   email: String;
   password: String;
+  role: ROLE_TYPE;
   company: CompanyCreateOneWithoutCreatedByInput;
 }
 
@@ -767,8 +816,10 @@ export interface JobUpdateManyMutationInput {
 }
 
 export interface FileUpdateDataInput {
-  base64?: String;
+  filename?: String;
   mimetype?: String;
+  encoding?: String;
+  url?: String;
 }
 
 export interface JobCreateInput {
@@ -780,6 +831,7 @@ export interface JobCreateInput {
   status: STATUS_TYPE;
   apply_url: String;
   company?: CompanyCreateOneWithoutJobsInput;
+  company_logo?: FileCreateOneInput;
   company_name?: String;
   company_email?: String;
   company_website?: String;
@@ -788,16 +840,18 @@ export interface JobCreateInput {
 }
 
 export interface InvoiceUpdateInput {
-  job?: JobUpdateOneRequiredWithoutInvoicesInput;
+  job?: JobUpdateOneWithoutInvoicesInput;
   last_four_digits?: Int;
   price?: Int;
   status?: String;
+  receipt_url?: String;
 }
 
 export interface InvoiceUpdateManyMutationInput {
   last_four_digits?: Int;
   price?: Int;
   status?: String;
+  receipt_url?: String;
 }
 
 export interface JobUpdateManyWithoutCompanyInput {
@@ -844,6 +898,7 @@ export interface JobUpdateWithoutCompanyDataInput {
   job_type?: JOB_TYPE;
   status?: STATUS_TYPE;
   apply_url?: String;
+  company_logo?: FileUpdateOneInput;
   company_name?: String;
   company_email?: String;
   company_website?: String;
@@ -860,6 +915,7 @@ export interface JobUpdateWithoutInvoicesDataInput {
   status?: STATUS_TYPE;
   apply_url?: String;
   company?: CompanyUpdateOneWithoutJobsInput;
+  company_logo?: FileUpdateOneInput;
   company_name?: String;
   company_email?: String;
   company_website?: String;
@@ -1018,6 +1074,20 @@ export interface InvoiceWhereInput {
   status_not_starts_with?: String;
   status_ends_with?: String;
   status_not_ends_with?: String;
+  receipt_url?: String;
+  receipt_url_not?: String;
+  receipt_url_in?: String[] | String;
+  receipt_url_not_in?: String[] | String;
+  receipt_url_lt?: String;
+  receipt_url_lte?: String;
+  receipt_url_gt?: String;
+  receipt_url_gte?: String;
+  receipt_url_contains?: String;
+  receipt_url_not_contains?: String;
+  receipt_url_starts_with?: String;
+  receipt_url_not_starts_with?: String;
+  receipt_url_ends_with?: String;
+  receipt_url_not_ends_with?: String;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
   createdAt_in?: DateTimeInput[] | DateTimeInput;
@@ -1043,6 +1113,7 @@ export interface InvoiceUpdateWithoutJobDataInput {
   last_four_digits?: Int;
   price?: Int;
   status?: String;
+  receipt_url?: String;
 }
 
 export interface InvoiceSubscriptionWhereInput {
@@ -1112,6 +1183,20 @@ export interface InvoiceScalarWhereInput {
   status_not_starts_with?: String;
   status_ends_with?: String;
   status_not_ends_with?: String;
+  receipt_url?: String;
+  receipt_url_not?: String;
+  receipt_url_in?: String[] | String;
+  receipt_url_not_in?: String[] | String;
+  receipt_url_lt?: String;
+  receipt_url_lte?: String;
+  receipt_url_gt?: String;
+  receipt_url_gte?: String;
+  receipt_url_contains?: String;
+  receipt_url_not_contains?: String;
+  receipt_url_starts_with?: String;
+  receipt_url_not_starts_with?: String;
+  receipt_url_ends_with?: String;
+  receipt_url_not_ends_with?: String;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
   createdAt_in?: DateTimeInput[] | DateTimeInput;
@@ -1136,6 +1221,7 @@ export interface InvoiceScalarWhereInput {
 export interface UserUpdateInput {
   email?: String;
   password?: String;
+  role?: ROLE_TYPE;
   company?: CompanyUpdateOneRequiredWithoutCreatedByInput;
 }
 
@@ -1152,6 +1238,7 @@ export interface InvoiceUpdateManyDataInput {
   last_four_digits?: Int;
   price?: Int;
   status?: String;
+  receipt_url?: String;
 }
 
 export type JobWhereUniqueInput = AtLeastOne<{
@@ -1327,10 +1414,12 @@ export interface JobScalarWhereInput {
   NOT?: JobScalarWhereInput[] | JobScalarWhereInput;
 }
 
-export interface JobUpdateOneRequiredWithoutInvoicesInput {
+export interface JobUpdateOneWithoutInvoicesInput {
   create?: JobCreateWithoutInvoicesInput;
   update?: JobUpdateWithoutInvoicesDataInput;
   upsert?: JobUpsertWithoutInvoicesInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
   connect?: JobWhereUniqueInput;
 }
 
@@ -1382,6 +1471,10 @@ export interface UserWhereInput {
   password_not_starts_with?: String;
   password_ends_with?: String;
   password_not_ends_with?: String;
+  role?: ROLE_TYPE;
+  role_not?: ROLE_TYPE;
+  role_in?: ROLE_TYPE[] | ROLE_TYPE;
+  role_not_in?: ROLE_TYPE[] | ROLE_TYPE;
   company?: CompanyWhereInput;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
@@ -1473,20 +1566,25 @@ export interface JobCreateOneWithoutInvoicesInput {
 }
 
 export interface InvoiceCreateInput {
-  job: JobCreateOneWithoutInvoicesInput;
+  job?: JobCreateOneWithoutInvoicesInput;
   last_four_digits: Int;
   price: Int;
   status?: String;
+  receipt_url: String;
 }
 
 export interface FileUpdateManyMutationInput {
-  base64?: String;
+  filename?: String;
   mimetype?: String;
+  encoding?: String;
+  url?: String;
 }
 
 export interface FileUpdateInput {
-  base64?: String;
+  filename?: String;
   mimetype?: String;
+  encoding?: String;
+  url?: String;
 }
 
 export interface UserSubscriptionWhereInput {
@@ -1518,6 +1616,7 @@ export interface JobUpdateInput {
   status?: STATUS_TYPE;
   apply_url?: String;
   company?: CompanyUpdateOneWithoutJobsInput;
+  company_logo?: FileUpdateOneInput;
   company_name?: String;
   company_email?: String;
   company_website?: String;
@@ -1540,6 +1639,7 @@ export interface UserPreviousValues {
   id: ID_Output;
   email: String;
   password: String;
+  role: ROLE_TYPE;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
@@ -1550,6 +1650,7 @@ export interface UserPreviousValuesPromise
   id: () => Promise<ID_Output>;
   email: () => Promise<String>;
   password: () => Promise<String>;
+  role: () => Promise<ROLE_TYPE>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -1560,6 +1661,7 @@ export interface UserPreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   email: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
+  role: () => Promise<AsyncIterator<ROLE_TYPE>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -1591,6 +1693,7 @@ export interface JobPromise extends Promise<Job>, Fragmentable {
   status: () => Promise<STATUS_TYPE>;
   apply_url: () => Promise<String>;
   company: <T = CompanyPromise>() => T;
+  company_logo: <T = FilePromise>() => T;
   company_name: () => Promise<String>;
   company_email: () => Promise<String>;
   company_website: () => Promise<String>;
@@ -1622,6 +1725,7 @@ export interface JobSubscription
   status: () => Promise<AsyncIterator<STATUS_TYPE>>;
   apply_url: () => Promise<AsyncIterator<String>>;
   company: <T = CompanySubscription>() => T;
+  company_logo: <T = FileSubscription>() => T;
   company_name: () => Promise<AsyncIterator<String>>;
   company_email: () => Promise<AsyncIterator<String>>;
   company_website: () => Promise<AsyncIterator<String>>;
@@ -1643,16 +1747,20 @@ export interface JobSubscription
 
 export interface File {
   id: ID_Output;
-  base64: String;
+  filename: String;
   mimetype: String;
+  encoding: String;
+  url: String;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
 
 export interface FilePromise extends Promise<File>, Fragmentable {
   id: () => Promise<ID_Output>;
-  base64: () => Promise<String>;
+  filename: () => Promise<String>;
   mimetype: () => Promise<String>;
+  encoding: () => Promise<String>;
+  url: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -1661,8 +1769,10 @@ export interface FileSubscription
   extends Promise<AsyncIterator<File>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  base64: () => Promise<AsyncIterator<String>>;
+  filename: () => Promise<AsyncIterator<String>>;
   mimetype: () => Promise<AsyncIterator<String>>;
+  encoding: () => Promise<AsyncIterator<String>>;
+  url: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -2164,6 +2274,7 @@ export interface InvoicePreviousValues {
   last_four_digits: Int;
   price: Int;
   status: String;
+  receipt_url: String;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
@@ -2175,6 +2286,7 @@ export interface InvoicePreviousValuesPromise
   last_four_digits: () => Promise<Int>;
   price: () => Promise<Int>;
   status: () => Promise<String>;
+  receipt_url: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -2186,6 +2298,7 @@ export interface InvoicePreviousValuesSubscription
   last_four_digits: () => Promise<AsyncIterator<Int>>;
   price: () => Promise<AsyncIterator<Int>>;
   status: () => Promise<AsyncIterator<String>>;
+  receipt_url: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -2220,6 +2333,7 @@ export interface Invoice {
   last_four_digits: Int;
   price: Int;
   status: String;
+  receipt_url: String;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
@@ -2230,6 +2344,7 @@ export interface InvoicePromise extends Promise<Invoice>, Fragmentable {
   last_four_digits: () => Promise<Int>;
   price: () => Promise<Int>;
   status: () => Promise<String>;
+  receipt_url: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -2242,14 +2357,17 @@ export interface InvoiceSubscription
   last_four_digits: () => Promise<AsyncIterator<Int>>;
   price: () => Promise<AsyncIterator<Int>>;
   status: () => Promise<AsyncIterator<String>>;
+  receipt_url: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 export interface FilePreviousValues {
   id: ID_Output;
-  base64: String;
+  filename: String;
   mimetype: String;
+  encoding: String;
+  url: String;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
@@ -2258,8 +2376,10 @@ export interface FilePreviousValuesPromise
   extends Promise<FilePreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  base64: () => Promise<String>;
+  filename: () => Promise<String>;
   mimetype: () => Promise<String>;
+  encoding: () => Promise<String>;
+  url: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -2268,8 +2388,10 @@ export interface FilePreviousValuesSubscription
   extends Promise<AsyncIterator<FilePreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  base64: () => Promise<AsyncIterator<String>>;
+  filename: () => Promise<AsyncIterator<String>>;
   mimetype: () => Promise<AsyncIterator<String>>;
+  encoding: () => Promise<AsyncIterator<String>>;
+  url: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -2311,6 +2433,7 @@ export interface User {
   id: ID_Output;
   email: String;
   password: String;
+  role: ROLE_TYPE;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
@@ -2319,6 +2442,7 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
   email: () => Promise<String>;
   password: () => Promise<String>;
+  role: () => Promise<ROLE_TYPE>;
   company: <T = CompanyPromise>() => T;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
@@ -2330,6 +2454,7 @@ export interface UserSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   email: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
+  role: () => Promise<AsyncIterator<ROLE_TYPE>>;
   company: <T = CompanySubscription>() => T;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
@@ -2424,6 +2549,10 @@ export const models: Model[] = [
   },
   {
     name: "STATUS_TYPE",
+    embedded: false
+  },
+  {
+    name: "ROLE_TYPE",
     embedded: false
   }
 ];

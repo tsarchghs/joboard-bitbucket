@@ -137,7 +137,7 @@ class _RenewJobModal extends React.Component{
                                         </label>
                                         {
                                             this.state.loading 
-                                            ? <center><img style={{ width: "10%" }} alt="" src="http://localhost:3000/assets/toolkit/images/loading_blue.gif" /></center>
+                                            ? <center><img style={{ width: "10%" }} alt="" src="/assets/toolkit/images/loading_blue.gif" /></center>
                                             : <button style={{ width: "100%" }} type="submit" className="button blue">Renew this job for ({this.state.featured ? "249" : "199"}$)</button>
                                         }
                                 </form>

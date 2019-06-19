@@ -33,8 +33,8 @@ class DashboardHeader extends React.Component {
 	              	style={{
 	              		backgroundImage: 
 	              			this.props.user.company.logo 
-	              			? this.props.user.company.logo.url 
-	              			: 'url("/assets/toolkit/images/014-company.svg")'
+	              			? `url("${this.props.user.company.logo.url}")`
+	              			: 'url("/assets/toolkit/images/014-comany.svg")'
 	              	}} />
 	              <img src="/assets/toolkit/images/gray-arrow.svg" alt=""/>
 	            </div>

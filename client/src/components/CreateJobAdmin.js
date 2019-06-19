@@ -6,8 +6,6 @@ import { convertToHTML } from "draft-convert";
 import { withApollo } from 'react-apollo';
 import { compose } from "recompose"
 import gql from "graphql-tag";
-import CreateAccountQuestionModal from "./CreateAccountQuestionModal";
-import TypePasswordModal from "./TypePasswordModal";
 import { withRouter } from "react-router";
 import { GET_LOGGED_IN_USER } from "../Queries";
 import { cloneDeep } from "lodash";
@@ -31,15 +29,11 @@ class _CreateJob extends React.Component {
 			company_email: "",
 			company_website: "",
 			featured: false,
-			card_error: "",
 			loading: false,
-			currentModal: null,
 			job: undefined
 		}
 		this.onChange = this.onChange.bind(this)
 		this.toggleLocationInput = this.toggleLocationInput.bind(this)
-		this.closeModal = this.closeModal.bind(this)
-		this.openModal = this.openModal.bind(this)
 		this.companyLogoInput = undefined; //ref
 		this.companyLogoDiv = undefined; //ref
 	}
@@ -52,18 +46,7 @@ class _CreateJob extends React.Component {
 		if (!this.state.editorState) job_description_html_output = `<h3>No description</h3`
 		else job_description_html_output = convertToHTML(this.state.editorState.getCurrentContent())
 		console.log(this.state, job_description_html_output)
-		let stripe_res = await this.props.stripe.createToken({ name: "Job Posting" });
-		if (stripe_res.error){
-			this.setState({
-				card_error: stripe_res.error.message,
-				loading: false
-			})
-			return;
-		} else {
-			this.setState({
-				card_error: ""
-			})
-		}
+
 		let variables = { ...this.state};
 		variables.description = job_description_html_output
 		if (this.state.locationInputDisabled){
@@ -74,50 +57,24 @@ class _CreateJob extends React.Component {
 		}
 		variables.salary = Number(variables.salary)
 		variables.status = this.state.featured ? "FEATURED" : "NEW"
-		variables.stripe_token = stripe_res.token.id
 		console.log(variables);
 		let res;
 		if (this.companyLogoInput && this.companyLogoInput.base64){
 			variables.company_logo = this.companyLogoInput.base64;
-		}
-		variables.bp = false;
+        }
+        variables.bp = true;
 		try {
 			let res = await this.props.client.mutate({
-				mutation: CREATE_JOB_MUTATION,
+                mutation: CREATE_JOB_MUTATION,
 				variables
 			})
 			this.setState({
 				job_id: res.data.createJob.id,
 				company_logo: this.companyLogoInput && this.companyLogoInput.base64 ? this.companyLogoInput.base64 : undefined
-			})
-			if (this.props.user){
-				try {
-					let data = cloneDeep(this.props.client.readQuery({
-						query: GET_LOGGED_IN_USER
-					}))
-					data.getLoggedInUser.company.jobs.push(res.data.createJob)
-					this.props.client.writeQuery({
-						query: GET_LOGGED_IN_USER,
-						data: data
-					})
-				} catch (e) {
-					console.log(e)
-				}
-				console.log(res,123,res.data,345);
-				this.props.history.push(`/job/${res.data.createJob.id}`)
-				return;
-			}
-			console.log(res)
-			this.setState({
-				job: res.data.createJob,
-				currentModal: "CreateAccountQuestionModal"
-			})
+            })
+            this.props.history.push(`/job/${res.data.createJob.id}`)
 		} catch (e) {
-			if (e.message.indexOf("CardError") !== -1){
-				this.setState({
-					card_error: e.message.split(":")[2]
-				})
-			}
+            console.log(e)
 		}
 		console.log(res)
 		this.setState({
@@ -143,30 +100,9 @@ class _CreateJob extends React.Component {
 			})
 		}
 	}
-	closeModal() {
-		this.setState({
-			currentModal: undefined
-		})
-		this.props.history.push(`/job/${this.state.job_id}`)
-	}
-	openModal(modalName) {
-		this.setState({ currentModal: modalName })
-	}
 	render(){
 		return (
 			<div className="create-job__layout">
-				<CreateAccountQuestionModal 
-					closeModal={this.closeModal} 
-					onYes={() => this.openModal("TypePasswordModal")} 
-					modalIsOpen={this.state.currentModal === "CreateAccountQuestionModal"}	
-				/>
-				<TypePasswordModal
-					closeModal={this.closeModal}
-					email={this.state.company_email}
-					parent_state={this.state}
-					refetchApp={this.props.refetchApp}
-					modalIsOpen={this.state.currentModal === "TypePasswordModal"}
-				/>
 				<form onSubmit={this.onSubmit}>
 					<h4>Create job</h4>
 					<div className="create-job">
@@ -318,10 +254,6 @@ class _CreateJob extends React.Component {
 							</label>
 						</div>
 					}
-					<label className="create-job__input--label"><span className="create-job__input--span">Company card</span>   
-						<CardElement />
-						<p style={{ "color": "red", margin:10 }}>{this.state.card_error}</p>
-					</label>
 						<label className="checkbox-container">
 							<input type="checkbox" checked={this.state.featured} onChange={e => this.onChange({target:{value:!this.state.featured}},"featured")}/>
 							<span className="checkmark" />
@@ -340,4 +272,4 @@ class _CreateJob extends React.Component {
 	}
 }
 
-export default compose(injectStripe,withApollo,withRouter)(_CreateJob);
+export default compose(withApollo,withRouter)(_CreateJob);

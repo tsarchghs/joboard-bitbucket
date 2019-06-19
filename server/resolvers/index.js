@@ -19,7 +19,7 @@ module.exports = {
 		updateCompany: companyResolvers.updateCompany,
 		createJob: jobResolvers.createJob,
 		renewJob: jobResolvers.renewJob,
-		updateJob: () => {},
-		deleteJob: () => {}
+		updateJob: jobResolvers.updateJob,
+		deleteJob: jobResolvers.deleteJob
 	}
 }

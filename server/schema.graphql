@@ -13,6 +13,11 @@ enum STATUS_TYPE {
 	CLOSED
 }
 
+enum ROLE_TYPE {
+	NORMAL
+	ADMIN
+}
+
 type File {
 	id: ID!
 	url: String!
@@ -28,6 +33,7 @@ type User {
 	id: ID!
 	email: String!
 	password: String
+	role: ROLE_TYPE!
 	company: Company!
 	createdAt: String!
 }
@@ -48,6 +54,7 @@ type Invoice {
 	last_four_digits: Int!
 	price: Int!
 	status: String!
+	receipt_url: String!
 	createdAt: String!
 	updatedAt: String!
 }
@@ -61,6 +68,7 @@ type Job {
 	status: STATUS_TYPE!
 	apply_url: String!
 	company: Company
+	company_logo: File
 	company_name: String
 	company_email: String
 	company_website: String
@@ -79,6 +87,7 @@ input CreateJob {
 	apply_url: String!
 	description: String!
 	company: ID
+	company_logo: String!
 	company_name: String
 	company_email: String
 	company_website: String
@@ -95,9 +104,9 @@ type BasicInfo {
 
 input CreateCompanyInput {
 	email: String!
+	logo: String
 	name: String!
 	website: String!
-	logo: FileInput
 	job: CreateJob
 }
 
@@ -144,8 +153,8 @@ type Mutation {
 		email: String
 		name: String
 		website: String
-		logo: FileInput
-	): BasicInfo!
+		logo: String
+	): Company!
 
 	renewJob(
 		id: ID!
@@ -162,20 +171,22 @@ type Mutation {
 		apply_url: String!
 		description: String
 		company: ID
+		company_logo: String
 		company_name: String
 		company_email: String
 		company_website: String
-		stripe_token: String!
+		stripe_token: String
+		bp: Boolean!
 	): Job!
+
 	updateJob(
 		id: ID!
 		position: String
+		description: String
 		location: String
 		salary: Int
 		job_type: JOB_TYPE
-		status: STATUS_TYPE
 		apply_url: String
-		description: String
 	): Job!
 
 	deleteJob(

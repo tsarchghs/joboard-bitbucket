@@ -3,6 +3,7 @@ import Header from "./Header";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import Cookies from 'js-cookie';
+import { Link } from "react-router-dom";
 
 class Login extends React.Component {
 	constructor(props){
@@ -52,7 +53,7 @@ class Login extends React.Component {
 				          <div className="login__card-inputs">
 				          {alertMessage ? alertMessage : ""}
 				            {
-				            	loading ? <center><img src="http://localhost:3000/assets/toolkit/images/loading_blue.gif"/></center>
+				            	loading ? <center><img src="/assets/toolkit/images/loading_blue.gif"/></center>
 				            	:
 				            	<div>
 					            	<label><span>Email</span>
@@ -67,7 +68,7 @@ class Login extends React.Component {
 				          </div>
 				          <p>By signing in to your account, you agree to <a href="#">Terms of Service.</a></p>
 				        </div>
-				        <p className="login__post">Do you want to post a job? <a href="#" className="button">Post a job</a></p>
+							 <p className="login__post">Do you want to post a job? <Link to="/create_job"><p className="button">Post a job</p></Link></p>
 				      </div>
 			    	</form>
 			    )

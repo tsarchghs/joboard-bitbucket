@@ -6,6 +6,10 @@ import Cookies from 'js-cookie';
 import { withRouter } from "react-router";
 
 const customStyles = {
+    overlay: {
+        'backgroundColor': 'rgba(40, 70, 100, 0.7)',
+        opacity: 2
+    },
     content: {
         top: '50%',
         left: '50%',
@@ -69,10 +73,12 @@ class TypePasswordModal extends React.Component{
                                         variables.email = this.props.parent_state.company_email
                                         variables.password = this.state.password
                                         variables.company = {
+                                            logo: this.props.parent_state.company_logo,
                                             email: this.props.parent_state.company_email,
                                             website: this.props.parent_state.company_website,
                                             name: this.props.parent_state.company_name
                                         }
+                                        console.log(variables,5521);
                                         let res = await signUp({variables})
                                         console.log(res)
                                         Cookies.set("token", res.data.register.token);

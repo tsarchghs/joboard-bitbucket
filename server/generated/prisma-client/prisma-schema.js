@@ -275,8 +275,10 @@ scalar DateTime
 
 type File {
   id: ID!
-  base64: String!
+  filename: String!
   mimetype: String!
+  encoding: String!
+  url: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -288,8 +290,10 @@ type FileConnection {
 }
 
 input FileCreateInput {
-  base64: String!
+  filename: String!
   mimetype: String!
+  encoding: String!
+  url: String!
 }
 
 input FileCreateOneInput {
@@ -305,10 +309,14 @@ type FileEdge {
 enum FileOrderByInput {
   id_ASC
   id_DESC
-  base64_ASC
-  base64_DESC
+  filename_ASC
+  filename_DESC
   mimetype_ASC
   mimetype_DESC
+  encoding_ASC
+  encoding_DESC
+  url_ASC
+  url_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -317,8 +325,10 @@ enum FileOrderByInput {
 
 type FilePreviousValues {
   id: ID!
-  base64: String!
+  filename: String!
   mimetype: String!
+  encoding: String!
+  url: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -342,18 +352,24 @@ input FileSubscriptionWhereInput {
 }
 
 input FileUpdateDataInput {
-  base64: String
+  filename: String
   mimetype: String
+  encoding: String
+  url: String
 }
 
 input FileUpdateInput {
-  base64: String
+  filename: String
   mimetype: String
+  encoding: String
+  url: String
 }
 
 input FileUpdateManyMutationInput {
-  base64: String
+  filename: String
   mimetype: String
+  encoding: String
+  url: String
 }
 
 input FileUpdateOneInput {
@@ -385,20 +401,20 @@ input FileWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  base64: String
-  base64_not: String
-  base64_in: [String!]
-  base64_not_in: [String!]
-  base64_lt: String
-  base64_lte: String
-  base64_gt: String
-  base64_gte: String
-  base64_contains: String
-  base64_not_contains: String
-  base64_starts_with: String
-  base64_not_starts_with: String
-  base64_ends_with: String
-  base64_not_ends_with: String
+  filename: String
+  filename_not: String
+  filename_in: [String!]
+  filename_not_in: [String!]
+  filename_lt: String
+  filename_lte: String
+  filename_gt: String
+  filename_gte: String
+  filename_contains: String
+  filename_not_contains: String
+  filename_starts_with: String
+  filename_not_starts_with: String
+  filename_ends_with: String
+  filename_not_ends_with: String
   mimetype: String
   mimetype_not: String
   mimetype_in: [String!]
@@ -413,6 +429,34 @@ input FileWhereInput {
   mimetype_not_starts_with: String
   mimetype_ends_with: String
   mimetype_not_ends_with: String
+  encoding: String
+  encoding_not: String
+  encoding_in: [String!]
+  encoding_not_in: [String!]
+  encoding_lt: String
+  encoding_lte: String
+  encoding_gt: String
+  encoding_gte: String
+  encoding_contains: String
+  encoding_not_contains: String
+  encoding_starts_with: String
+  encoding_not_starts_with: String
+  encoding_ends_with: String
+  encoding_not_ends_with: String
+  url: String
+  url_not: String
+  url_in: [String!]
+  url_not_in: [String!]
+  url_lt: String
+  url_lte: String
+  url_gt: String
+  url_gte: String
+  url_contains: String
+  url_not_contains: String
+  url_starts_with: String
+  url_not_starts_with: String
+  url_ends_with: String
+  url_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -436,14 +480,16 @@ input FileWhereInput {
 
 input FileWhereUniqueInput {
   id: ID
+  url: String
 }
 
 type Invoice {
   id: ID!
-  job: Job!
+  job: Job
   last_four_digits: Int!
   price: Int!
   status: String!
+  receipt_url: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -455,10 +501,11 @@ type InvoiceConnection {
 }
 
 input InvoiceCreateInput {
-  job: JobCreateOneWithoutInvoicesInput!
+  job: JobCreateOneWithoutInvoicesInput
   last_four_digits: Int!
   price: Int!
   status: String
+  receipt_url: String!
 }
 
 input InvoiceCreateManyWithoutJobInput {
@@ -470,6 +517,7 @@ input InvoiceCreateWithoutJobInput {
   last_four_digits: Int!
   price: Int!
   status: String
+  receipt_url: String!
 }
 
 type InvoiceEdge {
@@ -486,6 +534,8 @@ enum InvoiceOrderByInput {
   price_DESC
   status_ASC
   status_DESC
+  receipt_url_ASC
+  receipt_url_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -497,6 +547,7 @@ type InvoicePreviousValues {
   last_four_digits: Int!
   price: Int!
   status: String!
+  receipt_url: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -546,6 +597,20 @@ input InvoiceScalarWhereInput {
   status_not_starts_with: String
   status_ends_with: String
   status_not_ends_with: String
+  receipt_url: String
+  receipt_url_not: String
+  receipt_url_in: [String!]
+  receipt_url_not_in: [String!]
+  receipt_url_lt: String
+  receipt_url_lte: String
+  receipt_url_gt: String
+  receipt_url_gte: String
+  receipt_url_contains: String
+  receipt_url_not_contains: String
+  receipt_url_starts_with: String
+  receipt_url_not_starts_with: String
+  receipt_url_ends_with: String
+  receipt_url_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -586,22 +651,25 @@ input InvoiceSubscriptionWhereInput {
 }
 
 input InvoiceUpdateInput {
-  job: JobUpdateOneRequiredWithoutInvoicesInput
+  job: JobUpdateOneWithoutInvoicesInput
   last_four_digits: Int
   price: Int
   status: String
+  receipt_url: String
 }
 
 input InvoiceUpdateManyDataInput {
   last_four_digits: Int
   price: Int
   status: String
+  receipt_url: String
 }
 
 input InvoiceUpdateManyMutationInput {
   last_four_digits: Int
   price: Int
   status: String
+  receipt_url: String
 }
 
 input InvoiceUpdateManyWithoutJobInput {
@@ -625,6 +693,7 @@ input InvoiceUpdateWithoutJobDataInput {
   last_four_digits: Int
   price: Int
   status: String
+  receipt_url: String
 }
 
 input InvoiceUpdateWithWhereUniqueWithoutJobInput {
@@ -684,6 +753,20 @@ input InvoiceWhereInput {
   status_not_starts_with: String
   status_ends_with: String
   status_not_ends_with: String
+  receipt_url: String
+  receipt_url_not: String
+  receipt_url_in: [String!]
+  receipt_url_not_in: [String!]
+  receipt_url_lt: String
+  receipt_url_lte: String
+  receipt_url_gt: String
+  receipt_url_gte: String
+  receipt_url_contains: String
+  receipt_url_not_contains: String
+  receipt_url_starts_with: String
+  receipt_url_not_starts_with: String
+  receipt_url_ends_with: String
+  receipt_url_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -719,6 +802,7 @@ type Job {
   status: STATUS_TYPE!
   apply_url: String!
   company: Company
+  company_logo: File
   company_name: String
   company_email: String
   company_website: String
@@ -750,6 +834,7 @@ input JobCreateInput {
   status: STATUS_TYPE!
   apply_url: String!
   company: CompanyCreateOneWithoutJobsInput
+  company_logo: FileCreateOneInput
   company_name: String
   company_email: String
   company_website: String
@@ -775,6 +860,7 @@ input JobCreateWithoutCompanyInput {
   job_type: JOB_TYPE!
   status: STATUS_TYPE!
   apply_url: String!
+  company_logo: FileCreateOneInput
   company_name: String
   company_email: String
   company_website: String
@@ -791,6 +877,7 @@ input JobCreateWithoutInvoicesInput {
   status: STATUS_TYPE!
   apply_url: String!
   company: CompanyCreateOneWithoutJobsInput
+  company_logo: FileCreateOneInput
   company_name: String
   company_email: String
   company_website: String
@@ -1035,6 +1122,7 @@ input JobUpdateInput {
   status: STATUS_TYPE
   apply_url: String
   company: CompanyUpdateOneWithoutJobsInput
+  company_logo: FileUpdateOneInput
   company_name: String
   company_email: String
   company_website: String
@@ -1087,10 +1175,12 @@ input JobUpdateManyWithWhereNestedInput {
   data: JobUpdateManyDataInput!
 }
 
-input JobUpdateOneRequiredWithoutInvoicesInput {
+input JobUpdateOneWithoutInvoicesInput {
   create: JobCreateWithoutInvoicesInput
   update: JobUpdateWithoutInvoicesDataInput
   upsert: JobUpsertWithoutInvoicesInput
+  delete: Boolean
+  disconnect: Boolean
   connect: JobWhereUniqueInput
 }
 
@@ -1102,6 +1192,7 @@ input JobUpdateWithoutCompanyDataInput {
   job_type: JOB_TYPE
   status: STATUS_TYPE
   apply_url: String
+  company_logo: FileUpdateOneInput
   company_name: String
   company_email: String
   company_website: String
@@ -1118,6 +1209,7 @@ input JobUpdateWithoutInvoicesDataInput {
   status: STATUS_TYPE
   apply_url: String
   company: CompanyUpdateOneWithoutJobsInput
+  company_logo: FileUpdateOneInput
   company_name: String
   company_email: String
   company_website: String
@@ -1228,6 +1320,7 @@ input JobWhereInput {
   apply_url_ends_with: String
   apply_url_not_ends_with: String
   company: CompanyWhereInput
+  company_logo: FileWhereInput
   company_name: String
   company_name_not: String
   company_name_in: [String!]
@@ -1377,6 +1470,11 @@ type Query {
   node(id: ID!): Node
 }
 
+enum ROLE_TYPE {
+  NORMAL
+  ADMIN
+}
+
 enum STATUS_TYPE {
   FEATURED
   NEW
@@ -1396,6 +1494,7 @@ type User {
   id: ID!
   email: String!
   password: String!
+  role: ROLE_TYPE!
   company: Company!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -1410,6 +1509,7 @@ type UserConnection {
 input UserCreateInput {
   email: String!
   password: String!
+  role: ROLE_TYPE!
   company: CompanyCreateOneWithoutCreatedByInput!
 }
 
@@ -1421,6 +1521,7 @@ input UserCreateOneWithoutCompanyInput {
 input UserCreateWithoutCompanyInput {
   email: String!
   password: String!
+  role: ROLE_TYPE!
 }
 
 type UserEdge {
@@ -1435,6 +1536,8 @@ enum UserOrderByInput {
   email_DESC
   password_ASC
   password_DESC
+  role_ASC
+  role_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -1445,6 +1548,7 @@ type UserPreviousValues {
   id: ID!
   email: String!
   password: String!
+  role: ROLE_TYPE!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1470,12 +1574,14 @@ input UserSubscriptionWhereInput {
 input UserUpdateInput {
   email: String
   password: String
+  role: ROLE_TYPE
   company: CompanyUpdateOneRequiredWithoutCreatedByInput
 }
 
 input UserUpdateManyMutationInput {
   email: String
   password: String
+  role: ROLE_TYPE
 }
 
 input UserUpdateOneRequiredWithoutCompanyInput {
@@ -1488,6 +1594,7 @@ input UserUpdateOneRequiredWithoutCompanyInput {
 input UserUpdateWithoutCompanyDataInput {
   email: String
   password: String
+  role: ROLE_TYPE
 }
 
 input UserUpsertWithoutCompanyInput {
@@ -1538,6 +1645,10 @@ input UserWhereInput {
   password_not_starts_with: String
   password_ends_with: String
   password_not_ends_with: String
+  role: ROLE_TYPE
+  role_not: ROLE_TYPE
+  role_in: [ROLE_TYPE!]
+  role_not_in: [ROLE_TYPE!]
   company: CompanyWhereInput
   createdAt: DateTime
   createdAt_not: DateTime

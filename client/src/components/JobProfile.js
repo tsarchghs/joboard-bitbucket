@@ -1,45 +1,34 @@
 import React from "react";
 import { Query } from "react-apollo";
-import gql from "graphql-tag";
+import { JOB_QUERY } from "../Queries";
 
 class JobProfile extends React.Component {
 	render() {
 		return (
 			<Query
-				query={gql`
-					query {
-						job(id:"${this.props.match.match.params.id}") {
-							id
-							position
-							company {
-								id
-								logo {
-									id
-									url
-								}
-								name
-								website
-								email
-							}
-							expiresAt
-							description
-							apply_url
-							location
-							company_name
-							company_website
-							company_email
-							createdAt
-							job_type
-							status
-						}
-					}
-				`}
+				query={JOB_QUERY}
+				variables={{
+					id: this.props.match.match.params.id
+				}}
 			>
 			{({loading,error,data}) => {
 				if (loading) { return <h4>Loading</h4> }
 				if (error) { return <h4>{error.message}</h4> }
 				console.log(data);
 				let job = data.job;
+				console.log(job,123)
+				let backgroundImage;
+				if (job.company) {
+					if (job.company.logo && job.company.logo.url){
+						backgroundImage = `url("${job.company.logo.url}")`
+					} else {
+						backgroundImage = 'url("/assets/toolkit/images/	014-company.svg")';
+					}
+				} else if (job.company_logo && job.company_logo.url) {
+					backgroundImage = `url("${job.company_logo.url}")`
+				} else {
+					backgroundImage = 'url("/assets/toolkit/images/	014-company.svg")';
+				}
 				return (
 					<div>
 						<div>
@@ -49,12 +38,7 @@ class JobProfile extends React.Component {
 					            <div className="inside-page__content">
 					              <div className="inside-page__card">
 					                <div className="flex">
-					                  <div className="card__logo" style={{
-						              		backgroundImage: 
-						              			job.company && job.company.logo 
-						              			? job.company.logo.url 
-						              			: 'url("/assets/toolkit/images/	014-company.svg")'
-					                  }} />
+					                  <div className="card__logo" style={{backgroundImage}} />
 					                  <div className="card-data">
 					                    <div className="card-data__title"><a href="#" className="card-data__title">{job.position}</a></div>
 					                    <div className="card-data__subtitle"><a href="#" className="card-data__subtitle">{job.company ? job.company.name : job.company_name}</a></div>

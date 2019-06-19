@@ -20,6 +20,7 @@ const invoices = async (root,args,context,info) => {
                                 position
                         }
                         createdAt
+                        receipt_url
                     }
                 }
             }

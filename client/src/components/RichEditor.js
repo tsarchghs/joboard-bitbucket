@@ -1,10 +1,18 @@
 import React from "react";
 import { Editor, EditorState, RichUtils } from "draft-js"
+import { stateFromHTML } from "draft-js-import-html";
 
 class RichEditor extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { editorState: EditorState.createEmpty() };
+        let editorState = EditorState.createEmpty()
+        console.log(this.props.htmlContent);
+        if (this.props.htmlContent){
+            let contentState = stateFromHTML(this.props.htmlContent)
+            editorState = EditorState.createWithContent(contentState)
+        }
+        
+        this.state = { editorState };
 
         this.focus = () => this.refs.editor.focus();
         this.onChange = (editorState) => {

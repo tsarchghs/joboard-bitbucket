@@ -1,53 +1,87 @@
 import React from "react";
 import { daysDifference } from "../helpers";
-import { Query } from "react-apollo";
+import { withApollo } from "react-apollo";
 import gql from "graphql-tag";
 import DashboardHeader from "./DashboardHeader";
 import DashboardSidebar from "./DashboardSidebar";
 import { Link } from "react-router-dom";
 import RenewJobModal from "./RenewJobModal";
+import DeleteJobModal from "./DeleteJobModal";
 import { Elements } from 'react-stripe-elements';
+import { GET_LOGGED_IN_USER, DELETE_JOB_MUTATITON } from "../Queries";
 
-class Dashboard extends React.Component {
+class _Dashboard extends React.Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			isRenewModalOpen: false,
-			renewJob: undefined
+			currentModal: undefined,
+			modalJob: undefined,
+			jobOptions: undefined
 		}
 		this.closeModal = this.closeModal.bind(this)
+		this.deleteJob = this.deleteJob.bind(this);
 	}
 	closeModal(e,success){
 		if (success){
-			this[`${this.state.renewJob.id}_job-listing-table__time`].outerHTML = `
-			<div class="job-listing-table__time"><h5><img src="/assets/toolkit/images/time-left.svg" alt="">7 days left</h5><h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt="">${this.state.renewJob.location}</h5></div>
+			this[`${this.state.modalJob.id}_job-listing-table__time`].outerHTML = `
+			<div class="job-listing-table__time"><h5><img src="/assets/toolkit/images/time-left.svg" alt="">7 days left</h5><h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt="">${this.state.modalJob.location}</h5></div>
 			`
-
-			this[`${this.state.renewJob.id}_job-listing-table__more`].outerHTML = ""
+			this[`${this.state.modalJob.id}_job-listing-table__more`].outerHTML = ""
 		}
 		this.setState({
-			isRenewModalOpen: false,
-			renewJob: undefined
+			currentModal: undefined,
+			modalJob: undefined
 		})
 	}
-	openModal(job){
+	openModal(modalName,job){
 		console.log(job,123);
+		let partial_state = {
+			currentModal: modalName
+		}
+		if (job) partial_state["modalJob"] = job;
+		this.setState(partial_state)
+	}
+	async deleteJob(e,job){
+		e.preventDefault();
+		await this.props.client.mutate({
+			mutation: DELETE_JOB_MUTATITON,
+			variables: {
+				id: job.id
+			}
+		})
+		let cached = this.props.client.readQuery({
+			query: GET_LOGGED_IN_USER
+		})
+		console.log(cached);
+		console.log(cached.getLoggedInUser.company.jobs.length)
+		cached.getLoggedInUser.company.jobs = cached.getLoggedInUser.company.jobs.filter(x => x.id !== job.id);
+		console.log(cached.getLoggedInUser.company.jobs.length)
+		this.props.client.writeQuery({
+			query: GET_LOGGED_IN_USER,
+			data: cached
+		})
 		this.setState({
-			isRenewModalOpen: true,
-			renewJob: job
+			currentModal: false
 		})
 	}
 	render(){
+		console.log(this.props.user.company,5555);
 		return (
 			<div>
 				<DashboardSidebar />
 				<Elements>
 					<RenewJobModal
-						modalIsOpen={this.state.isRenewModalOpen}
+						modalIsOpen={this.state.currentModal === "RenewJobModal"}
 						closeModal={this.closeModal}
-						job={this.state.renewJob}
+						job={this.state.modalJob}
 					/>
 				</Elements>
+				<DeleteJobModal
+					closeModal={this.closeModal}
+					modalIsOpen={this.state.currentModal === "DeleteJobModal"}
+					onYes={(e) => this.deleteJob(e,this.state.modalJob)}
+					job={this.state.modalJob}
+				/>
 				<div className="dashboard-layout">
 					<div className="dashboard-layout__header dashboard-jl">
 						<div className="card">
@@ -55,8 +89,8 @@ class Dashboard extends React.Component {
 								style={{
 									backgroundImage:
 										this.props.user.company.logo
-											? this.props.user.company.logo.url
-											: 'url("/assets/toolkit/images/014-company.svg")'
+											? `url("${this.props.user.company.logo.url}")`
+											: 'url("/assets/toolkit/images/014-copany.svg")'
 								}} />
 							<div className="card-data">
 								<div className="card-data__title">{this.props.user.company.name}</div>
@@ -82,10 +116,10 @@ class Dashboard extends React.Component {
 								return (
 									<div className={`job-listing-table__list ${this.props.user.company.jobs[0].id === job.id ? "no-border" : ""}`}>
 										<div className="job-listing-table__logo" style={{
-											backgroundImage:	
+											backgroundImage:
 												this.props.user.company.logo
-													? this.props.user.company.logo.url
-													: 'url("/assets/toolkit/images/014-company.svg")'
+													? `url("${this.props.user.company.logo.url}")`
+													: 'url("/assets/toolkit/images/014-compay.svg")'
 										}} />
 										<div className="job-listing-table__info">
 											<h4>
@@ -113,11 +147,23 @@ class Dashboard extends React.Component {
 												job.status === "CLOSED"
 													?
 													<div ref={node => this[`${job.id}_job-listing-table__more`] = node} className="job-listing-table__more" style={{marginRight:15}}>
-													 <p onClick={() => this.openModal(job)} class="button blue">Renew</p>
+													<p onClick={() => this.openModal("RenewJobModal",job)} class="button blue">Renew</p>
 													</div>
 													: ""
 											}
-														<a href="#"><img src="/assets/toolkit/images/more.svg" alt="" /></a>
+											<div class="custom-dropdown opened" style={{display: this.state.jobOptions == job.id ? "initial" : "none"}}>
+												<Link to={`/job/update/${job.id}`}>
+													<p>Update</p>
+												</Link>	
+												<a onClick={(e) => this.openModal("DeleteJobModal",job)}>Delete</a>
+											</div>
+											<a href="#" onClick={e => {
+												e.preventDefault();
+												this.setState(nextState => {
+													nextState.jobOptions = nextState.jobOptions === job.id ? undefined : job.id 
+													return nextState;
+												})
+											}} ><img src="/assets/toolkit/images/more.svg" alt="" /></a>
 									</div>
 								);
 							})
@@ -130,4 +176,4 @@ class Dashboard extends React.Component {
 	}
 }
 
-export default Dashboard;
+export default withApollo(_Dashboard);

@@ -13,23 +13,31 @@ enum STATUS_TYPE {
 	CLOSED
 }
 
+enum ROLE_TYPE {
+	NORMAL
+	ADMIN
+}
+
+
 type User {
 	id: ID! @id
 	email: String! @unique
 	password: String!
+	role: ROLE_TYPE!
 	company: Company!
 	createdAt: DateTime! @createdAt
 	updatedAt: DateTime! @updatedAt
 }
 
 type File {
-	id: ID! @id
-	base64: String!
-	mimetype: String!	
-	createdAt: DateTime! @createdAt
-	updatedAt: DateTime! @updatedAt
+  id: ID!  @id
+  filename: String!
+  mimetype: String!
+  encoding: String!
+  url: String! @unique  
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
-
 type Company {
 	id: ID! @id
 	createdBy: User! @relation(link: TABLE)
@@ -44,10 +52,11 @@ type Company {
 
 type Invoice {
 	id: ID! @id
-	job: Job! @relation(link: TABLE)
+	job: Job @relation(link: TABLE)
 	last_four_digits: Int!
 	price: Int!
 	status: String! @default(value:"Paid")
+	receipt_url: String!
 	createdAt: DateTime! @createdAt
 	updatedAt: DateTime! @updatedAt
 }
@@ -62,6 +71,7 @@ type Job {
 	status: STATUS_TYPE!
 	apply_url: String!
 	company: Company 
+	company_logo: File @relation(link: TABLE)
 	company_name: String
 	company_email: String
 	company_website: String

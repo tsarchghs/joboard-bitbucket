@@ -34,7 +34,6 @@ const login = async (root,args,context,info) => {
 }
 
 const register = async (root,args,context,info) => {
-	console.log(context);	
 	var hasLogo; 
 	var logo;
 	if (!args.email || !args.password 
@@ -42,38 +41,31 @@ const register = async (root,args,context,info) => {
 		){
 		throw new Error("Please check that all of your arguments are not empty!")
 	}
-	if (args.logo && !(args.logo.base64 && args.logo.mimetype)) {
-		throw new Error("logo.base64 or logo.mimetype is missing");
-	} else {
-		hasLogo = args.logo ? true : false
-	}
-	if (hasLogo){
-		logo = await fileHandling.processUpload(args.logo.base64,
-												args.logo.mimetype,context);
-	}
 	const hashed_password = await bcrypt.hash(args.password,saltRounds);
 	var userParams = {
 		email: args.email,
 		password: hashed_password,
 		company: {
 			create: {
-				...args.company
+				email: args.company.email,
+				name: args.company.name,
+				website: args.company.website
 			}
 		}
 	}
 	// delete userParams["company"]["create"]["job"];
 	// // if (args.company.job){
-	// // 	delete args.company.job["company"]
-	// // 	userParams["company"]["create"]["jobs"] = {
-	// // 		create: {...args.company.job,expiresIn:new Date()}
-	// // 	}
-	// // }
-	if (logo){
-		userParams["company"]["create"]["logo"] = {
-			connect: { id: logo.id }
-		}
+		// // 	delete args.company.job["company"]
+		// // 	userParams["company"]["create"]["jobs"] = {
+			// // 		create: {...args.company.job,expiresIn:new Date()}
+			// // 	}
+			// // }
+	if (args.company.logo){
+		console.log(145);
+		logo = await fileHandling.processUpload(args.company.logo,"png",context);
+		userParams.company.create.logo = { connect: { id: logo.id } }
 	}
-	console.log(userParams);
+	console.log(userParams.company.create.logo,123);
 	let user = await context.db.mutation.createUser({data:userParams},`
 		{
 			id

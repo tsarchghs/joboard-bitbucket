@@ -56,9 +56,17 @@ class Home extends React.Component {
 				    company {
 				      id
 				      name
+					  logo {
+						  id
+						  url
+					  }
 				    }
 				    status
 				    job_type
+					company_logo {
+						id
+						url
+					}
 				    company_name
 				    company_email
 				    company_website	
@@ -87,6 +95,21 @@ class Home extends React.Component {
 			[to]: e.target.value
 		})
 		this.update()
+	}
+	getLogo(job){
+		let backgroundImage;
+		if (job.company) {
+			if (job.company.logo && job.company.logo.url) {
+				backgroundImage = `url("${job.company.logo.url}")`
+			} else {
+				backgroundImage = 'url("/assets/toolkit/images/	014-copany.svg")';
+			}
+		} else if (job.company_logo && job.company_logo.url) {
+			backgroundImage = `url("${job.company_logo.url}")`
+		} else {
+			backgroundImage = 'url("/assets/toolkit/images/	014-compay.svg")';
+		}
+		return backgroundImage
 	}
 	render(){
 		return (
@@ -125,16 +148,14 @@ class Home extends React.Component {
 	          <div className="home__table">
 				<h4 className="home__table-title">Featured</h4>
 				{
-					!this.state.featured_jobs ? <center><img alt="" src="http://localhost:3000/assets/toolkit/images/loading_blue.gif" /></center>
+					!this.state.featured_jobs ? <center><img alt="" src="/assets/toolkit/images/loading_blue.gif" /></center>
 						:
 						(
 							this.state.featured_jobs.map(job => (
 								<div key={job.id} className={`job-listing-table__list home-table ${this.state.featured_jobs[0].id === job.id ? "no-border" : ""}`}>
 									<div className="job-listing-table__logo"
 										style={{
-											backgroundImage:
-												job.company && job.company.logo && job.company.logo.url ? job.company.logo.url :
-													'url("/assets/toolkit/images/014-company.svg")'
+											backgroundImage: this.getLogo(job)
 										}} />
 									<div className="job-listing-table__info">
 										<Link to={`/job/${job.id}`}>
@@ -161,16 +182,14 @@ class Home extends React.Component {
 
 	            <h4 className="home__table-title">Today</h4>
 	            {
-	            	!this.state.today_jobs ? <center><img alt="" src="http://localhost:3000/assets/toolkit/images/loading_blue.gif"/></center>
+	            	!this.state.today_jobs ? <center><img alt="" src="/assets/toolkit/images/loading_blue.gif"/></center>
 	            	: 
 	            	(
 	            		this.state.today_jobs.map(job => (
 			              <div key={job.id} className={`job-listing-table__list home-table ${this.state.today_jobs[0].id === job.id ? "no-border" : ""}`}>
 			                <div className="job-listing-table__logo" 
 			                style={{
-			                	backgroundImage: 
-			                		job.company && job.company.logo && job.company.logo.url ? job.company.logo.url :
-			                		'url("/assets/toolkit/images/014-company.svg")'
+			                	backgroundImage: this.getLogo(job)
 			                }} />
 				                <div className="job-listing-table__info">
 			                	<Link to={`/job/${job.id}`}>
@@ -195,17 +214,15 @@ class Home extends React.Component {
 	            	)
 	            }
 	            <h4 className="home__table-title">This week</h4>	            	
-					{ !this.state.other_jobs ? <center><img alt="" src="http://localhost:3000/assets/toolkit/images/loading_blue.gif"/></center>
+					{ !this.state.other_jobs ? <center><img alt="" src="/assets/toolkit/images/loading_blue.gif"/></center>
 	            	: 
 	            	(
 	            		this.state.other_jobs.map(job => (
 			              <div key={job.id} className={`job-listing-table__list home-table ${this.state.other_jobs[0].id === job.id ? "no-border" : ""}`}>
-			                <div className="job-listing-table__logo" 
-			                style={{
-			                	backgroundImage: 
-			                		job.company && job.company.logo && job.company.logo.url ? job.company.logo.url :
-			                		'url("/assets/toolkit/images/014-company.svg")'
-			                }} />
+								<div className="job-listing-table__logo"
+									style={{
+										backgroundImage: this.getLogo(job)
+									}} />
 			                <div className="job-listing-table__info">
 			                	<Link to={`/job/${job.id}`}>
 				                  <h4>
