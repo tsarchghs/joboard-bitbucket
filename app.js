@@ -93,12 +93,14 @@ const server = new graphqlServer({
 	}
 });
 
-server.express.use('/assets', static(path.join(__dirname, 'public')))
-server.express.use(static(path.join(__dirname, 'build')));
-
-server.express.get('/*', function (req, res) {
-	res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+if (configs.production){
+	server.express.use('/assets', static(path.join(__dirname, 'public')))
+	server.express.use(static(path.join(__dirname, 'build')));
+	
+	server.express.get('/*', function (req, res) {
+		res.sendFile(path.join(__dirname, 'build', 'index.html'));
+	});
+}
 
 
 server.express.use(logger("dev"));

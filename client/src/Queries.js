@@ -183,11 +183,47 @@ const CREATE_JOB_MUTATION = gql`
     }
 `
 
+const CREATE_JOB_AND_LOGIN_MUTATION = gql`
+    mutation CreateJobAndLogin(
+		$email: String!
+		$password: String!
+		$position: String!
+		$location: String!
+		$salary: Int!
+		$job_type: JOB_TYPE!
+		$status: STATUS_TYPE!
+		$apply_url: String!
+		$description: String!
+		$stripe_token: String!
+    ){
+        createJobAndLogin(
+            email: $email
+            password: $password
+            position: $position
+            location: $location
+            salary: $salary
+            job_type: $job_type
+            status: $status
+            apply_url: $apply_url
+            description: $description
+            stripe_token: $stripe_token
+        ){
+            auth_data {
+                token
+            }
+            job {
+                id
+            }
+        }
+    }
+`
+
 export {
     INVOICES_QUERY,
     GET_LOGGED_IN_USER,
     JOB_QUERY,
     UPDATE_JOB_QUERY,
     DELETE_JOB_MUTATITON,
-    CREATE_JOB_MUTATION
+    CREATE_JOB_MUTATION,
+    CREATE_JOB_AND_LOGIN_MUTATION
 }

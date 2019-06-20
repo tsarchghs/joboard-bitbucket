@@ -28,8 +28,15 @@ class TypePasswordModal extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            password: ""
+            email: "", 
+            password: "",
+            new_email: false
         }
+    }
+    onChange(e, key) {
+        this.setState({
+            [key]: e.target.value
+        })
     }
     render(){
         return (
@@ -68,18 +75,33 @@ class TypePasswordModal extends React.Component{
                             >
                                 { (signUp,{loading,error,data}) => {
                                     let onClick = async () => {
+                                        this.setState({
+                                            error: ""
+                                        })
                                         let variables = {}
                                         variables.job = this.props.parent_state.job.id
-                                        variables.email = this.props.parent_state.company_email
+                                        variables.email = this.state.new_email ? this.state.email : this.props.parent_state.company_email
                                         variables.password = this.state.password
                                         variables.company = {
                                             logo: this.props.parent_state.company_logo,
-                                            email: this.props.parent_state.company_email,
+                                            email: this.state.new_email ? this.state.email : this.props.parent_state.company_email,
                                             website: this.props.parent_state.company_website,
                                             name: this.props.parent_state.company_name
                                         }
                                         console.log(variables,5521);
-                                        let res = await signUp({variables})
+                                        let res;
+                                        try {
+                                            res = await signUp({variables})
+                                        } catch (e) {
+                                            console.log(e,1,e.message)
+                                            if (e.message.indexOf("unique")){
+                                                this.setState({
+                                                    new_email: true,
+                                                    error: "Email is already taken."
+                                                })
+                                            }
+                                            return;
+                                        }
                                         console.log(res)
                                         Cookies.set("token", res.data.register.token);
                                         await this.props.refetchApp();
@@ -87,9 +109,25 @@ class TypePasswordModal extends React.Component{
                                     } 
                                     return (
                                         <div>
-                                            <label className="create-job__input--label"><span className="create-job__input--span">Your email</span>
-                                                <p>{this.props.email}</p>
-                                            </label>
+                                            {
+                                                !this.state.new_email &&
+                                                    <label className="create-job__input--label"><span className="create-job__input--span">Your email</span>
+                                                        <p>{this.props.email}</p>
+                                                    </label>
+                                            }
+                                            {
+                                                this.state.new_email &&
+                                                    <label className="create-job__input--label"><span className="create-job__input--span">Company email</span>
+                                                        <input
+                                                            className="input"
+                                                            type="email"
+                                                            placeholder="Your Email here"
+                                                            value={this.state.email}
+                                                            onChange={e => this.onChange(e, "email")}
+                                                            required
+                                                        />
+                                                    </label>
+                                            }
                                             <label className="create-job__input--label"><span className="create-job__input--span">Password</span>
                                                 <input 
                                                     className="input" 

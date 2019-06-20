@@ -1,0 +1,76 @@
+import React from "react";
+import { Query } from "react-apollo";
+import { JOB_QUERY } from "../Queries";
+
+class JobProfile extends React.Component {
+	render() {
+		return (
+			<Query
+				query={JOB_QUERY}
+				variables={{
+					id: this.props.match.match.params.id
+				}}
+			>
+			{({loading,error,data}) => {
+				if (loading) { return <h4>Loading</h4> }
+				if (error) { return <h4>{error.message}</h4> }
+				console.log(data);
+				let job = data.job;
+				console.log(job,123)
+				let backgroundImage;
+				if (job.company) {
+					if (job.company.logo && job.company.logo.url){
+						backgroundImage = `url("${job.company.logo.url}")`
+					} else {
+						backgroundImage = 'url("/assets/toolkit/images/	014-company.svg")';
+					}
+				} else if (job.company_logo && job.company_logo.url) {
+					backgroundImage = `url("${job.company_logo.url}")`
+				} else {
+					backgroundImage = 'url("/assets/toolkit/images/	014-company.svg")';
+				}
+				return (
+					<div>
+						<div>
+					        </div>
+					        <div className="inside-page">
+					          <div className="inside-page__container">
+					            <div className="inside-page__content">
+					              <div className="inside-page__card">
+					                <div className="flex">
+					                  <div className="card__logo" style={{backgroundImage}} />
+					                  <div className="card-data">
+					                    <div className="card-data__title"><a href="#" className="card-data__title">{job.position}</a></div>
+					                    <div className="card-data__subtitle"><a href="#" className="card-data__subtitle">{job.company ? job.company.name : job.company_name}</a></div>
+					                    <div className="card-data__info">
+					                      <p><img src="/assets/toolkit/images/gray-placeholder.svg" alt />{job.location}</p>
+					                      <p><img src="/assets/toolkit/images/gray-portfolio.svg" alt />{job.job_type}</p>
+					                      <a href="#"><img src="/assets/toolkit/images/grid-world.svg" alt />{job.company ? job.company.website : job.company_website }</a>
+					                    </div>
+					                  </div>
+					                </div>
+					                <div className="card__button">
+					                  <p style={{marginLeft:10}} className="gray"></p>
+					                  <a target="_blank"  href={job.apply_url} className="button blue">Apply for this job</a>
+					                </div>
+					              </div>
+					              <div className="inside-page__description">
+					                <div dangerouslySetInnerHTML={{
+										__html:job.description
+									}} style={{"whiteSpace":"pre-line"}} className="inside-page__description-part">
+					                </div>
+
+					              </div>
+					            </div>
+					          </div>
+				        </div>
+				       </div>
+					)
+			}}
+		    </Query>
+
+		);
+	}
+}
+
+export default JobProfile;

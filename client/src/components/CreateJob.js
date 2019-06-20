@@ -12,12 +12,15 @@ import { withRouter } from "react-router";
 import { GET_LOGGED_IN_USER } from "../Queries";
 import { cloneDeep } from "lodash";
 import { handleUploadPhotoInput } from "../helpers";
-import { CREATE_JOB_MUTATION } from "../Queries";
+import { CREATE_JOB_MUTATION, CREATE_JOB_AND_LOGIN_MUTATION } from "../Queries";
+import Cookies from 'js-cookie';
 
 class _CreateJob extends React.Component {
 	constructor(props){
 		super(props)
-		this.onSubmit = this.onSubmit.bind(this)
+		this.onSubmitNoAccount = this.onSubmitNoAccount.bind(this);
+		this.createStripeToken = this.createStripeToken.bind(this);
+		this.onSubmitWithAccount = this.onSubmitWithAccount.bind(this);
 		this.state = {
 			position: "",
 			editorState: undefined,
@@ -34,7 +37,11 @@ class _CreateJob extends React.Component {
 			card_error: "",
 			loading: false,
 			currentModal: null,
-			job: undefined
+			job: undefined,
+			hasAccount: false,
+			email: "",
+			password: "",
+			under_company_info_error: ""
 		}
 		this.onChange = this.onChange.bind(this)
 		this.toggleLocationInput = this.toggleLocationInput.bind(this)
@@ -43,7 +50,81 @@ class _CreateJob extends React.Component {
 		this.companyLogoInput = undefined; //ref
 		this.companyLogoDiv = undefined; //ref
 	}
-	async onSubmit(e){
+	async createStripeToken(){
+		let stripe_res = await this.props.stripe.createToken({ name: "Job Posting" });
+		if (stripe_res.error) {
+			this.setState({
+				card_error: stripe_res.error.message,
+				loading: false
+			})
+			return false;
+		} else {
+			this.setState({
+				card_error: ""
+			})
+			console.log(stripe_res);
+			return stripe_res.token.id;
+		}
+	}
+	async onSubmitWithAccount(e){
+		e.preventDefault()
+		this.setState({
+			loading: true
+		})
+		let job_description_html_output;
+		if (!this.state.editorState) job_description_html_output = `<h3>No description</h3`
+		else job_description_html_output = convertToHTML(this.state.editorState.getCurrentContent())
+
+		let stripe_token = await this.createStripeToken();
+		if (!stripe_token) return;
+
+		let variables = {
+			email: this.state.email,
+			password: this.state.password,
+			position: this.state.position,
+			location: this.state.location,
+			salary: Number(this.state.salary),
+			job_type: this.state.job_type,
+			status: this.state.featured ? "FEATURED" : "NEW",
+			apply_url: this.state.apply_url,
+			description: job_description_html_output,
+			stripe_token: stripe_token
+		}
+		console.log(variables)
+
+		let res;
+		try {
+			res = await this.props.client.mutate({
+				mutation: CREATE_JOB_AND_LOGIN_MUTATION,
+				variables
+			})
+			console.log(res)
+		} catch (e) {
+			console.log(e);
+			if (e.message.indexOf("CardError") !== -1) {
+				this.setState({
+					card_error: e.message.split(":")[2],
+					loading: false
+				})
+				console.log(1);
+			} else {
+				this.setState({
+					under_company_info_error: e.message.split(":")[1],
+					loading: false
+				})
+				console.log(e.message);
+			}
+			return;
+		}
+		Cookies.set("token", res.data.createJobAndLogin.auth_data.token);
+		await this.props.refetchApp();
+		this.props.history.push("/dashboard")
+
+		this.setState({
+			loading: false
+		})
+	}
+	async onSubmitNoAccount(e){
 		e.preventDefault()
 		this.setState({
 			loading: true
@@ -52,18 +133,10 @@ class _CreateJob extends React.Component {
 		if (!this.state.editorState) job_description_html_output = `<h3>No description</h3`
 		else job_description_html_output = convertToHTML(this.state.editorState.getCurrentContent())
 		console.log(this.state, job_description_html_output)
-		let stripe_res = await this.props.stripe.createToken({ name: "Job Posting" });
-		if (stripe_res.error){
-			this.setState({
-				card_error: stripe_res.error.message,
-				loading: false
-			})
-			return;
-		} else {
-			this.setState({
-				card_error: ""
-			})
-		}
+		
+		let stripe_token = await this.createStripeToken();
+		if (!stripe_token) return;
+
 		let variables = { ...this.state};
 		variables.description = job_description_html_output
 		if (this.state.locationInputDisabled){
@@ -74,7 +147,7 @@ class _CreateJob extends React.Component {
 		}
 		variables.salary = Number(variables.salary)
 		variables.status = this.state.featured ? "FEATURED" : "NEW"
-		variables.stripe_token = stripe_res.token.id
+		variables.stripe_token = stripe_token
 		console.log(variables);
 		let res;
 		if (this.companyLogoInput && this.companyLogoInput.base64){
@@ -167,7 +240,7 @@ class _CreateJob extends React.Component {
 					refetchApp={this.props.refetchApp}
 					modalIsOpen={this.state.currentModal === "TypePasswordModal"}
 				/>
-				<form onSubmit={this.onSubmit}>
+				<form onSubmit={this.state.hasAccount ? this.onSubmitWithAccount : this.onSubmitNoAccount}>
 					<h4>Create job</h4>
 					<div className="create-job">
 					<h5>Hire the flutters. Share your job post with many of job seekers.</h5>
@@ -244,81 +317,129 @@ class _CreateJob extends React.Component {
 					}
 					<div className="company-info">
 					{
-						!this.props.user && <h5>Company info</h5>
+							!this.props.user && 
+							(
+								<div style={{ "display": "inline" }}>
+									<h5 style={{ "display": "inline" }}>Company info</h5>
+									<div style={{ "display": "inline" }} dangerouslySetInnerHTML={{ __html: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' }} />
+									<a style={{"display": "inline","color":"#2196F3"}} onClick={e => {
+										e.preventDefault()
+										this.setState(nextState =>{
+											nextState.hasAccount = !nextState.hasAccount;
+											return nextState
+										})
+									}}>{this.state.hasAccount ? "New company" : "Do you have an account?"}</a>
+								</div>
+							)
 					}
+					<h1>{this.state.under_company_info_error}</h1>
 					{
 						this.props.user ? null 
 						: 
 						<div>
-							<div className="upload-image">
-								<div ref={node => this.companyLogoDiv = node} style={{display:"inline"}} className="upload-image__img" style={{
-									backgroundImage: 'url("../../assets/toolkit/images/014-company.svg")',
-									backgroundSize: "cover",
-									backgroundRepeat:"no-repeat"
-								}} />
-								<div style={{display:"inline"}} style={{
-											position: "relative",
-											overflow: "hidden",
-											display: "inline-block"
-								}}>
-									<button style={{
-											border: "2px solid #00FFFF",
-											color: "#00FFFF",
-											backgroundColor: "white",
-											padding: "8px 20px",
-											borderRadius: "8px",
-											fontSize: "20px",
-											fontWeight: "bold",
-											marginTop: 5
-									}}>Upload a file</button>
-									<input style={{
-										fontSize: "100px",
-										position: "absolute",
-										left: 0,
-										top: 0,
-										opacity: 0
-									  }} 
-										ref={node => this.companyLogoInput = node}
-										onChange={e => {
-											e.persist();
-											handleUploadPhotoInput(e.target, this.companyLogoDiv);
-										}}
-									  type="file" name="myfile" />
-								</div>
-							</div>
-							<label className="create-job__input--label"><span className="create-job__input--span">Company name</span>
-								<input 
-									className="input" 
-									type="text" 
-									placeholder="Type your company name" 
-									onChange={e => this.onChange(e,"company_name")}	
-									value={this.state.company_name}
-									required
-								/>
-							</label>
-							<label className="create-job__input--label"><span className="create-job__input--span">Company email</span>
-								<input 
-									className="input" 
-									type="text" 
-									placeholder="Your Email here" 
-									value={this.state.company_email}
-									onChange={e => this.onChange(e,"company_email")}	
-									required
-								/>
-							</label>
-							<label className="create-job__input--label"><span className="create-job__input--span">Company website</span>
-								<input 
-									className="input" 
-									type="text"
-									placeholder="Company website" 
-									value={this.state.company_website}
-									onChange={e => this.onChange(e,"company_website")}	
-									required
-								/>
-							</label>
+							{
+								this.state.hasAccount && 
+								(
+									<div>
+										<label style={{marginTop:35}} className="create-job__input--label"><span className="create-job__input--span">Email</span>
+											<input 
+												className="input" 
+												type="email" 
+												placeholder="Your email here" 
+												onChange={e => this.onChange(e,"email")}	
+												value={this.state.email}
+												required
+											/>
+										</label>
+										<label className="create-job__input--label"><span className="create-job__input--span">Password</span>
+											<input 
+												className="input" 
+												type="password" 
+												placeholder="Your password here" 
+												value={this.state.password}
+												onChange={e => this.onChange(e,"password")}	
+												required
+											/>
+										</label>
+									</div>
+								)
+							}
+							{
+								!this.state.hasAccount && 
+								(
+									<div>
+												<div className="upload-image">
+													<div ref={node => this.companyLogoDiv = node} style={{ display: "inline" }} className="upload-image__img" style={{
+														backgroundImage: 'url("../../assets/toolkit/images/014-company.svg")',
+														backgroundSize: "cover",
+														backgroundRepeat: "no-repeat"
+													}} />
+													<div style={{ display: "inline" }} style={{
+														position: "relative",
+														overflow: "hidden",
+														display: "inline-block"
+													}}>
+														<button style={{
+															border: "2px solid #00FFFF",
+															color: "#00FFFF",
+															backgroundColor: "white",
+															padding: "8px 20px",
+															borderRadius: "8px",
+															fontSize: "20px",
+															fontWeight: "bold",
+															marginTop: 5
+														}}>Upload a file</button>
+														<input style={{
+															fontSize: "100px",
+															position: "absolute",
+															left: 0,
+															top: 0,
+															opacity: 0
+														}}
+															ref={node => this.companyLogoInput = node}
+															onChange={e => {
+																e.persist();
+																handleUploadPhotoInput(e.target, this.companyLogoDiv);
+															}}
+															type="file" name="myfile" />
+													</div>
+												</div>
+										<label className="create-job__input--label"><span className="create-job__input--span">Company name</span>
+											<input 
+												className="input" 
+												type="text" 
+												placeholder="Type your company name" 
+												onChange={e => this.onChange(e,"company_name")}	
+												value={this.state.company_name}
+												required
+											/>
+										</label>
+										<label className="create-job__input--label"><span className="create-job__input--span">Company email</span>
+											<input 
+												className="input" 
+												type="email" 
+												placeholder="Your Email here" 
+												value={this.state.company_email}
+												onChange={e => this.onChange(e,"company_email")}	
+												required
+											/>
+										</label>
+										<label className="create-job__input--label"><span className="create-job__input--span">Company website</span>
+											<input 
+												className="input" 
+												type="text"
+												placeholder="Company website" 
+												value={this.state.company_website}
+												onChange={e => this.onChange(e,"company_website")}	
+												required
+											/>
+										</label>
+									</div>
+								)
+							}
 						</div>
 					}
-					<label className="create-job__input--label"><span className="create-job__input--span">Company card</span>   
+					<label style={{marginTop: this.state.hasAccount ? 0 : 0}} className="create-job__input--label"><span className="create-job__input--span">Company card</span>   
 						<CardElement />
 						<p style={{ "color": "red", margin:10 }}>{this.state.card_error}</p>
 					</label>

@@ -51,7 +51,8 @@ const register = async (root,args,context,info) => {
 				name: args.company.name,
 				website: args.company.website
 			}
-		}
+		},
+		role: "NORMAL"
 	}
 	// delete userParams["company"]["create"]["job"];
 	// // if (args.company.job){
@@ -171,6 +172,7 @@ const resetPassword = async (root,args,context) => {
 
 module.exports = {
 	login,
+	createToken,
 	register,
 	forgetPassword,
 	verifyForgotPassword,

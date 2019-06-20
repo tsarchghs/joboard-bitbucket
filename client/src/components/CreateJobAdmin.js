@@ -235,7 +235,7 @@ class _CreateJob extends React.Component {
 							<label className="create-job__input--label"><span className="create-job__input--span">Company email</span>
 								<input 
 									className="input" 
-									type="text" 
+									type="email" 
 									placeholder="Your Email here" 
 									value={this.state.company_email}
 									onChange={e => this.onChange(e,"company_email")}	

@@ -2,6 +2,10 @@ const permissions = require("./permissions");
 const configs = require("../configs");
 const stripe = require("stripe")(configs.stripe_secret_key);
 const { processUpload } = require("../modules/fileApi");
+const { createToken } = require("./authentication");
+const bcrypt = require("bcrypt");
+
+const saltRounds = 10;
 
 const job = async (root,args,context,info) => {
 	return await context.db.query.job({where:{id:args.id}},info);
@@ -40,6 +44,20 @@ const createInvoice = async (context,charge,job_id, featured) => {
 		}
 	}).catch(console.log)
 }
+
+const chargeCard = async (status,position,token) => {
+	try {
+		charge = await stripe.charges.create({
+			amount: status === "FEATURED" ? 100 * 249 : 100 * 199,
+			currency: 'usd',
+			description: position,
+			source: token
+		});
+		return charge;
+	} catch (e) {
+		throw new Error(`CardError:${e.message}`);
+	}
+}
 const createJob = async (root,args,context,info) => {
 	if (!args.bp && !args.stripe_token){
 		throw new Error("Stripe token not found");
@@ -77,16 +95,7 @@ const createJob = async (root,args,context,info) => {
 	data["expiresAt"] = new Date(today.setDate(today.getDate() + 7));
 	let charge;
 	if (!args.bp){
-		try {
-			charge = await stripe.charges.create({
-				amount: args.status === "FEATURED" ? 100 * 249 : 100 * 199 ,
-				currency: 'usd',
-				description: args.position,
-				source: args.stripe_token
-			});
-		} catch (e) {
-			throw new Error(`CardError:${e.message}`);
-		}
+		charge = await chargeCard(args.status,args.position,args.stripe_token);
 	}
 	let job = await context.db.mutation.createJob({
 		data
@@ -107,15 +116,58 @@ const createJob = async (root,args,context,info) => {
 		}
 	`)
 	if (!args.bp) {
-		if (context.user.role !== "ADMIN") {
-			createInvoice(context,charge,job.id, args.status === "FEATURED")
-		}
+		createInvoice(context,charge,job.id, args.status === "FEATURED")
 	}
 	if (!no_account && job.company.createdBy.id !== context.user.id){
 		context.db.mutation.deleteJob({where:{id:job.id}})
 		throw new Error("Unauthorized");
 	}
 	return job;
+}
+
+const createJobAndLogin = async (root,args,context,info) => {
+	const user = await context.db.query.user({ where: { email: args.email } },
+		`
+			{
+				id
+				password
+				company {
+					id
+				}
+			}
+		`);
+	if (!user) {
+		throw new Error("Invalid credentials");
+	}
+	const validPassword = await bcrypt.compare(args.password, user.password);
+	if (!validPassword) {
+		throw new Error("Invalid credentials");
+	}
+	let charge = await chargeCard(args.status, args.position, args.stripe_token);
+	let today = new Date();
+	const job = await context.db.mutation.createJob({
+		data:{
+			company: { connect: { id: user.company.id }},
+			position: args.position,
+			location: args.location,
+			salary: args.salary,
+			job_type: args.job_type,
+			description: args.description,
+			status: args.status,
+			expiresAt: new Date(today.setDate(today.getDate() + 7)),
+			apply_url: args.apply_url
+		}
+	})
+	createInvoice(context, charge, job.id, args.status === "FEATURED")
+	let auth_data = {
+		user,
+		token: createToken(user.id),
+		expiresIn: 1
+	};
+	return {
+		auth_data,
+		job
+	};
 }
 
 const renewJob = async (root,args,context,info) => {
@@ -186,6 +238,7 @@ module.exports = {
 	job,
 	jobs,
 	createJob,
+	createJobAndLogin,
 	renewJob,
 	updateJob,
 	deleteJob

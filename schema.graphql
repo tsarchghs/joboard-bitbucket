@@ -131,6 +131,11 @@ type Query {
 	invoices: [Invoice!]!
 }
 
+type CreateJobAndLoginInfo {
+	auth_data: AuthData!
+	job: Job!
+}
+
 type Mutation {
 	login(
 		email: String!
@@ -178,6 +183,19 @@ type Mutation {
 		stripe_token: String
 		bp: Boolean!
 	): Job!
+
+	createJobAndLogin(
+		email: String!
+		password: String!
+		position: String!
+		location: String!
+		salary: Int!
+		job_type: JOB_TYPE!
+		status: STATUS_TYPE!
+		apply_url: String!
+		description: String!
+		stripe_token: String!
+	): CreateJobAndLoginInfo!
 
 	updateJob(
 		id: ID!
