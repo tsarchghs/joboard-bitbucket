@@ -138,7 +138,7 @@ class Home extends React.Component {
 							return nextState
 						 })} />
 						<span className="checkmark" />
-						<p>Remote/anywhere</p>
+						<p style={{color: "white"}}>Remote/anywhere</p>
 						</label>	           
 					</label>
 	            <label><span>Type of work</span>
@@ -233,7 +233,7 @@ class Home extends React.Component {
 			              <div key={job.id} className={`job-listing-table__list home-table ${this.state.other_jobs[0].id === job.id ? "no-border" : ""}`}>
 								<div className="job-listing-table__logo"
 									style={{
-										backgroundImage: this.getLogo(job)
+										backgroundImage: this.getLogo(job),
 									}} />
 			                <div className="job-listing-table__info">
 			                	<Link to={`/job/${job.id}`}>

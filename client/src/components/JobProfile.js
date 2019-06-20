@@ -43,9 +43,9 @@ class JobProfile extends React.Component {
 					        <div className="inside-page">
 					          <div className="inside-page__container">
 					            <div className="inside-page__content">
-					              <div className="inside-page__card">
+					              <div className="inside-page__card" style={{paddingLeft:0,paddingRight:0}}>
 					                <div className="flex">
-					                  <div style={{border: "1px solid gray !important"}} className="card__logo" style={{backgroundImage}} />
+					                  <div className="card__logo" style={{backgroundImage}} />
 					                  <div className="card-data">
 					                    <div className="card-data__title"><a href="#" className="card-data__title">{job.position}</a></div>
 					                    <div className="card-data__subtitle"><a href="#" className="card-data__subtitle">{job.company ? job.company.name : job.company_name}</a></div>
