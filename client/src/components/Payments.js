@@ -34,7 +34,7 @@ class Payments extends React.Component {
 									<td>- - - - -- - - - -- - - - -</td>
 									<td>- - - - - - - - - - - - - - - - - - - - -</td>
 									<td className="td-bold">- - - -</td>
-									<td className="td-blue"><a href="#"><img src="/assets/toolkit/images/pdf-file.svg" alt="" />Download pdf</a></td>
+									<td className="td-blue"><a href="#"><img src="/assets/toolkit/images/pdf-file.svg" alt="" />View</a></td>
 								</tr>)
 							}
 							let invoices = data.invoices

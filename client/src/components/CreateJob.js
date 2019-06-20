@@ -222,7 +222,10 @@ class _CreateJob extends React.Component {
 		})
 		this.props.history.push(`/job/${this.state.job_id}`)
 	}
-	openModal(modalName) {
+	openModal(modalName,e) {
+		if (e){
+			e.preventDefault();
+		}
 		this.setState({ currentModal: modalName })
 	}
 	render(){
@@ -230,7 +233,7 @@ class _CreateJob extends React.Component {
 			<div className="create-job__layout">
 				<CreateAccountQuestionModal 
 					closeModal={this.closeModal} 
-					onYes={() => this.openModal("TypePasswordModal")} 
+					onYes={(e) => this.openModal("TypePasswordModal",e)} 
 					modalIsOpen={this.state.currentModal === "CreateAccountQuestionModal"}	
 				/>
 				<TypePasswordModal

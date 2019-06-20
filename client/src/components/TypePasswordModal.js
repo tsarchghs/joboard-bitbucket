@@ -74,7 +74,8 @@ class TypePasswordModal extends React.Component{
                                 `}
                             >
                                 { (signUp,{loading,error,data}) => {
-                                    let onSubmit = async () => {
+                                    let onSubmit = async (e) => {
+                                        e.preventDefault();
                                         this.setState({
                                             error: ""
                                         })

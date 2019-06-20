@@ -58,7 +58,7 @@ class JobProfile extends React.Component {
 					                </div>
 					                <div className="card__button">
 					                  <p style={{marginLeft:10}} className="gray"></p>
-					                  <a target="_blank"  href={job.apply_url} className="button blue">Apply for this job</a>
+					                  <a target="_blank"  href={this.getUrl(job.apply_url)} className="button blue">Apply for this job</a>
 					                </div>
 					              </div>
 					              <div className="inside-page__description">

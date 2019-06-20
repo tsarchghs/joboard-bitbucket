@@ -6054,7 +6054,7 @@ a:focus {
   height: 120px;
   border-radius: 50%;
   margin-right: 22px;
-  border: 1px solid gray;
+  border: 1px solid #DEE3E7;
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center; }
@@ -6064,7 +6064,7 @@ a:focus {
       margin-bottom: 15px; } }
 
 .card-data__subtitle {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 500;
   line-height: 1.1;
   color: #000000;
@@ -6073,7 +6073,7 @@ a:focus {
     color: #000000; }
 
 .card-data__title {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 500;
   line-height: 0.92;
   color: #000000;
@@ -6222,7 +6222,7 @@ a:focus {
   height: 50px;
   margin-right: 21px;
   border-radius: 50%;
-  border: 1px solid gray;
+  border: 1px solid #DEE3E7;
   background-repeat: no-repeat;
   background-size: cover;
   overflow: hidden;
