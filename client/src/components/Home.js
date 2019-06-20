@@ -31,7 +31,7 @@ class Home extends React.Component {
 			jobFilter: {
 				id_not_in,
 				status_not_in,
-				location_contains: this.state.search_value,
+				location_contains: this.state.only_remote ? "remote/everywhere" : this.state.search_value,
 				status_type,
 				job_type: this.jobTypeRef && this.jobTypeRef.value === "ALL" ? undefined : this.jobTypeRef.value,
 				createdAt_gte,
@@ -122,13 +122,25 @@ class Home extends React.Component {
 	              <div className="home__input">
 	                <input 
 	                	id="searchRef"
+						value={this.state.only_remote ? "" : this.state.search_value}
 	                	onChange={(e) => this.updateFilter(e,"search_value")}
 	                	className="input" 
 	                	type="email" 
+						disabled={this.state.only_remote}
 	                	placeholder="Search for state, city" />
 	                <img src="../assets/toolkit/images/placeholder.svg" alt=""/>				
 	              </div>
-	            </label>
+					<label style={{marginTop: 10}} className="checkbox-container">
+						<input type="checkbox" checked={this.state.only_remote} onChange={e => this.setState(nextState => {
+							nextState.only_remote = !nextState.only_remote;
+							nextState.search_value = "";
+							this.update();
+							return nextState
+						 })} />
+						<span className="checkmark" />
+						<p>Remote/anywhere</p>
+						</label>	           
+					</label>
 	            <label><span>Type of work</span>
 	              <div className="home__select">
 	                <select ref={node => this.jobTypeRef = node} data-placeholder="Full time/part time ..." className="chosen-select">

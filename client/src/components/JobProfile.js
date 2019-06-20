@@ -3,6 +3,13 @@ import { Query } from "react-apollo";
 import { JOB_QUERY } from "../Queries";
 
 class JobProfile extends React.Component {
+	getUrl(s){
+		var prefix = 'http://';
+		if (s.substr(0, prefix.length) !== prefix) {
+			s = prefix + s;
+		}
+		return s;
+	}
 	render() {
 		return (
 			<Query
@@ -38,14 +45,14 @@ class JobProfile extends React.Component {
 					            <div className="inside-page__content">
 					              <div className="inside-page__card">
 					                <div className="flex">
-					                  <div className="card__logo" style={{backgroundImage}} />
+					                  <div style={{border: "1px solid gray !important"}} className="card__logo" style={{backgroundImage}} />
 					                  <div className="card-data">
 					                    <div className="card-data__title"><a href="#" className="card-data__title">{job.position}</a></div>
 					                    <div className="card-data__subtitle"><a href="#" className="card-data__subtitle">{job.company ? job.company.name : job.company_name}</a></div>
 					                    <div className="card-data__info">
 					                      <p><img src="/assets/toolkit/images/gray-placeholder.svg" alt />{job.location}</p>
 					                      <p><img src="/assets/toolkit/images/gray-portfolio.svg" alt />{job.job_type}</p>
-					                      <a href="#"><img src="/assets/toolkit/images/grid-world.svg" alt />{job.company ? job.company.website : job.company_website }</a>
+					                      <a href={job.company ? this.getUrl(job.company.website) : this.getUrl(job.company_website) } target="_blank"><img src="/assets/toolkit/images/grid-world.svg" alt />{job.company ? job.company.website : job.company_website }</a>
 					                    </div>
 					                  </div>
 					                </div>

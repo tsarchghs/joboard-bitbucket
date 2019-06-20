@@ -311,6 +311,16 @@ class _CreateJob extends React.Component {
 						<input onChange={e => this.onChange(e,"apply_url")} value={this.state.apply_url} required className="input" type="text" placeholder="Where people can apply" />
 						</label>
 					</div>
+						<label className="checkbox-container" 
+							style={{ marginTop: '40px', marginBottom: '60px' }}>
+							<input type="checkbox" checked={this.state.featured} onChange={e => this.onChange({ target: { value: !this.state.featured } }, "featured")}/>
+							<span className="checkmark" />
+								<p className="checkmark-text">Make my job vacancy featured for 7 days ( +50$) 
+							<span className="new blue">
+							<img src="/assets/toolkit/images/blue-star.svg" />Featured
+							</span>
+							</p>
+						</label>
 					</div>
 					{
 						!this.props.user && <span className="line" />	
@@ -328,7 +338,7 @@ class _CreateJob extends React.Component {
 											nextState.hasAccount = !nextState.hasAccount;
 											return nextState
 										})
-									}}>{this.state.hasAccount ? "New company" : "Do you have an account?"}</a>
+									}}>{this.state.hasAccount ? "Create new company?" : "Do you have an account?"}</a>
 								</div>
 							)
 					}
@@ -443,11 +453,6 @@ class _CreateJob extends React.Component {
 						<CardElement />
 						<p style={{ "color": "red", margin:10 }}>{this.state.card_error}</p>
 					</label>
-						<label className="checkbox-container">
-							<input type="checkbox" checked={this.state.featured} onChange={e => this.onChange({target:{value:!this.state.featured}},"featured")}/>
-							<span className="checkmark" />
-							<p className="checkmark-text">Make my job vacancy featured for 7 days ( +50$) <span className="new blue"><img src="/assets/toolkit/images/blue-star.svg" alt />Featured</span></p>
-						</label>
 					<div className="text-center">
 					{
 						this.state.loading ? <img alt="" src="/assets/toolkit/images/loading_blue.gif"/>

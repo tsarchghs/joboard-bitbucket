@@ -74,7 +74,7 @@ class TypePasswordModal extends React.Component{
                                 `}
                             >
                                 { (signUp,{loading,error,data}) => {
-                                    let onClick = async () => {
+                                    let onSubmit = async () => {
                                         this.setState({
                                             error: ""
                                         })
@@ -108,12 +108,15 @@ class TypePasswordModal extends React.Component{
                                         this.props.history.push("/dashboard")
                                     } 
                                     return (
-                                        <div>
+                                        <form onSubmit={onSubmit}>
                                             {
                                                 !this.state.new_email &&
                                                     <label className="create-job__input--label"><span className="create-job__input--span">Your email</span>
                                                         <p>{this.props.email}</p>
                                                     </label>
+                                            }
+                                            {
+                                                this.state.error
                                             }
                                             {
                                                 this.state.new_email &&
@@ -137,8 +140,8 @@ class TypePasswordModal extends React.Component{
                                                     onChange={e => this.setState({password: e.target.value})}
                                                 />
                                             </label>
-                                            <a href="#" className="button blue" onClick={onClick}>Let me in</a>
-                                        </div>
+                                            <a href="#" className="button blue" onClick={onSubmit}>Let me in</a>
+                                        </form>
                                     )
                                 }}
                             </Mutation>

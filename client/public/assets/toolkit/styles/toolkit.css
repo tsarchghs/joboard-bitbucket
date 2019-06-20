@@ -6054,7 +6054,7 @@ a:focus {
   height: 120px;
   border-radius: 50%;
   margin-right: 22px;
-  border: 1px solid #d3d8e5;
+  border: 1px solid gray;
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center; }
