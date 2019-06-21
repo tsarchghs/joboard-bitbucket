@@ -70,21 +70,19 @@ class _UpdateJobProfile extends React.Component {
         this.setState({
             loading: true
         })
-        let job_description_html_output;
-        if (!this.state.editorState) job_description_html_output = `<h3>No description</h3`
-        else job_description_html_output = convertToHTML(this.state.editorState.getCurrentContent())
-        console.log(this.state.job_type,5599);
+        let variables = {
+            id: this.props.match.params.id,
+            position: this.state.position,
+            location: this.state.location,
+            salary: Number(this.state.salary),
+            job_type: this.state.job_type,
+            apply_url: this.state.apply_url
+        }
+        if (this.state.editorState) variables.description = convertToHTML(this.state.editorState.getCurrentContent())
+        console.log(variables);
         let res = await this.props.client.mutate({
             mutation: UPDATE_JOB_QUERY,
-            variables: {
-                id: this.props.match.params.id,
-                position: this.state.position,
-                description: job_description_html_output,
-                location: this.state.location,
-                salary: Number(this.state.salary),
-                job_type: this.state.job_type,
-                apply_url: this.state.apply_url
-            }
+            variables
         })
         this.props.history.push(`/job/${res.data.updateJob.id}`);
         console.log(res,555);

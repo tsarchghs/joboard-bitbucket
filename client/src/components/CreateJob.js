@@ -72,7 +72,7 @@ class _CreateJob extends React.Component {
 			loading: true
 		})
 		let job_description_html_output;
-		if (!this.state.editorState) job_description_html_output = `<h3>No description</h3`
+		if (!this.state.editorState) job_description_html_output = `<h3>No description</h3>`
 		else job_description_html_output = convertToHTML(this.state.editorState.getCurrentContent())
 
 		let stripe_token = await this.createStripeToken();
