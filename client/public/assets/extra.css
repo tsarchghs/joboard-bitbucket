@@ -16,3 +16,28 @@
 		}
 	}
 }
+
+.active-result {
+	padding: 9px 6px !important;
+}
+
+.highlighted {
+	background-color: #007cff !important; 
+	background-image: none !important;
+}
+
+.chosen-search {
+	display: none !important;
+}
+.chosen-drop {
+	padding: 10px 0px !important;
+}
+
+.header__nav-login {
+	margin-bottom: 15px!important;
+	display: inline-block;
+}
+
+@media screen and (min-width: 640px) { 
+		.header__nav-mobie {display: none}
+}

@@ -5991,7 +5991,7 @@ a:focus {
   transition: 0.3s ease all;
   right: -1180px;
   position: absolute;
-  top: 65px;
+  top: 80px;
   padding: 25px;
   background: rgba(0, 0, 0, 0.7);
   border-radius: 6px;
@@ -6796,7 +6796,6 @@ a:focus {
           -ms-flex-direction: column;
               flex-direction: column; } }
   .inside-page__card .card-data__info {
-    width: 380px;
     -ms-flex-wrap: wrap;
         flex-wrap: wrap; }
     .inside-page__card .card-data__info p {
