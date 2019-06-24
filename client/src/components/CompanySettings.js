@@ -101,7 +101,9 @@ class CompanySettings extends React.Component {
 												this.props.company.logo
 													? `url("${this.props.company.logo.url}")`
 													: 'url("/assets/toolkit/images/014-comany.svg")'
-										}} />
+											,
+											backgroundSize: "cover"
+									}} />
 										<div className="upload-image">
 											<div style={{ display: "inline" }} style={{
 												position: "relative",

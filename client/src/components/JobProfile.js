@@ -10,6 +10,19 @@ class JobProfile extends React.Component {
 		}
 		return s;
 	}
+	getJobType(jobType){
+		console.log(jobType);
+		if (jobType === "FULL_TIME"){
+			jobType = "Full Time";
+		} else if (jobType === "PART_TIME"){
+			jobType = "Part Time";
+		} else if (jobType === "CONTRACT"){
+			jobType = "Contract";
+		} else if (jobType === "FREELANCNE"){
+			jobType = "Freelance";
+		}
+		return jobType;
+	}
 	render() {
 		return (
 			<Query
@@ -28,13 +41,9 @@ class JobProfile extends React.Component {
 				if (job.company) {
 					if (job.company.logo && job.company.logo.url){
 						backgroundImage = `url("${job.company.logo.url}")`
-					} else {
-						backgroundImage = 'url("/assets/toolkit/images/	014-company.svg")';
-					}
+					} 
 				} else if (job.company_logo && job.company_logo.url) {
 					backgroundImage = `url("${job.company_logo.url}")`
-				} else {
-					backgroundImage = 'url("/assets/toolkit/images/	014-company.svg")';
 				}
 				return (
 					<div>
@@ -49,9 +58,15 @@ class JobProfile extends React.Component {
 					                  <div className="card-data">
 					                    <div className="card-data__title"><a href="#" className="card-data__title">{job.position}</a></div>
 					                    <div className="card-data__subtitle"><a href="#" className="card-data__subtitle">{job.company ? job.company.name : job.company_name}</a></div>
-					                    <div className="card-data__info">
-					                      <p><img src="/assets/toolkit/images/gray-placeholder.svg" alt />{job.location}</p>
-					                      <p><img src="/assets/toolkit/images/gray-portfolio.svg" alt />{job.job_type}</p>
+					                    <div className="card-data__info" style={{width:600}}>
+											<div style={{display:"inline"}}>
+												<p style={{display:"inline"}}><img src="/assets/toolkit/images/gray-placeholder.svg" alt />{job.location}</p>
+												<p style={{display:"inline"}}><img src="/assets/toolkit/images/gray-portfolio.svg" alt />{this.getJobType(job.job_type)}</p>
+												{
+													job.salary && 
+														<p style={{display:"inline"}}><img src="/assets/salary.svg" alt />{job.salary}$</p>
+												}
+											</div>
 					                      <a href={job.company ? this.getUrl(job.company.website) : this.getUrl(job.company_website) } target="_blank"><img src="/assets/toolkit/images/grid-world.svg" alt />{job.company ? job.company.website : job.company_website }</a>
 					                    </div>
 					                  </div>

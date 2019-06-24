@@ -391,7 +391,7 @@ export interface UserCreateWithoutCompanyInput {
 export interface JobCreateWithoutInvoicesInput {
   position: String;
   location: String;
-  salary: Int;
+  salary?: Int;
   description: String;
   job_type: JOB_TYPE;
   status: STATUS_TYPE;
@@ -684,7 +684,7 @@ export interface JobWhereInput {
 export interface JobCreateWithoutCompanyInput {
   position: String;
   location: String;
-  salary: Int;
+  salary?: Int;
   description: String;
   job_type: JOB_TYPE;
   status: STATUS_TYPE;
@@ -825,7 +825,7 @@ export interface FileUpdateDataInput {
 export interface JobCreateInput {
   position: String;
   location: String;
-  salary: Int;
+  salary?: Int;
   description: String;
   job_type: JOB_TYPE;
   status: STATUS_TYPE;
@@ -1670,7 +1670,7 @@ export interface Job {
   id: ID_Output;
   position: String;
   location: String;
-  salary: Int;
+  salary?: Int;
   description: String;
   job_type: JOB_TYPE;
   status: STATUS_TYPE;
@@ -1846,7 +1846,7 @@ export interface JobPreviousValues {
   id: ID_Output;
   position: String;
   location: String;
-  salary: Int;
+  salary?: Int;
   description: String;
   job_type: JOB_TYPE;
   status: STATUS_TYPE;

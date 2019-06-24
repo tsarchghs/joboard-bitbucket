@@ -26,6 +26,7 @@ class _CreateJob extends React.Component {
 			editorState: undefined,
 			location: "",
 			locationInputDisabled: true,
+			salaryInputDisabled: false,
 			salary: "",
 			job_type: "FULL_TIME",
 			apply_url: "",
@@ -83,7 +84,7 @@ class _CreateJob extends React.Component {
 			password: this.state.password,
 			position: this.state.position,
 			location: this.state.location,
-			salary: Number(this.state.salary),
+			salary: this.state.salaryInputDisabled ? null : Number(this.state.salary),
 			job_type: this.state.job_type,
 			status: this.state.featured ? "FEATURED" : "NEW",
 			apply_url: this.state.apply_url,
@@ -277,11 +278,21 @@ class _CreateJob extends React.Component {
 						</label>
 						</label>
 						<label className="create-job__input--label"><span className="create-job__input--span">Salary</span>
-						<input className="input" type="text" type="number" placeholder="Type the salary here" 
-							onChange={e => this.onChange(e,"salary")}
-							value={this.state.salary}
-							required
-						/>
+							<input className="input" type="text" type="number" placeholder="Type the salary here" 
+								onChange={e => this.onChange(e,"salary")}
+								disabled={this.state.salaryInputDisabled}
+								value={this.state.salary}
+								required
+							/>
+							<label className="checkbox-container">
+								<input type="checkbox" checked={this.state.salaryInputDisabled} onChange={e => this.setState(nextState => { 
+									nextState.salaryInputDisabled = !nextState.salaryInputDisabled 
+									return nextState;
+								})}/>
+								<span className="checkmark" />
+									<p className="checkmark-text">Do not show salary
+								</p>
+							</label>						
 						</label>
 						<label className="create-job__input--label less-margin"><span className="create-job__input--span">Job type</span></label>
 						<div className="create-job__checkbox">
@@ -383,7 +394,7 @@ class _CreateJob extends React.Component {
 									<div>
 												<div className="upload-image">
 													<div ref={node => this.companyLogoDiv = node} style={{ display: "inline" }} className="upload-image__img" style={{
-														backgroundImage: 'url("../../assets/toolkit/images/014-company.svg")',
+														backgroundImage: 'url("")',
 														backgroundSize: "cover",
 														backgroundRepeat: "no-repeat"
 													}} />

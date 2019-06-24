@@ -65,7 +65,7 @@ type Job {
 	id: ID! @id
 	position: String!
 	location: String!
-	salary: Int!
+	salary: Int
 	description: String!
 	job_type: JOB_TYPE!
 	status: STATUS_TYPE!

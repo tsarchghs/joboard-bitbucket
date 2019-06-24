@@ -144,7 +144,7 @@ const CREATE_JOB_MUTATION = gql`
     mutation CreateJob(
         $position: String!
         $location: String!
-        $salary: Int!
+        $salary: Int
         $job_type: JOB_TYPE!
         $status: STATUS_TYPE!
         $apply_url: String!
@@ -189,7 +189,7 @@ const CREATE_JOB_AND_LOGIN_MUTATION = gql`
 		$password: String!
 		$position: String!
 		$location: String!
-		$salary: Int!
+		$salary: Int
 		$job_type: JOB_TYPE!
 		$status: STATUS_TYPE!
 		$apply_url: String!

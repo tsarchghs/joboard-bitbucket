@@ -796,7 +796,7 @@ type Job {
   id: ID!
   position: String!
   location: String!
-  salary: Int!
+  salary: Int
   description: String!
   job_type: JOB_TYPE!
   status: STATUS_TYPE!
@@ -828,7 +828,7 @@ type JobConnection {
 input JobCreateInput {
   position: String!
   location: String!
-  salary: Int!
+  salary: Int
   description: String!
   job_type: JOB_TYPE!
   status: STATUS_TYPE!
@@ -855,7 +855,7 @@ input JobCreateOneWithoutInvoicesInput {
 input JobCreateWithoutCompanyInput {
   position: String!
   location: String!
-  salary: Int!
+  salary: Int
   description: String!
   job_type: JOB_TYPE!
   status: STATUS_TYPE!
@@ -871,7 +871,7 @@ input JobCreateWithoutCompanyInput {
 input JobCreateWithoutInvoicesInput {
   position: String!
   location: String!
-  salary: Int!
+  salary: Int
   description: String!
   job_type: JOB_TYPE!
   status: STATUS_TYPE!
@@ -924,7 +924,7 @@ type JobPreviousValues {
   id: ID!
   position: String!
   location: String!
-  salary: Int!
+  salary: Int
   description: String!
   job_type: JOB_TYPE!
   status: STATUS_TYPE!

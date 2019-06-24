@@ -14,6 +14,7 @@ class _UpdateJobProfile extends React.Component {
             editorState: undefined,
             location: "",
             locationInputDisabled: true,
+            salaryInputDisabled: false,
             salary: undefined,
             job_type: "",
             apply_url: "",
@@ -57,6 +58,7 @@ class _UpdateJobProfile extends React.Component {
             position: job.position,
             location: job.location,
             salary: job.salary,
+            salaryInputDisabled: !job.salary,
             job_type: job.job_type,
             apply_url: job.apply_url,
             htmlContent: job.description,
@@ -74,7 +76,7 @@ class _UpdateJobProfile extends React.Component {
             id: this.props.match.params.id,
             position: this.state.position,
             location: this.state.location,
-            salary: Number(this.state.salary),
+            salary: this.state.salaryInputDisabled ? null : Number(this.state.salary),
             job_type: this.state.job_type,
             apply_url: this.state.apply_url
         }
@@ -134,8 +136,18 @@ class _UpdateJobProfile extends React.Component {
                                             <input className="input" type="text" type="number" placeholder="Type the salary here"
                                                 onChange={e => this.onChange(e, "salary")}
                                                 value={this.state.salary}
+                                                disabled={this.state.salaryInputDisabled}
                                                 required
                                             />
+                                            <label className="checkbox-container">
+                                                <input type="checkbox" checked={this.state.salaryInputDisabled} onChange={e => this.setState(nextState => {
+                                                    nextState.salaryInputDisabled = !nextState.salaryInputDisabled
+                                                    return nextState;
+                                                })} />
+                                                <span className="checkmark" />
+                                                <p className="checkmark-text">Do not show salary
+                                                </p>
+                                            </label>
                                         </label>
                                         <label className="create-job__input--label less-margin"><span className="create-job__input--span">Job type</span></label>
                                         <div className="create-job__checkbox">

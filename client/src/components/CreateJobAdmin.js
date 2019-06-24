@@ -55,14 +55,14 @@ class _CreateJob extends React.Component {
 		if (this.props.user){
 			variables.company = this.props.user.company.id
 		}
-		variables.salary = Number(variables.salary)
+		variables.salary = this.state.salaryInputDisabled ? null : Number(this.state.salary);
 		variables.status = this.state.featured ? "FEATURED" : "NEW"
 		console.log(variables);
 		let res;
 		if (this.companyLogoInput && this.companyLogoInput.base64){
 			variables.company_logo = this.companyLogoInput.base64;
         }
-        variables.bp = true;
+		variables.bp = true;
 		try {
 			let res = await this.props.client.mutate({
                 mutation: CREATE_JOB_MUTATION,
@@ -137,11 +137,21 @@ class _CreateJob extends React.Component {
 						</label>
 						</label>
 						<label className="create-job__input--label"><span className="create-job__input--span">Salary</span>
-						<input className="input" type="text" type="number" placeholder="Type the salary here" 
-							onChange={e => this.onChange(e,"salary")}
-							value={this.state.salary}
-							required
-						/>
+							<input className="input" type="text" type="number" placeholder="Type the salary here" 
+								onChange={e => this.onChange(e,"salary")}
+								value={this.state.salary}
+								disabled={this.state.salaryInputDisabled}
+								required
+							/>
+							<label className="checkbox-container">
+								<input type="checkbox" checked={this.state.salaryInputDisabled} onChange={e => this.setState(nextState => {
+									nextState.salaryInputDisabled = !nextState.salaryInputDisabled
+									return nextState;
+								})} />
+								<span className="checkmark" />
+								<p className="checkmark-text">Do not show salary
+								</p>
+							</label>
 						</label>
 						<label className="create-job__input--label less-margin"><span className="create-job__input--span">Job type</span></label>
 						<div className="create-job__checkbox">
@@ -179,16 +189,10 @@ class _CreateJob extends React.Component {
 						!this.props.user && <span className="line" />	
 					}
 					<div className="company-info">
-					{
-						!this.props.user && <h5>Company info</h5>
-					}
-					{
-						this.props.user ? null 
-						: 
+						<h5>Company info</h5>
 						<div>
 							<div className="upload-image">
 								<div ref={node => this.companyLogoDiv = node} style={{display:"inline"}} className="upload-image__img" style={{
-									backgroundImage: 'url("../../assets/toolkit/images/014-company.svg")',
 									backgroundSize: "cover",
 									backgroundRepeat:"no-repeat"
 								}} />
@@ -253,7 +257,6 @@ class _CreateJob extends React.Component {
 								/>
 							</label>
 						</div>
-					}
 						<label className="checkbox-container">
 							<input type="checkbox" checked={this.state.featured} onChange={e => this.onChange({target:{value:!this.state.featured}},"featured")}/>
 							<span className="checkmark" />

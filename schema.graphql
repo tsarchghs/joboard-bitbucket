@@ -63,7 +63,7 @@ type Job {
 	id: ID!
 	position: String!
 	location: String!
-	salary: Int!
+	salary: Int
 	job_type: JOB_TYPE!
 	status: STATUS_TYPE!
 	apply_url: String!
@@ -81,7 +81,7 @@ type Job {
 input CreateJob {
 	position: String!
 	location: String!
-	salary: Int!
+	salary: Int
 	job_type: JOB_TYPE!
 	status: STATUS_TYPE!
 	apply_url: String!
@@ -170,7 +170,7 @@ type Mutation {
 	createJob(
 		position: String!
 		location: String!
-		salary: Int!
+		salary: Int
 		job_type: JOB_TYPE!
 		status: STATUS_TYPE!
 		apply_url: String!
@@ -189,7 +189,7 @@ type Mutation {
 		password: String!
 		position: String!
 		location: String!
-		salary: Int!
+		salary: Int
 		job_type: JOB_TYPE!
 		status: STATUS_TYPE!
 		apply_url: String!

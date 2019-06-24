@@ -6056,7 +6056,7 @@ a:focus {
   margin-right: 22px;
   border: 1px solid #DEE3E7;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
   background-position: center; }
   @media screen and (max-width: 39.9375em) {
     .card__logo {

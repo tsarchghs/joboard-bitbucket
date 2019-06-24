@@ -43,11 +43,14 @@ class _Dashboard extends React.Component {
 	}
 	async deleteJob(e,job){
 		e.preventDefault();
-		await this.props.client.mutate({
+		this.props.client.mutate({
 			mutation: DELETE_JOB_MUTATITON,
 			variables: {
 				id: job.id
 			}
+		})
+		this.setState({
+			currentModal: false
 		})
 		let cached = this.props.client.readQuery({
 			query: GET_LOGGED_IN_USER
@@ -59,9 +62,6 @@ class _Dashboard extends React.Component {
 		this.props.client.writeQuery({
 			query: GET_LOGGED_IN_USER,
 			data: cached
-		})
-		this.setState({
-			currentModal: false
 		})
 	}
 	render(){
@@ -91,11 +91,13 @@ class _Dashboard extends React.Component {
 										this.props.user.company.logo
 											? `url("${this.props.user.company.logo.url}")`
 											: 'url("/assets/toolkit/images/014-copany.svg")'
+									,
+									backgroundSize: "cover"
 								}} />
 							<div className="card-data">
 								<div className="card-data__title">{this.props.user.company.name}</div>
 								<div className="card-data__info">
-									<a href="#"><img src="/assets/toolkit/images/grid-world.svg" alt="" />{this.props.user.company.website}</a>
+									<a href={this.props.user.company.website} target="_blank"><img src="/assets/toolkit/images/grid-world.svg" alt="" />{this.props.user.company.website}</a>
 									<a href="#"><img src="/assets/toolkit/images/envelope.svg" alt="" />{this.props.user.company.email}</a>
 								</div>
 							</div>
