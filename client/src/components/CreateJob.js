@@ -83,7 +83,7 @@ class _CreateJob extends React.Component {
 			email: this.state.email,
 			password: this.state.password,
 			position: this.state.position,
-			location: this.state.location,
+			location: this.state.locationInputDisabled ? "remote/everywhere" : this.state.location,
 			salary: this.state.salaryInputDisabled ? null : Number(this.state.salary),
 			job_type: this.state.job_type,
 			status: this.state.featured ? "FEATURED" : "NEW",
