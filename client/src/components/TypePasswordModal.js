@@ -141,7 +141,13 @@ class TypePasswordModal extends React.Component{
                                                     onChange={e => this.setState({password: e.target.value})}
                                                 />
                                             </label>
-                                            <a href="#" className="button blue" onClick={onSubmit}>Let me in</a>
+                                            {
+                                                loading ? 
+                                                    <center><img alt="" src="/assets/toolkit/images/loading_blue.gif" style={{"width":"65"}}/></center>
+                                                :
+                                                    <a href="#" className="button blue" onClick={onSubmit}>Let me in</a>
+                                            }
+                                            
                                         </form>
                                     )
                                 }}
