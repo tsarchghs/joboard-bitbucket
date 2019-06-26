@@ -1,20 +1,6 @@
-.custom-dropdown {
-	display: none;
-	padding: 20px;
-	background-color: #fff;
-	border-radius: 6px;
-	right: 65px;
-	top: 60px;
-	border: 1px solid rgba(128, 128, 128, 0.23);
-	&.opened {
-		display: initial;
-	}
-	a {
-		color: #000;
-		&:hover, &:focus {
-			color: #000;
-		}
-	}
+
+.card-data__info a {
+	margin-bottom: 10px;
 }
 
 .active-result {
@@ -33,11 +19,18 @@
 	padding: 10px 0px !important;
 }
 
-.header__nav-login {
-	margin-bottom: 15px!important;
-	display: inline-block;
+.header__logo a{
+	display: flex;
 }
 
 @media screen and (min-width: 640px) { 
 		.header__nav-mobie {display: none}
+		
+}
+
+@media screen and (max-width: 639px) {
+	.header__nav-login {
+		margin-bottom: 15px!important;
+		display: inline-block;
+	}
 }

@@ -3,6 +3,8 @@ import { loadToolKit } from "../helpers";
 import { debounce } from "lodash";
 import { withApollo, Query } from 'react-apollo';
 import gql from "graphql-tag";
+import Footer from "./Footer";
+
 import { Link } from "react-router-dom";
 import { loadAfterHomeMount } from "../helpers"
 
@@ -217,7 +219,7 @@ class Home extends React.Component {
 				                {
 				                	job.status === "FEATURED" 
 				                	? <span className="new blue"><img src="/assets/toolkit/images/blue-star.svg" alt=""/>Featured</span>
-				                	: <span className="new "><img src="/assets/toolkit/images/blue-star.svg" alt=""/>New</span>
+				                	: <span className="new ">New</span>
 				                }
 			                  <h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt=""/>{job.location}</h5>
 			                </div>
@@ -252,10 +254,21 @@ class Home extends React.Component {
 	            		))
 	            	)
 	            }
-
+							<div className="newsletter">
+								<div className="newsletter__title">
+									<img src="../../assets/toolkit/images/015-email.svg" alt=""/>
+									<p>Get the newest Flutter jobs in your inbox</p>
+								</div>
+								<div className="newsletter__input">
+									<input type="text" placeholder="Your email"/>
+									<a href="#" className="button button--blue">Notify me</a>
+								</div>
+							</div>
 	          </div>
+					<Footer/>
 	      </div>
 	      </div>
+				
 		);
 	}
 }

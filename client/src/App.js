@@ -7,6 +7,7 @@ import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import Home from "./components/Home";
 import Login from "./components/Login";
+import Footer from "./components/Footer";
 import CreateJob from "./components/CreateJob";
 import CreateJobAdmin from "./components/CreateJobAdmin";
 import Header from "./components/Header";
@@ -78,6 +79,7 @@ class App extends Component {
                       return ( 
                         <div>
                           <Header user={user}/>
+
                           <Elements>
                             <CreateJob refetchApp={refetch} user={user}/>
                           </Elements>

@@ -48,26 +48,28 @@ class Login extends React.Component {
 				 	}}>
 			    	   <div className="login">
 				        <Header/>
-				        <div className="login__card">
-				          <h4>Login</h4>
-				          <div className="login__card-inputs">
-				          {alertMessage ? alertMessage : ""}
-				            {
-				            	loading ? <center><img src="/assets/toolkit/images/loading_blue.gif"/></center>
-				            	:
-				            	<div>
-					            	<label><span>Email</span>
-						              <input value={this.state.email} onChange={(e) => this.setState({email:e.target.value})} className="input" type="text" placeholder="youremail@domain.com" />
-						            </label>
-						            <label><span>Password</span>
-						              <input value={this.state.password} onChange={(e) => this.setState({password:e.target.value})} className="input" type="password" placeholder="Your password here" />
-						            </label>
-				          <button className="button blue">Sign in</button>
-						         </div>
-					        }
-				          </div>
-				          <p>By signing in to your account, you agree to <a href="#">Terms of Service.</a></p>
-				        </div>
+								<div className="login__container">
+					        <div className="login__card">
+										<h4>Login</h4>
+										<div className="login__card-inputs">
+										{alertMessage ? alertMessage : ""}
+											{
+												loading ? <center><img src="/assets/toolkit/images/loading_blue.gif"/></center>
+												:
+												<div>
+													<label><span>Email</span>
+														<input value={this.state.email} onChange={(e) => this.setState({email:e.target.value})} className="input" type="text" placeholder="youremail@domain.com" />
+													</label>
+													<label><span>Password</span>
+														<input value={this.state.password} onChange={(e) => this.setState({password:e.target.value})} className="input" type="password" placeholder="Your password here" />
+													</label>
+												<button className="button blue">Sign in</button>
+											</div>
+										}
+										</div>
+										<p>By signing in to your account, you agree to <a href="#">Terms of Service.</a></p>
+									</div>
+									</div>
 							 <p className="login__post">Do you want to post a job? <Link to="/create_job"><p className="button">Post a job</p></Link></p>
 				      </div>
 			    	</form>
