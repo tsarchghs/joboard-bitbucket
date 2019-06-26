@@ -44,21 +44,25 @@ cron.schedule(EVERY_MINUTE, async () => {
 		if (job_expiresAt < today){
 			console.log(today,job_expiresAt,123)
 			new_status = "CLOSED"
-		} else if (daysDifference(new Date(today), new Date(job_expiresAt)) < 6){
-			console.log(tomorrow, 123, job_expiresAt, 11, daysDifference(new Date(tomorrow), new Date(job_expiresAt)))
-				new_status = "OLD"
+		} else if (daysDifference(new Date(today), new Date(job_expiresAt)) <= 30) {
+			new_status = "TODAY"
+		} else if (daysDifference(new Date(today), new Date(job_expiresAt)) <= 29 && job.status !== "FEATURED") {
+			new_status = "WEEK"
+		} else if (daysDifference(new Date(today), new Date(job_expiresAt)) <= 23 && job.status == "FEATURED") {
+			new_status = "WEEK"
+		} else {
+			new_status = "MONTH"
 		}
+
 		console.log(new_status,12)
 		if (new_status !== undefined && new_status !== job.status){
-			if (!(new_status === "OLD" && job.status === "FEATURED")){
-				console.log(new_status, 55)
-				prismaDb.mutation.updateJob({
-					where:{id: job.id},
-					data: {
-						status: new_status
-					}
-				})
-			}
+			console.log(new_status, 55)
+			prismaDb.mutation.updateJob({
+				where:{id: job.id},
+				data: {
+					status: new_status
+				}
+			})
 		}
 	}
 });

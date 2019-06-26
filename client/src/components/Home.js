@@ -14,7 +14,8 @@ class Home extends React.Component {
 			job_type: undefined,
 			featured_jobs: undefined,
 			today_jobs: undefined,
-			other_jobs: undefined	
+			week_jobs: undefined,
+			month_jobs: undefined
 		}
 		this.jobTypeRef = undefined;
 		this.update = debounce(this.update.bind(this),250);
@@ -83,11 +84,13 @@ class Home extends React.Component {
 		this.setState({
 			featured_jobs: undefined,
 			today_jobs:undefined,
-			other_jobs:undefined
+			week_jobs:undefined,
+			month_jobs: undefined
 		})
 		this.updateJobs("featured_jobs",undefined, undefined, "FEATURED");
-		this.updateJobs("today_jobs",undefined, undefined, "NEW");
-		this.updateJobs("other_jobs",undefined, undefined, "OLD");
+		this.updateJobs("today_jobs",undefined, undefined, "TODAY");
+		this.updateJobs("week_jobs", undefined, undefined, "WEEK");
+		this.updateJobs("month_jobs", undefined, undefined, "MONTH");
 		
 	}
 	updateFilter(e,to){
@@ -158,7 +161,11 @@ class Home extends React.Component {
 	        </div>
 	        <div className="master-layout__hero">
 	          <div className="home__table">
-				<h4 className="home__table-title">Featured</h4>
+				{
+					this.state.featured_jobs === undefined || (this.state.featured_jobs && this.state.featured_jobs.length)
+					? <h4 className="home__table-title">Featured</h4>
+					: null
+				}
 				{
 					!this.state.featured_jobs ? <center><img alt="" src="/assets/toolkit/images/loading_blue.gif" /></center>
 						:
@@ -192,7 +199,11 @@ class Home extends React.Component {
 						)
 				}
 
-	            <h4 className="home__table-title">Today</h4>
+				{
+					this.state.today_jobs === undefined || (this.state.today_jobs && this.state.today_jobs.length)
+						? <h4 className="home__table-title">Today</h4>
+						: null
+				}
 	            {
 	            	!this.state.today_jobs ? <center><img alt="" src="/assets/toolkit/images/loading_blue.gif"/></center>
 	            	: 
@@ -225,12 +236,16 @@ class Home extends React.Component {
 	            		))
 	            	)
 	            }
-	            <h4 className="home__table-title">This week</h4>	            	
-					{ !this.state.other_jobs ? <center><img alt="" src="/assets/toolkit/images/loading_blue.gif"/></center>
+				{
+					this.state.week_jobs === undefined || (this.state.week_jobs && this.state.week_jobs.length)
+					? <h4 className="home__table-title">Week</h4>
+					: null
+				}	            	
+					{ !this.state.week_jobs ? <center><img alt="" src="/assets/toolkit/images/loading_blue.gif"/></center>
 	            	: 
 	            	(
-	            		this.state.other_jobs.map(job => (
-			              <div key={job.id} className={`job-listing-table__list home-table ${this.state.other_jobs[0].id === job.id ? "no-border" : ""}`}>
+	            		this.state.week_jobs.map(job => (
+			              <div key={job.id} className={`job-listing-table__list home-table ${this.state.week_jobs[0].id === job.id ? "no-border" : ""}`}>
 								<div className="job-listing-table__logo"
 									style={{
 										backgroundImage: this.getLogo(job),
@@ -252,7 +267,37 @@ class Home extends React.Component {
 	            		))
 	            	)
 	            }
-
+						{
+							this.state.month_jobs === undefined || (this.state.month_jobs && this.state.month_jobs.length)
+								? <h4 className="home__table-title">Month</h4>
+								: null
+						}
+						{!this.state.month_jobs ? <center><img alt="" src="/assets/toolkit/images/loading_blue.gif" /></center>
+							:
+							(
+								this.state.month_jobs.map(job => (
+									<div key={job.id} className={`job-listing-table__list home-table ${this.state.month_jobs[0].id === job.id ? "no-border" : ""}`}>
+										<div className="job-listing-table__logo"
+											style={{
+												backgroundImage: this.getLogo(job),
+											}} />
+										<div className="job-listing-table__info">
+											<Link to={`/job/${job.id}`}>
+												<h4>
+													<p>{job.position}</p>
+												</h4>
+												<h5>
+													<p>{job.company ? job.company.name : job.company_name}</p>
+												</h5>
+											</Link>
+										</div>
+										<div className="job-listing-table__time">
+											<h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt="" />{job.location}</h5>
+										</div>
+									</div>
+								))
+							)
+						}
 	          </div>
 	      </div>
 	      </div>

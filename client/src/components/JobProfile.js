@@ -2,6 +2,10 @@ import React from "react";
 import { Query } from "react-apollo";
 import { JOB_QUERY } from "../Queries";
 
+const monthNames = ["January", "February", "March", "April", "May", "June",
+	"July", "August", "September", "October", "November", "December"
+];
+
 class JobProfile extends React.Component {
 	getUrl(s){
 		var prefix = 'http://';
@@ -63,7 +67,7 @@ class JobProfile extends React.Component {
 												<p><img src="/assets/toolkit/images/gray-placeholder.svg" alt />{job.location}</p>
 												<p><img src="/assets/toolkit/images/gray-portfolio.svg" alt />{this.getJobType(job.job_type)}</p>
 												{
-													job.salary && 
+													!job.salary ? null : 
 														<p><img src="/assets/salary.svg" alt />{job.salary}$</p>
 												}
 											</div>
@@ -73,7 +77,8 @@ class JobProfile extends React.Component {
 					                </div>
 					                <div className="card__button">
 					                  <p style={{marginLeft:10}} className="gray"></p>
-					                  <a target="_blank"  href={this.getUrl(job.apply_url)} className="button blue">Apply for this job</a>
+											{monthNames[new Date(job.createdAt).getMonth()]} {new Date(job.createdAt).getDay() }
+									  <a target="_blank"  href={this.getUrl(job.apply_url)} className="button blue">Apply for this job</a>
 					                </div>
 					              </div>
 					              <div className="inside-page__description">

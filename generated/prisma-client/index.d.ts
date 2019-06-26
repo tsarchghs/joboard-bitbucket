@@ -277,7 +277,7 @@ export interface ClientConstructor<T> {
 
 export type JOB_TYPE = "FULL_TIME" | "PART_TIME" | "FREELANCE" | "CONTRACT";
 
-export type STATUS_TYPE = "FEATURED" | "NEW" | "OLD" | "CLOSED";
+export type STATUS_TYPE = "FEATURED" | "TODAY" | "WEEK" | "MONTH" | "CLOSED";
 
 export type JobOrderByInput =
   | "id_ASC"

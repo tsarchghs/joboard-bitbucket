@@ -11,5 +11,5 @@ module.exports = {
 		accessKeyId: "AKIAU7ZLBUXTEV6MN7W7",
 		secretAccessKey: "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"
 	},
-	"production": true
+	"production": false
 }
