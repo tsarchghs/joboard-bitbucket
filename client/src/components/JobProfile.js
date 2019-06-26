@@ -9,7 +9,7 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
 class JobProfile extends React.Component {
 	getUrl(s){
 		var prefix = 'http://';
-		if (s.substr(0, prefix.length) !== prefix) {
+		if (s.substr(0, prefix.length) !== prefix && s.indexOf("www") === -1) {
 			s = prefix + s;
 		}
 		return s;
@@ -71,13 +71,12 @@ class JobProfile extends React.Component {
 														<p><img src="/assets/salary.svg" alt />{job.salary}$</p>
 												}
 											</div>
-					                      <a href={job.company ? this.getUrl(job.company.website) : this.getUrl(job.company_website) } target="_blank"><img src="/assets/toolkit/images/grid-world.svg" alt />{job.company ? job.company.website : job.company_website }</a>
+					                      <a href={job.company ? this.getUrl(job.company.website) : this.getUrl(job.company_website) } target="_blank"><img src="/assets/toolkit/images/grid-world.svg" alt />Company Website</a>
 					                    </div>
 					                  </div>
 					                </div>
 					                <div className="card__button">
-					                  <p style={{marginLeft:10}} className="gray"></p>
-											{monthNames[new Date(job.createdAt).getMonth()]} {new Date(job.createdAt).getDay() }
+					                  <p style={{marginLeft:10}} className="gray">Posted {monthNames[new Date(job.createdAt).getMonth()]} {new Date(job.createdAt).getDay() }</p>
 									  <a target="_blank"  href={this.getUrl(job.apply_url)} className="button blue">Apply for this job</a>
 					                </div>
 					              </div>
