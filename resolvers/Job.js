@@ -67,7 +67,7 @@ const createJob = async (root,args,context,info) => {
 		location: args.location,
 		salary: args.salary,
 		job_type: args.job_type,
-		status: args.status,
+		status: args.status === "FEATURED" ? args.status : "TODAY",
 		apply_url: args.apply_url,
 		description: args.description,
 		company_name: args.company_name,
@@ -192,7 +192,7 @@ const renewJob = async (root,args,context,info) => {
 		},
 		data: {
 			expiresAt: new Date(today.setDate(today.getDate() + 30)),
-			status: args.featured ? "FEATURED" : "NEW"
+			status: args.featured ? "FEATURED" : "TODAY"
 		}
 	},info)
 	return job;

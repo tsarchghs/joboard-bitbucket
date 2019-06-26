@@ -56,7 +56,7 @@ class _CreateJob extends React.Component {
 			variables.company = this.props.user.company.id
 		}
 		variables.salary = this.state.salaryInputDisabled ? null : Number(this.state.salary);
-		variables.status = this.state.featured ? "FEATURED" : "NEW"
+		variables.status = this.state.featured ? "FEATURED" : "TODAY"
 		console.log(variables);
 		let res;
 		if (this.companyLogoInput && this.companyLogoInput.base64){

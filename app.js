@@ -18,12 +18,12 @@ const EVERY_MIDNIGHT = "0 0 0 * * *"
 const EVERY_MINUTE = "* * * * *"
 
 var daysDifference = (data1, data2) => {
-	console.log(data1, 223, data2)
 	// time difference
 	var timeDiff = Math.abs(data1.getTime() - data2.getTime());
-
+	
 	// days difference
 	var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+	console.log(data1, 223, data2,99,diffDays)
 	return diffDays
 }
 
@@ -41,14 +41,14 @@ cron.schedule(EVERY_MINUTE, async () => {
 		let job = jobs[x];
 		let job_expiresAt = new Date(job.expiresAt).getTime()
 		let new_status = undefined
+		let daysDiff = daysDifference(new Date(today), new Date(job_expiresAt));
+		console.log(job.status);
 		if (job_expiresAt < today){
 			console.log(today,job_expiresAt,123)
 			new_status = "CLOSED"
-		} else if (daysDifference(new Date(today), new Date(job_expiresAt)) <= 30) {
+		} else if (daysDiff >= 30 && job.status !== "FEATURED") {
 			new_status = "TODAY"
-		} else if (daysDifference(new Date(today), new Date(job_expiresAt)) <= 29 && job.status !== "FEATURED") {
-			new_status = "WEEK"
-		} else if (daysDifference(new Date(today), new Date(job_expiresAt)) <= 23 && job.status == "FEATURED") {
+		} else if (daysDiff >= 23 && job.status !== "FEATURED") {
 			new_status = "WEEK"
 		} else {
 			new_status = "MONTH"

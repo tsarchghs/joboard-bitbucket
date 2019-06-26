@@ -86,7 +86,7 @@ class _CreateJob extends React.Component {
 			location: this.state.locationInputDisabled ? "remote/everywhere" : this.state.location,
 			salary: this.state.salaryInputDisabled ? null : Number(this.state.salary),
 			job_type: this.state.job_type,
-			status: this.state.featured ? "FEATURED" : "NEW",
+			status: this.state.featured ? "FEATURED" : "TODAY",
 			apply_url: this.state.apply_url,
 			description: job_description_html_output,
 			stripe_token: stripe_token
@@ -147,7 +147,7 @@ class _CreateJob extends React.Component {
 			variables.company = this.props.user.company.id
 		}
 		variables.salary = Number(variables.salary)
-		variables.status = this.state.featured ? "FEATURED" : "NEW"
+		variables.status = this.state.featured ? "FEATURED" : "TODAY"
 		variables.stripe_token = stripe_token
 		console.log(variables);
 		let res;
