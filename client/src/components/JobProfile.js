@@ -3,7 +3,10 @@ import { Query } from "react-apollo";
 import { JOB_QUERY } from "../Queries";
 import { Link } from "react-router-dom";
 import Footer from "./Footer";
-
+import {
+	FacebookShareButton,
+	TwitterShareButton
+} from 'react-share';
 
 const monthNames = ["January", "February", "March", "April", "May", "June",
 	"July", "August", "September", "October", "November", "December"
@@ -91,8 +94,12 @@ class JobProfile extends React.Component {
 					                </div>
 					              </div>
 													<div class="socials with-border">
-														<a href="#" class="button button--fb"><img src="../../assets/toolkit/images/fb.svg" alt=""/>Share on Facebook</a>
-														<a href="#" class="button button--tw"><img src="../../assets/toolkit/images/tw.svg" alt=""/>Share on Twitter</a>
+													<FacebookShareButton url={`http://www.flutterjobs.io${window.location.pathname}`}>
+														<p class="button button--fb"><img src="../../assets/toolkit/images/fb.svg" alt=""/>Share on Facebook</p>
+													</FacebookShareButton>
+													<TwitterShareButton url={`http://www.flutterjobs.io${window.location.pathname}`}>
+														<p style={{marginLeft:30}} class="button button--tw"><img src="../../assets/toolkit/images/tw.svg" alt=""/>Share on Twitter</p>
+													</TwitterShareButton>
 													</div>
 					            </div>
 											<Footer/>
