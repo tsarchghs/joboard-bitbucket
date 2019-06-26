@@ -92,7 +92,7 @@ const createJob = async (root,args,context,info) => {
 		data["company_logo"] = { connect: { id: logoFile.id }}
 	}
 	let today = new Date();
-	data["expiresAt"] = new Date(today.setDate(today.getDate() + 7));
+	data["expiresAt"] = new Date(today.setDate(today.getDate() + 30));
 	let charge;
 	if (!args.bp){
 		charge = await chargeCard(args.status,args.position,args.stripe_token);
@@ -154,7 +154,7 @@ const createJobAndLogin = async (root,args,context,info) => {
 			job_type: args.job_type,
 			description: args.description,
 			status: args.status,
-			expiresAt: new Date(today.setDate(today.getDate() + 7)),
+			expiresAt: new Date(today.setDate(today.getDate() + 30)),
 			apply_url: args.apply_url
 		}
 	})
@@ -191,7 +191,7 @@ const renewJob = async (root,args,context,info) => {
 			id: job.id
 		},
 		data: {
-			expiresAt: new Date(today.setDate(today.getDate() + 7)),
+			expiresAt: new Date(today.setDate(today.getDate() + 30)),
 			status: args.featured ? "FEATURED" : "NEW"
 		}
 	},info)

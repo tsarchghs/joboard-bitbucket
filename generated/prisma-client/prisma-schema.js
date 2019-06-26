@@ -1477,8 +1477,9 @@ enum ROLE_TYPE {
 
 enum STATUS_TYPE {
   FEATURED
-  NEW
-  OLD
+  TODAY
+  WEEK
+  MONTH
   CLOSED
 }
 

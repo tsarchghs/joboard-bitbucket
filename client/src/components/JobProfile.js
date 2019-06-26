@@ -5,6 +5,9 @@ import { Link } from "react-router-dom";
 import Footer from "./Footer";
 
 
+const monthNames = ["January", "February", "March", "April", "May", "June",
+	"July", "August", "September", "October", "November", "December"
+];
 
 class JobProfile extends React.Component {
 	getUrl(s){
@@ -78,7 +81,8 @@ class JobProfile extends React.Component {
 					                </div>
 					                <div className="card__button">
 					                  <p style={{marginLeft:10}} className="gray"></p>
-					                  <a target="_blank"  href={this.getUrl(job.apply_url)} className="button blue">Apply for this job</a>
+											{monthNames[new Date(job.createdAt).getMonth()]} {new Date(job.createdAt).getDay() }
+									  <a target="_blank"  href={this.getUrl(job.apply_url)} className="button blue">Apply for this job</a>
 					                </div>
 					              </div>
 					              <div className="inside-page__description">
