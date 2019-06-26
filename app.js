@@ -46,12 +46,11 @@ cron.schedule(EVERY_MINUTE, async () => {
 		if (job_expiresAt < today){
 			console.log(today,job_expiresAt,123)
 			new_status = "CLOSED"
-		} else if (daysDiff >= 30 && job.status !== "FEATURED") {
-			new_status = "TODAY"
-		} else if (daysDiff >= 23 && job.status !== "FEATURED") {
+		} else if (daysDiff <= 23 && job.status !== "FEATURED") {
 			new_status = "WEEK"
-		} else {
-			new_status = "MONTH"
+		} 
+		} else if (daysDiff <= 30 && job.status !== "FEATURED") {
+			new_status = "TODAY"
 		}
 
 		console.log(new_status,12)

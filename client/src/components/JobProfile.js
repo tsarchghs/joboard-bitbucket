@@ -1,6 +1,9 @@
 import React from "react";
 import { Query } from "react-apollo";
 import { JOB_QUERY } from "../Queries";
+import { Link } from "react-router-dom";
+import Footer from "./Footer";
+
 
 const monthNames = ["January", "February", "March", "April", "May", "June",
 	"July", "August", "September", "October", "November", "December"
@@ -56,22 +59,23 @@ class JobProfile extends React.Component {
 					        <div className="inside-page">
 					          <div className="inside-page__container">
 					            <div className="inside-page__content">
-					              <div className="inside-page__card" style={{paddingLeft:0,paddingRight:0}}>
+											<Link to="/" className="back-to"><img src="../../assets/toolkit/images/004-left-arrow.svg" alt=""/><p>Back to other jobs</p></Link>
+					              <div className="inside-page__card" >
 					                <div className="flex">
 					                  <div className="card__logo" style={{backgroundImage}} />
 					                  <div className="card-data">
 					                    <div className="card-data__title"><a href="#" className="card-data__title">{job.position}</a></div>
 					                    <div className="card-data__subtitle"><a href="#" className="card-data__subtitle">{job.company ? job.company.name : job.company_name}</a></div>
 					                    <div className="card-data__info">
-											<div  style={{display:'flex'}}>
-												<p><img src="/assets/toolkit/images/gray-placeholder.svg" alt />{job.location}</p>
-												<p><img src="/assets/toolkit/images/gray-portfolio.svg" alt />{this.getJobType(job.job_type)}</p>
-												{
-													!job.salary ? null : 
-														<p><img src="/assets/salary.svg" alt />{job.salary}$</p>
-												}
-											</div>
-					                      <a href={job.company ? this.getUrl(job.company.website) : this.getUrl(job.company_website) } target="_blank"><img src="/assets/toolkit/images/grid-world.svg" alt />Company Website</a>
+																<div className="card-data__info--data">
+																	<p><img src="/assets/toolkit/images/gray-placeholder.svg" alt />{job.location}</p>
+																	<p><img src="/assets/toolkit/images/gray-portfolio.svg" alt />{this.getJobType(job.job_type)}</p>
+													{
+														!job.salary ? null :
+															<p><img src="/assets/salary.svg" alt />{job.salary}$</p>
+													}
+																</div>
+					                      <a href={job.company ? this.getUrl(job.company.website) : this.getUrl(job.company_website) } target="_blank"><img src="/assets/toolkit/images/grid-world.svg" alt />{job.company ? job.company.website : job.company_website }</a>
 					                    </div>
 					                  </div>
 					                </div>
@@ -85,9 +89,13 @@ class JobProfile extends React.Component {
 										__html:job.description
 									}} style={{"whiteSpace":"pre-line"}} className="inside-page__description-part">
 					                </div>
-
 					              </div>
+													<div class="socials with-border">
+														<a href="#" class="button button--fb"><img src="../../assets/toolkit/images/fb.svg" alt=""/>Share on Facebook</a>
+														<a href="#" class="button button--tw"><img src="../../assets/toolkit/images/tw.svg" alt=""/>Share on Twitter</a>
+													</div>
 					            </div>
+											<Footer/>
 					          </div>
 				        </div>
 				       </div>

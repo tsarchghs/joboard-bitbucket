@@ -404,14 +404,15 @@ class _CreateJob extends React.Component {
 														display: "inline-block"
 													}}>
 														<button style={{
-															border: "2px solid #00FFFF",
-															color: "#00FFFF",
+															border: "1px solid #007CFF",
+															color: "#007CFF",
 															backgroundColor: "white",
-															padding: "8px 20px",
+															padding: "8px 10px",
 															borderRadius: "8px",
-															fontSize: "20px",
+															fontSize: "14px",
 															fontWeight: "bold",
-															marginTop: 5
+															marginTop: 10,
+															marginLeft: 11
 														}}>Upload a file</button>
 														<input style={{
 															fontSize: "100px",
