@@ -83,7 +83,7 @@ class JobProfile extends React.Component {
 					                  </div>
 					                </div>
 					                <div className="card__button">
-					                  <p style={{marginLeft:10}} className="gray">Posted {monthNames[new Date(job.createdAt).getMonth()]} {new Date(job.createdAt).getDay() }</p>
+					                  <p className="gray">Posted {monthNames[new Date(job.createdAt).getMonth()]} {new Date(job.createdAt).getDay() }</p>
 									  <a target="_blank"  href={this.getUrl(job.apply_url)} className="button blue">Apply for this job</a>
 					                </div>
 					              </div>
@@ -94,10 +94,10 @@ class JobProfile extends React.Component {
 					                </div>
 					              </div>
 													<div class="socials with-border">
-													<FacebookShareButton url={`http://www.flutterjobs.io${window.location.pathname}`}>
+													<FacebookShareButton url={`https://www.flutterjobs.io${window.location.pathname}`}>
 														<p class="button button--fb"><img src="../../assets/toolkit/images/fb.svg" alt=""/>Share on Facebook</p>
 													</FacebookShareButton>
-													<TwitterShareButton url={`http://www.flutterjobs.io${window.location.pathname}`}>
+													<TwitterShareButton url={`https://www.flutterjobs.io${window.location.pathname}`}>
 														<p style={{marginLeft:30}} class="button button--tw"><img src="../../assets/toolkit/images/tw.svg" alt=""/>Share on Twitter</p>
 													</TwitterShareButton>
 													</div>

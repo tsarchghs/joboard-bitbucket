@@ -19,7 +19,7 @@ class Footer extends React.Component {
                     </div>
                 </div>
                 <div className="footer__contact">
-                    <p>Find us on  <a href="http://www.twitter.com">Twitter!</a></p>
+                    <p>Find us on  <a href="https://www.twitter.com">Twitter!</a></p>
                     <p>Contact us at <a href="#">info@flutterjobs.io</a></p>
                 </div>
             </div>

@@ -3,6 +3,7 @@
  * Toolkit styles
  */
 @import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700");
+@import url("https://fonts.googleapis.com/css?family=Noto+Sans+HK:400,500,700&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Roboto+Slab:300,400,700&display=swap");
 @font-face {
   font-family: 'icomoon';
@@ -1352,7 +1353,7 @@ body {
   margin: 0;
   padding: 0;
   background: #ffffff;
-  font-family: "Roboto Slab", serif;
+  font-family: "Noto Sans HK", sans-serif;
   font-weight: normal;
   line-height: 1.5;
   color: #000000;
@@ -2235,7 +2236,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Roboto Slab", serif;
+  font-family: "Noto Sans HK", sans-serif;
   font-style: normal;
   font-weight: normal;
   color: inherit;
@@ -6135,7 +6136,8 @@ a:focus {
 .card-data__info--data {
   display: -webkit-box;
   display: -ms-flexbox;
-  display: flex; }
+  display: flex;
+  margin-bottom: 10px; }
 
 .socials {
   display: -webkit-box;
@@ -6185,6 +6187,20 @@ a:focus {
     color: #000; }
     .custom-dropdown a:hover, .custom-dropdown a:focus {
       color: #000; }
+
+.company-info__avatar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center; }
+  .company-info__avatar a {
+    margin-bottom: 20px;
+    color: #007cff; }
 
 .jobs-card {
   width: 264px;
@@ -6244,7 +6260,7 @@ a:focus {
   display: -ms-flexbox;
   display: flex;
   padding: 20px 0px;
-  border-bottom: 2px solid #d3d9e5;
+  border-bottom: 1px solid #d3d9e5;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center; }
@@ -6255,7 +6271,7 @@ a:focus {
           -ms-flex-direction: column;
               flex-direction: column; } }
   .job-listing-table__list.no-border {
-    border-top: 2px solid #d3d9e5; }
+    border-top: 1px solid #d3d9e5; }
   .job-listing-table__list.home-table .job-listing-table__time {
     min-height: 68px;
     display: -webkit-box;
@@ -6474,7 +6490,7 @@ a:focus {
       width: 260px; }
 
 .master-layout__header {
-  margin-top: 70px; }
+  margin-top: 40px; }
   @media screen and (max-width: 39.9375em) {
     .master-layout__header {
       padding: 0px 15px;
@@ -6662,8 +6678,7 @@ a:focus {
   margin-top: 60px;
   padding: 35px 65px; }
   .login__card h4 {
-    margin-bottom: 50px;
-    font-family: ApexSans-Bold; }
+    margin-bottom: 50px; }
   .login__card p {
     font-size: 14px;
     color: #9b9b9b;
@@ -6696,7 +6711,6 @@ a:focus {
       margin-bottom: 15px; } }
   .login__card-inputs label span {
     font-size: 12px;
-    font-family: ApexSans-Bold;
     padding-bottom: 8px;
     color: #5b5d6e;
     text-transform: uppercase;

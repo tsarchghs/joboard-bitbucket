@@ -343,10 +343,10 @@ class _CreateJob extends React.Component {
 					{
 							!this.props.user && 
 							(
-								<div style={{ "display": "inline" }}>
-									<h5 style={{ "display": "inline" }}>Company info</h5>
-									<div style={{ "display": "inline" }} dangerouslySetInnerHTML={{ __html: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' }} />
-									<a style={{"display": "inline","color":"#2196F3"}} onClick={e => {
+								<div className="company-info__avatar">
+									<h5>Company info</h5>
+									
+									<a onClick={e => {
 										e.preventDefault()
 										this.setState(nextState =>{
 											nextState.hasAccount = !nextState.hasAccount;
