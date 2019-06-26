@@ -14,7 +14,7 @@ class Header extends React.Component {
 	          <div className="header__container">
 	            <div className="header__content">
 		          <Link to="/">
-		            <div className="header__logo"><Link to="/"><img src="/assets/flutterjobs.svg"/></Link></div>
+		            <div className="header__logo"><Link to="/"><img src="/assets/Flutterjobs.svg"/></Link></div>
 		          </Link>
 	              <div className="header__nav">
 	              {
