@@ -97,7 +97,7 @@ if (configs.production){
 	server.express.use('/assets', static(path.join(__dirname, 'public')))
 	
 	server.express.use((req, res, next) => {
-		let protocol = req.get('x-forwarded-proto') === "https";
+		let protocol = req.get('x-forwarded-proto');
 		console.log(req.secure, req.protocol, protocol);
 		if (protocol === "https"){
 			console.log("REDIRECTED");
