@@ -6,6 +6,7 @@ import gql from "graphql-tag";
 import { compose } from "recompose"
 import { GET_LOGGED_IN_USER } from "../Queries";
 import { cloneDeep } from "lodash";
+import LoadingAnimation from "./LoadingAnimation";
 
 const customStyles = {
     overlay: {
@@ -141,7 +142,7 @@ class _RenewJobModal extends React.Component{
                                         </label>
                                         {
                                             this.state.loading 
-                                            ? <center><img style={{ width: "10%" }} alt="" src="/assets/toolkit/images/loading_blue.gif" /></center>
+                                            ? <center><LoadingAnimation loading_type={2} width={"10%"} /></center>
                                             : <button style={{ width: "100%" }} type="submit" className="button blue">Renew this job for ({this.state.featured ? "249" : "199"}$)</button>
                                         }
                                 </form>

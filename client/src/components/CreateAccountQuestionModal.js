@@ -30,7 +30,7 @@ const CreateAccountQuestionModal = props => {
             >
 
                 <div className="modal__main">
-                    <div className="modal__remove"><img src="/assets/toolkit/images/delete-icon.svg"/></div>
+                    <div style={{cursor:"pointer"}} onClick={props.closeModal} className="modal__remove"><img style={{width:20}} src="/assets/toolkit/images/delete-icon.svg" /></div>
                     <div className="modal__header">
                         <img src="/assets/toolkit/images/small-company.svg" alt />
                         <h4>Do you want to create an account ?</h4>

@@ -7,18 +7,21 @@ import {
 	FacebookShareButton,
 	TwitterShareButton
 } from 'react-share';
+import MetaTags from 'react-meta-tags';
+import {
+	convertToRaw,
+} from 'draft-js';
+import { stateFromHTML } from "draft-js-import-html";
+import { EditorState } from "draft-js"
 
 const monthNames = ["January", "February", "March", "April", "May", "June",
 	"July", "August", "September", "October", "November", "December"
 ];
 
 class JobProfile extends React.Component {
-	getUrl(s){
-		var prefix = 'http://';
-		if (s.substr(0, prefix.length) !== prefix && s.indexOf("www") === -1) {
-			s = prefix + s;
-		}
-		return s;
+	constructor(props){
+		super(props);
+		this.description = undefined;
 	}
 	getJobType(jobType){
 		console.log(jobType);
@@ -33,6 +36,13 @@ class JobProfile extends React.Component {
 		}
 		return jobType;
 	}
+	getAbsoluteUrl = (url) => {
+		if (url.indexOf("http") === -1) {
+			let tmp = `http://${url}`;
+			return tmp;
+		}
+		return url;
+	}
 	render() {
 		return (
 			<Query
@@ -44,8 +54,13 @@ class JobProfile extends React.Component {
 			{({loading,error,data}) => {
 				if (loading) { return <h4>Loading</h4> }
 				if (error) { return <h4>{error.message}</h4> }
-				console.log(data);
 				let job = data.job;
+				console.log(job);
+				if (!this.description){
+					let contentState = stateFromHTML(job.description)
+					this.description = convertToRaw(contentState);
+				}
+				console.log(data);
 				console.log(job,123)
 				let backgroundImage;
 				if (job.company) {
@@ -57,8 +72,17 @@ class JobProfile extends React.Component {
 				}
 				return (
 					<div>
+						<meta property="og:title" content="your_link_title"/>
+						<meta property="og:image" content="your_image_url"/>		
+						<MetaTags>
+							<title>Flutterjobs - {job.position}</title>
+							<meta property="og:title" content={job.position} />
+							<meta name="description" content={this.description} />
+							<meta property="og:image" content={backgroundImage} />
+						</MetaTags>
 						<div>
 					    	</div>
+							
 					        <div className="inside-page">
 					          <div className="inside-page__container">
 					            <div className="inside-page__content">
@@ -78,13 +102,13 @@ class JobProfile extends React.Component {
 															<p><img src="/assets/salary.svg" alt />{job.salary}$</p>
 													}
 																</div>
-					                      <a href={job.company ? this.getUrl(job.company.website) : this.getUrl(job.company_website) } target="_blank"><img src="/assets/toolkit/images/grid-world.svg" alt />Company Website</a>
+					                      <a href={job.company ? this.getAbsoluteUrl(job.company.website) : this.getAbsoluteUrl(job.company_website) } target="_blank"><img src="/assets/toolkit/images/grid-world.svg" alt />Company Website</a>
 					                    </div>
 					                  </div>
 					                </div>
 					                <div className="card__button">
 					                  <p className="gray">Posted {monthNames[new Date(job.createdAt).getMonth()]} {new Date(job.createdAt).toLocaleDateString().split("/")[1] }</p>
-									  <a target="_blank"  href={this.getUrl(job.apply_url)} className="button blue">Apply for this job</a>
+									  <a target="_blank"  href={this.getAbsoluteUrl(job.apply_url)} className="button blue">Apply for this job</a>
 					                </div>
 					              </div>
 					              <div className="inside-page__description">
@@ -94,7 +118,7 @@ class JobProfile extends React.Component {
 					                </div>
 					              </div>
 													<div class="socials with-border">
-													<FacebookShareButton url={`https://www.flutterjobs.io${window.location.pathname}`}>
+													<FacebookShareButton title={job.position} url={`https://www.flutterjobs.io${window.location.pathname}`}>
 														<p class="button button--fb"><img src="../../assets/toolkit/images/fb.svg" alt=""/>Share on Facebook</p>
 													</FacebookShareButton>
 													<TwitterShareButton url={`https://www.flutterjobs.io${window.location.pathname}`}>

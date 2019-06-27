@@ -31,3 +31,7 @@
 .header__logo a{
 	display: flex;
 }
+
+.header__nav-mobie {
+	text-align: center !important;
+}

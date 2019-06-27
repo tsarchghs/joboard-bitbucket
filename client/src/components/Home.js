@@ -7,6 +7,7 @@ import Footer from "./Footer";
 
 import { Link } from "react-router-dom";
 import { loadAfterHomeMount } from "../helpers"
+import LoadingAnimation from "./LoadingAnimation";
 
 class Home extends React.Component {
 	constructor(props){
@@ -169,7 +170,7 @@ class Home extends React.Component {
 					: null
 				}
 				{
-					!this.state.featured_jobs ? <center><img alt="" src="/assets/toolkit/images/loading_blue.gif" /></center>
+					!this.state.featured_jobs ? <LoadingAnimation loading_type={1}/>
 						:
 						(
 							this.state.featured_jobs.map(job => (
@@ -207,7 +208,7 @@ class Home extends React.Component {
 						: null
 				}
 	            {
-	            	!this.state.today_jobs ? <center><img alt="" src="/assets/toolkit/images/loading_blue.gif"/></center>
+	            	!this.state.today_jobs ? <LoadingAnimation loading_type={1}/>
 	            	: 
 	            	(
 	            		this.state.today_jobs.map(job => (
@@ -243,7 +244,7 @@ class Home extends React.Component {
 					? <h4 className="home__table-title">Week</h4>
 					: null
 				}	            	
-					{ !this.state.week_jobs ? <center><img alt="" src="/assets/toolkit/images/loading_blue.gif"/></center>
+					{ !this.state.week_jobs ? <LoadingAnimation loading_type={1}/>
 	            	: 
 	            	(
 	            		this.state.week_jobs.map(job => (
@@ -274,7 +275,7 @@ class Home extends React.Component {
 								? <h4 className="home__table-title">Month</h4>
 								: null
 						}
-						{!this.state.month_jobs ? <center><img alt="" src="/assets/toolkit/images/loading_blue.gif" /></center>
+						{!this.state.month_jobs ? <LoadingAnimation loading_type={1}/>
 							:
 							(
 								this.state.month_jobs.map(job => (

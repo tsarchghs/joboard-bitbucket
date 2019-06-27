@@ -4,6 +4,7 @@ import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import Cookies from 'js-cookie';
 import { Link } from "react-router-dom";
+import LoadingAnimation from "./LoadingAnimation";
 
 class Login extends React.Component {
 	constructor(props){
@@ -54,7 +55,7 @@ class Login extends React.Component {
 										<div className="login__card-inputs">
 										{alertMessage ? alertMessage : ""}
 											{
-												loading ? <center><img src="/assets/toolkit/images/loading_blue.gif"/></center>
+												loading ? <center><LoadingAnimation loading_type={2}/></center>
 												:
 												<div>
 													<label><span>Email</span>

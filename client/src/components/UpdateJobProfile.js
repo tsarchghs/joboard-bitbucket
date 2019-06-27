@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import { JOB_QUERY, UPDATE_JOB_QUERY } from "../Queries";
 import RichEditor from "./RichEditor";
 import { convertToHTML } from "draft-convert";
+import LoadingAnimation from "./LoadingAnimation";
 
 class _UpdateJobProfile extends React.Component {
     constructor(props){
@@ -97,7 +98,7 @@ class _UpdateJobProfile extends React.Component {
                         <h4>Create job</h4>
                         <div className="create-job">
                             <h5>Hire the flutters. Share your job post with many of job seekers.</h5>
-                            <center style={{display: this.state.loading_all ? "block" : "none"}}><img alt="" src="/assets/toolkit/images/loading_blue.gif" /></center>
+                            <center style={{display: this.state.loading_all ? "block" : "none"}}><LoadingAnimation loading_type={2}/></center>
                             <div style={{display: this.state.loading_all ? "none" : "block"}}>
                                 <div>
                                     <div className="create-job__input">
@@ -185,7 +186,7 @@ class _UpdateJobProfile extends React.Component {
                             <div className="company-info">
                                 <div className="text-center">
                                     {
-                                        this.state.loading ? <img alt="" src="/assets/toolkit/images/loading_blue.gif" />
+                                        this.state.loading ? <LoadingAnimation loading_type={2}/>
                                             : <button style={{ width: "100%" }} type="submit" className="button blue">Update job posting</button>
                                     }
                                 </div>

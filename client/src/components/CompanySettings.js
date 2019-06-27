@@ -4,6 +4,7 @@ import { Mutation, withApollo } from "react-apollo";
 import gql from "graphql-tag";
 import { handleUploadPhotoInput } from "../helpers";
 import { GET_LOGGED_IN_USER } from "../Queries";
+import LoadingAnimation from "./LoadingAnimation";
 
 class CompanySettings extends React.Component {
 	constructor(props){
@@ -157,7 +158,7 @@ class CompanySettings extends React.Component {
 									<div>
 									{
 										loading
-										? <img style={{width:"15%"}} alt="" src="/assets/toolkit/images/loading_blue.gif" /> 
+										? <LoadingAnimation loading_type={2} width={"15%"}/>
 										: <button type="submit" className="button blue">Save changes</button>
 									}
 									</div>
