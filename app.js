@@ -101,7 +101,7 @@ if (configs.production){
 		console.log(req.secure,req.protocol);
 		if (!req.secure){
 			console.log("REDIRECTED");
-			res.redirect(`https://www.flutterjobs.io${req.url}`)
+			return res.redirect(`https://www.flutterjobs.io${req.url}`)
 		}
 		next();
 	})
