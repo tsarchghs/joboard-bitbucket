@@ -20,6 +20,8 @@
     "node-cron": "^2.0.3",
     "nodemailer": "^6.2.1",
     "prisma-binding": "^2.3.10",
+    "prop-types": "^15.7.2",
+    "react-lottie": "^1.2.3",
     "stripe": "^7.1.0"
   }
 }
