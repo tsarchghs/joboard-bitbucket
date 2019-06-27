@@ -4,6 +4,7 @@ import { Mutation } from 'react-apollo';
 import gql from "graphql-tag";
 import Cookies from 'js-cookie';
 import { withRouter } from "react-router";
+import LoadingAnimation from "./LoadingAnimation";
 
 const customStyles = {
     overlay: {
@@ -143,7 +144,7 @@ class TypePasswordModal extends React.Component{
                                             </label>
                                             {
                                                 loading ? 
-                                                    <center><img alt="" src="/assets/toolkit/images/loading_blue.gif" style={{"width":"65"}}/></center>
+                                                    <center><LoadingAnimation loading_type={2} width={65} /></center>
                                                 :
                                                     <a href="#" className="button blue" onClick={onSubmit}>Let me in</a>
                                             }

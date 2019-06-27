@@ -14,6 +14,7 @@ import { cloneDeep } from "lodash";
 import { handleUploadPhotoInput } from "../helpers";
 import { CREATE_JOB_MUTATION, CREATE_JOB_AND_LOGIN_MUTATION } from "../Queries";
 import Cookies from 'js-cookie';
+import LoadingAnimation from "./LoadingAnimation";
 
 class _CreateJob extends React.Component {
 	constructor(props){
@@ -470,7 +471,7 @@ class _CreateJob extends React.Component {
 					</label>
 					<div className="text-center">
 					{
-						this.state.loading ? <img alt="" src="/assets/toolkit/images/loading_blue.gif"/>
+						this.state.loading ? <LoadingAnimation loading_type={2}/>
 						: <button style={{width:"100%"}} type="submit" className="button blue">Post this job ({this.state.featured ? "249" : "199"}$)</button>
 					}
 					</div>
