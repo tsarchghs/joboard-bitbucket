@@ -83,7 +83,7 @@ class JobProfile extends React.Component {
 					                  </div>
 					                </div>
 					                <div className="card__button">
-					                  <p className="gray">Posted {monthNames[new Date(job.createdAt).getMonth()]} {new Date(job.createdAt).getDay() }</p>
+					                  <p className="gray">Posted {monthNames[new Date(job.createdAt).getMonth()]} {new Date(job.createdAt).toLocaleDateString().split("/")[1] }</p>
 									  <a target="_blank"  href={this.getUrl(job.apply_url)} className="button blue">Apply for this job</a>
 					                </div>
 					              </div>
