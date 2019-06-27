@@ -98,7 +98,8 @@ if (configs.production){
 	server.express.use(static(path.join(__dirname, 'build')));
 	
 	server.express.use((req, res, next) => {
-		if (req.protocol.indexOf("https") === -1){
+		console.log(req.secure,req.protocol);
+		if (!req.secure){
 			console.log("REDIRECTED");
 			res.redirect(`https://www.flutterjobs.io${req.url}`)
 		}
