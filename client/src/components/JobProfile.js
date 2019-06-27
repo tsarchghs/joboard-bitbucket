@@ -58,7 +58,7 @@ class JobProfile extends React.Component {
 				return (
 					<div>
 						<div>
-					        </div>
+					    	</div>
 					        <div className="inside-page">
 					          <div className="inside-page__container">
 					            <div className="inside-page__content">
@@ -78,7 +78,7 @@ class JobProfile extends React.Component {
 															<p><img src="/assets/salary.svg" alt />{job.salary}$</p>
 													}
 																</div>
-					                      <a href={job.company ? this.getUrl(job.company.website) : this.getUrl(job.company_website) } target="_blank"><img src="/assets/toolkit/images/grid-world.svg" alt />{job.company ? job.company.website : job.company_website }</a>
+					                      <a href={job.company ? this.getUrl(job.company.website) : this.getUrl(job.company_website) } target="_blank"><img src="/assets/toolkit/images/grid-world.svg" alt />Company Website</a>
 					                    </div>
 					                  </div>
 					                </div>

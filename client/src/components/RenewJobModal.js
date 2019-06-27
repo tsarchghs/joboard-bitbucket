@@ -8,6 +8,10 @@ import { GET_LOGGED_IN_USER } from "../Queries";
 import { cloneDeep } from "lodash";
 
 const customStyles = {
+    overlay: {
+        'backgroundColor': 'rgba(40, 70, 100, 0.7)',
+        opacity: 1
+    },
     content: {
         top: '50%',
         left: '50%',

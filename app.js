@@ -23,7 +23,6 @@ var daysDifference = (data1, data2) => {
 	
 	// days difference
 	var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-	console.log(data1, 223, data2,99,diffDays)
 	return diffDays
 }
 
@@ -42,20 +41,17 @@ cron.schedule(EVERY_MINUTE, async () => {
 		let job_expiresAt = new Date(job.expiresAt).getTime()
 		let new_status = undefined
 		let daysDiff = daysDifference(new Date(today), new Date(job_expiresAt));
-		console.log(job.status);
-		// if (job_expiresAt < today){
-		// 	console.log(today,job_expiresAt,123)
-		// 	new_status = "CLOSED"
-		// } else if (daysDiff <= 23 && job.status !== "FEATURED") {
-		// 	new_status = "WEEK"
-		// } 
-		// } else if (daysDiff <= 30 && job.status !== "FEATURED") {
-		// 	new_status = "TODAY"
-		// }
-
-		console.log(new_status,12)
+		if (job_expiresAt < today){
+			console.log(today,job_expiresAt,123)
+			new_status = "CLOSED"
+		} else if (daysDiff < 23 && job.status !== "FEATURED") {
+			new_status = "MONTH"
+		} else if (daysDiff < 30 && job.status !== "FEATURED") {
+			new_status = "WEEK"
+		}
+		
+		console.log(job.id,"---",daysDiff,"---",new_status);
 		if (new_status !== undefined && new_status !== job.status){
-			console.log(new_status, 55)
 			prismaDb.mutation.updateJob({
 				where:{id: job.id},
 				data: {
@@ -100,6 +96,14 @@ const server = new graphqlServer({
 if (configs.production){
 	server.express.use('/assets', static(path.join(__dirname, 'public')))
 	server.express.use(static(path.join(__dirname, 'build')));
+	
+	server.express.use((req, res, next) => {
+		if (req.protocol.indexOf("https") === -1){
+			console.log("REDIRECTED");
+			res.redirect(`https://www.flutterjobs.io${req.url}`)
+		}
+		next();
+	})
 	
 	server.express.get('/*', function (req, res) {
 		res.sendFile(path.join(__dirname, 'build', 'index.html'));

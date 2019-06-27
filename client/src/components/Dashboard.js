@@ -24,7 +24,7 @@ class _Dashboard extends React.Component {
 	closeModal(e,success){
 		if (success){
 			this[`${this.state.modalJob.id}_job-listing-table__time`].outerHTML = `
-			<div class="job-listing-table__time"><h5><img src="/assets/toolkit/images/time-left.svg" alt="">7 days left</h5><h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt="">${this.state.modalJob.location}</h5></div>
+			<div class="job-listing-table__time"><h5><img src="/assets/toolkit/images/time-left.svg" alt="">30 days left</h5><h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt="">${this.state.modalJob.location}</h5></div>
 			`
 			this[`${this.state.modalJob.id}_job-listing-table__more`].outerHTML = ""
 		}
