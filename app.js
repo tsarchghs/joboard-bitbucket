@@ -97,8 +97,9 @@ if (configs.production){
 	server.express.use('/assets', static(path.join(__dirname, 'public')))
 	
 	server.express.use((req, res, next) => {
-		console.log(req.secure,req.protocol,req.get('x-forwarded-proto'));
-		if (req.get('x-forwarded-proto') === "https"){
+		let protocol = req.get('x-forwarded-proto') === "https";
+		console.log(req.secure, req.protocol, protocol);
+		if (protocol === "https"){
 			console.log("REDIRECTED");
 			return res.redirect(`https://www.flutterjobs.io${req.url}`)
 		}
