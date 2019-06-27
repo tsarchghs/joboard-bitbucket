@@ -49,7 +49,7 @@ class TypePasswordModal extends React.Component{
                     contentLabel="Example Modal"
                 >
                     <div className="modal__main modal__password">
-                    <div className="modal__remove"><img src="/assets/toolkit/images/delete-icon.svg"/></div>
+                    <div style={{cursor:"pointer"}} onClick={this.props.closeModal} className="modal__remove"><img style={{width:20}} src="/assets/toolkit/images/delete-icon.svg" /></div>
 
                         <div className="modal__header">
                             <img src="/assets/toolkit/images/small-company.svg" alt />
