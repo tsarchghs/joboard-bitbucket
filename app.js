@@ -95,7 +95,6 @@ const server = new graphqlServer({
 
 if (configs.production){
 	server.express.use('/assets', static(path.join(__dirname, 'public')))
-	server.express.use(static(path.join(__dirname, 'build')));
 	
 	server.express.use((req, res, next) => {
 		console.log(req.secure,req.protocol);
@@ -105,6 +104,8 @@ if (configs.production){
 		}
 		next();
 	})
+	
+	server.express.use(static(path.join(__dirname, 'build')));
 	
 	server.express.get('/*', function (req, res) {
 		res.sendFile(path.join(__dirname, 'build', 'index.html'));
