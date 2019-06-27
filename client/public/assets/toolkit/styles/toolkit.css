@@ -5604,6 +5604,13 @@ a.thumbnail {
     .button.blue:hover, .button.blue:focus {
       outline: none;
       background-color: #007cff; }
+  .button.white {
+    background-color: #fff;
+    color: #000; }
+    .button.white:hover, .button.white:focus {
+      outline: none;
+      background-color: #fff;
+      color: #000; }
 
 .button--blue {
   padding: 15px 20px;
@@ -5777,6 +5784,10 @@ a:focus {
     width: 100%; }
   .modal__hero label {
     width: 100%; }
+  @media screen and (max-width: 39.9375em) {
+    .modal__hero {
+      -ms-flex-wrap: initial;
+          flex-wrap: initial; } }
 
 .modal__hero-info {
   max-width: 187px; }
@@ -5815,6 +5826,35 @@ a:focus {
               flex-direction: column-reverse; }
       .modal__footer-buttons a {
         margin-bottom: 20px; } }
+
+.modal__main {
+  width: 700px;
+  padding: 20px 125px; }
+  @media screen and (max-width: 39.9375em) {
+    .modal__main {
+      width: 100%;
+      padding: 0 !important; } }
+
+.modal__remove {
+  position: absolute;
+  right: 90px;
+  right: 10%; }
+
+.ReactModal__Overlay {
+  z-index: 10000; }
+
+.modal__password .modal__hero {
+  padding-bottom: 100px !important; }
+
+.modal__password form {
+  width: 100%; }
+  .modal__password form a {
+    display: block;
+    width: 250px;
+    margin: 0 auto; }
+
+.modal__password .modal__header {
+  padding-top: 100px !important; }
 
 .menu {
   width: 30px;
@@ -5998,19 +6038,20 @@ a:focus {
 
 .header__nav-mobie {
   transition: 0.3s ease all;
-  right: -1180px;
+  right: -2180px;
   position: absolute;
-  top: 65px;
+  top: 80px;
   padding: 25px;
-  background: rgba(0, 0, 0, 0.7);
-  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.52) !important;
+  border-radius: 0px;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
   display: -webkit-box;
   display: -ms-flexbox;
-  display: flex; }
+  display: flex;
+  width: 100%; }
   .header__nav-mobie.open {
     right: 0; }
   .header__nav-mobie .header__nav-login {
@@ -6377,7 +6418,8 @@ a:focus {
 .master-layout {
   background-image: linear-gradient(57deg, #0072ff, #00c6ff);
   overflow: hidden;
-  padding-top: 55px; }
+  padding-top: 55px;
+  min-height: 100vh; }
   .master-layout .header {
     background: transparent; }
 

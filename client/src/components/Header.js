@@ -27,7 +27,7 @@ class Header extends React.Component {
 		                </Link>
 	              }
 	                <Link to="/create_job">
-	                	<a href="/create_job" className="button black">Post a job</a>
+	                	<a href="/create_job" className="button white">Post a job</a>
 	                </Link>
 	              </div>
 	              <div onClick={() => this.setState(nextState => {
@@ -43,7 +43,7 @@ class Header extends React.Component {
 	                <a href="/login" className="header__nav-login">Login</a>
 				  </Link>
 				  <Link to="/create_job">
-	                <a href="/create_job" className="button black">Post a job</a>
+	                <a href="/create_job" className="button white">Post a job</a>
 				  </Link>
 	              </div>
 	            </div>

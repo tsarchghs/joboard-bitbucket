@@ -29,7 +29,8 @@ const CreateAccountQuestionModal = props => {
                 contentLabel="Example Modal"
             >
 
-                <div>
+                <div className="modal__main">
+                    <div className="modal__remove"><img src="/assets/toolkit/images/delete-icon.svg"/></div>
                     <div className="modal__header">
                         <img src="/assets/toolkit/images/small-company.svg" alt />
                         <h4>Do you want to create an account ?</h4>
