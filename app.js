@@ -99,7 +99,7 @@ if (configs.production){
 	server.express.use((req, res, next) => {
 		let protocol = req.get('x-forwarded-proto');
 		console.log(req.secure, req.protocol, protocol);
-		if (protocol === "https"){
+		if (protocol === "http"){
 			console.log("REDIRECTED");
 			return res.redirect(`https://www.flutterjobs.io${req.url}`)
 		}
