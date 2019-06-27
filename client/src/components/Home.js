@@ -300,7 +300,7 @@ class Home extends React.Component {
 								))
 							)
 						}
-						<div class="newsletter">
+						{/* <div class="newsletter">
 							<div class="newsletter__title">
 								<img src="../../assets/toolkit/images/015-email.svg" alt=""/>
 								<p>Get the newest Flutter jobs in your inbox</p>
@@ -309,7 +309,7 @@ class Home extends React.Component {
 								<input type="text" placeholder="Your email"/>
 								<a href="#" class="button button--blue">Notify me</a>
 							</div>
-						</div>
+						</div> */}
 	        </div>
 					<Footer/>
 	      </div>
