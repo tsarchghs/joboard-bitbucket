@@ -126,9 +126,13 @@ if (true){
 				console.log(err);
 				return res.status(404).end();
 			}
-			res.send(
-				htmlData.replace("<title>",`<title>${job.position} - Flutterjobs`)
-			)
+			if (job){
+				res.send(
+					htmlData.replace("<title>",`<title>${job.position} - Flutterjobs`)
+				)
+			} else {
+				res.send(htmlData);
+			}
 		})
 	});
 }
