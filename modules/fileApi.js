@@ -20,7 +20,7 @@ const processUpload = async (upload, mimetype, context, save_encoding = false) =
 	}
 	let imgdata = upload
 	let extension = get_extension(imgdata)
-	let filename = `file-${uuid()}`;
+	let filename = `file-${uuid()}.png`;
 	let base64Data = imgdata.replace(/^data:([A-Za-z-+/]+);base64,/, '');
 	let buff = new Buffer(base64Data, "base64");
 	// fs.writeFileSync(__dirname + "/../public" + path, base64Data,  {encoding: 'base64'});
