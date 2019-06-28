@@ -6,8 +6,10 @@ const jwt = require("jsonwebtoken");
 const configs = require("./configs");
 const logger = require("morgan");
 const { static } = require("express");
-var cron = require('node-cron');
+const cron = require('node-cron');
 const path = require("path");
+const ejs = require('ejs');
+const fs = require("fs");
 
 const prismaDb = new Prisma({
 	typeDefs:prismaTypeDefs,
@@ -93,23 +95,41 @@ const server = new graphqlServer({
 });
 
 
-if (configs.production){
+if (true){
 	server.express.use('/assets', static(path.join(__dirname, 'public')))
+	server.express.use('/', static(path.join(__dirname, 'build')))
 	
 	server.express.use((req, res, next) => {
 		let protocol = req.get('x-forwarded-proto');
-		console.log(req.secure, req.protocol, protocol);
+		// console.log(req.secure, req.protocol, protocol);
 		if (protocol === "http"){
-			console.log("REDIRECTED");
-			return res.redirect(`https://www.flutterjobs.io${req.url}`)
+			// console.log("REDIRECTED");
+			// return res.redirect(`https://www.flutterjobs.io${req.url}`)
 		}
 		next();
 	})
 	
 	server.express.use(static(path.join(__dirname, 'build')));
-	
+
 	server.express.get('/*', function (req, res) {
-		res.sendFile(path.join(__dirname, 'build', 'index.html'));
+		console.log(12323);
+		let splitted = req.originalUrl.split("/");
+		console.log(splitted);
+		let variables = {};
+		if (splitted[1] === "job"){
+			let job = prismaDb.query.job({where:{id:splitted[2]}});
+			variables["title"] = job.title;
+		}
+		let filePath = path.resolve(__dirname, 'build', 'index.html');
+		fs.readFile(filePath, "utf8",(err,htmlData) => {
+			if (err){
+				console.log(err);
+				return res.status(404).end();
+			}
+			res.send(
+				htmlData.replace("<title>","<title>213123")
+			)
+		})
 	});
 }
 

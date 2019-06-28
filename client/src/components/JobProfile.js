@@ -12,7 +12,7 @@ import {
 } from 'draft-js';
 import { stateFromHTML } from "draft-js-import-html";
 import { EditorState } from "draft-js"
-import { Helmet } from "react-helmet";
+// import { Helmet } from "react-helmet";
 const monthNames = ["January", "February", "March", "April", "May", "June",
 	"July", "August", "September", "October", "November", "December"
 ];
@@ -71,14 +71,6 @@ class JobProfile extends React.Component {
 				}
 				return (
 					<div>
-						<meta property="og:title" content="your_link_title"/>
-						<meta property="og:image" content="your_image_url"/>		
-						<Helmet>
-							<title>Flutterjobs - {job.position}</title>
-							<meta property="og:title" content={job.position} />
-							<meta name="description" content={this.description} />
-							<meta property="og:image" content={backgroundImage} />
-						</Helmet>
 						<div>
 					    	</div>
 							
