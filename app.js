@@ -164,7 +164,7 @@ if (true){
 					`)
 				)
 			} else {
-				res.send(htmlData);
+				res.send(htmlData.replace("<title>","<title>Find only Flutter jobs! - Flutterjobs.io"));
 			}
 		})
 	});
