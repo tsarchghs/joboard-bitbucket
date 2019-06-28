@@ -115,8 +115,9 @@ if (true){
 		let splitted = req.originalUrl.split("/");
 		console.log(splitted);
 		let variables = {};
+		let job;
 		if (splitted[1] === "job"){
-			let job = prismaDb.query.job({where:{id:splitted[2]}});
+			job = prismaDb.query.job({where:{id:splitted[2]}});
 			variables["title"] = job.title;
 		}
 		let filePath = path.resolve(__dirname, 'build', 'index.html');
