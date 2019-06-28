@@ -96,9 +96,6 @@ const server = new graphqlServer({
 
 
 if (true){
-	server.express.use('/assets', static(path.join(__dirname, 'public')))
-	server.express.use('/', static(path.join(__dirname, 'build')))
-	
 	server.express.use((req, res, next) => {
 		let protocol = req.get('x-forwarded-proto');
 		console.log(protocol,59)
@@ -108,6 +105,9 @@ if (true){
 		}
 		next();
 	})
+	server.express.use('/assets', static(path.join(__dirname, 'public')))
+	server.express.use('/', static(path.join(__dirname, 'build')))
+	
 	
 	server.express.use(static(path.join(__dirname, 'build')));
 
