@@ -126,7 +126,7 @@ if (true){
 				return res.status(404).end();
 			}
 			res.send(
-				htmlData.replace("<title>","<title>213123")
+				htmlData.replace("<title>",`<title>${job.position} - Flutterjobs`)
 			)
 		})
 	});
