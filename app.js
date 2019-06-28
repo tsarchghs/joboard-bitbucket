@@ -117,7 +117,21 @@ if (true){
 		let variables = {};
 		let job;
 		if (splitted[1] === "job"){
-			job = await prismaDb.query.job({where:{id:splitted[2]}});
+			job = await prismaDb.query.job({where:{id:splitted[2]}},`
+				{
+					id
+					company_logo
+					position
+					description
+					company {
+						id
+						logo {
+							id
+							url
+						}
+					}
+				}
+			`);
 			variables["title"] = job.title;
 		}
 		let filePath = path.resolve(__dirname, 'build', 'index.html');
@@ -130,7 +144,8 @@ if (true){
 				res.send(
 					htmlData.replace("<title>",`<title>${job.position} - Flutterjobs`)
 					.replace("</head>",`
-						  <meta name="description" content="${job.description}">
+							<meta property="og:description" content="${job.description}" />
+							<meta property="og:image" content="${job.company ? job.company.logo.url : job.company_website}" />
 						  </head>
 					`)
 				)
