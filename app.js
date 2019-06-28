@@ -110,14 +110,14 @@ if (true){
 	
 	server.express.use(static(path.join(__dirname, 'build')));
 
-	server.express.get('/*', function (req, res) {
+	server.express.get('/*', async (req, res) => {
 		console.log(12323);
 		let splitted = req.originalUrl.split("/");
 		console.log(splitted);
 		let variables = {};
 		let job;
 		if (splitted[1] === "job"){
-			job = prismaDb.query.job({where:{id:splitted[2]}});
+			job = await prismaDb.query.job({where:{id:splitted[2]}});
 			variables["title"] = job.title;
 		}
 		let filePath = path.resolve(__dirname, 'build', 'index.html');
