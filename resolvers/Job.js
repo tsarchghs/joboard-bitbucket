@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 const job = async (root,args,context,info) => {
-	return await context.db.query.job({ where: { id: args.id }, orderBy:"last_payment_DESC"},info);
+	return await context.db.query.job({ where: { id: args.id } },info);
 }
 
 const jobs = async (root,args,context,info) => {
@@ -26,7 +26,7 @@ const jobs = async (root,args,context,info) => {
 		where,
 		first: args.jobFilter ? args.jobFilter.first : undefined,
 		skip: args.jobFilter ? args.jobFilter.skip : undefined,
-		orderBy: args.jobFilter ? args.jobFilter.orderBy : undefined
+		orderBy: "last_payment_DESC"
 	}
 	,info);
 }
