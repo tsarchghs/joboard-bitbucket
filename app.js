@@ -6,8 +6,10 @@ const jwt = require("jsonwebtoken");
 const configs = require("./configs");
 const logger = require("morgan");
 const { static } = require("express");
-var cron = require('node-cron');
+const cron = require('node-cron');
 const path = require("path");
+const fs = require("fs");
+const htmlToText = require('html-to-text');
 
 const prismaDb = new Prisma({
 	typeDefs:prismaTypeDefs,
@@ -93,23 +95,77 @@ const server = new graphqlServer({
 });
 
 
-if (configs.production){
+if (true){
 	server.express.use('/assets', static(path.join(__dirname, 'public')))
+	server.express.use('/', static(path.join(__dirname, 'build')))
 	
 	server.express.use((req, res, next) => {
 		let protocol = req.get('x-forwarded-proto');
-		console.log(req.secure, req.protocol, protocol);
 		if (protocol === "http"){
-			console.log("REDIRECTED");
 			return res.redirect(`https://www.flutterjobs.io${req.url}`)
 		}
 		next();
 	})
 	
 	server.express.use(static(path.join(__dirname, 'build')));
-	
-	server.express.get('/*', function (req, res) {
-		res.sendFile(path.join(__dirname, 'build', 'index.html'));
+
+	server.express.get('/*', async (req, res) => {
+		console.log(12323);
+		let splitted = req.originalUrl.split("/");
+		console.log(splitted);
+		let variables = {};
+		let job;
+		if (splitted[1] === "job"){
+			console.log(0);
+			job = await prismaDb.query.job({where:{id:splitted[2]}},`
+				{
+					id
+					company_logo { 
+						id
+						url
+					}
+					position
+					description
+					company {
+						id
+						logo {
+							id
+							url
+						}
+					}
+				}
+			`);
+			variables["title"] = job.title;
+		}
+		let filePath = path.resolve(__dirname, 'build', 'index.html');
+		fs.readFile(filePath, "utf8",(err,htmlData) => {
+			if (err){
+				console.log(err);
+				return res.status(404).end();
+			}
+			if (job){
+				let logo;
+				if (job.company && job.company.logo && job.company.logo.url){
+					logo = job.company.logo.url.replace("https","http");
+					console.log(logo,555);
+				} else if (job.company_logo && job.company_logo.url){
+					logo = job.company_logo.url.replace("https","http");
+					console.log(logo,555);
+				}
+				res.send(
+					htmlData.replace("<title>",`<title>${job.position} - Flutterjobs`)
+					.replace("</head>",`
+							<meta property="og:description" content="${htmlToText.fromString(job.description)}">
+							${!logo ? ""
+							: `<meta property="og:image" content="${logo}">`
+							}
+						  </head>
+					`)
+				)
+			} else {
+				res.send(htmlData);
+			}
+		})
 	});
 }
 

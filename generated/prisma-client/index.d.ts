@@ -296,6 +296,8 @@ export type JobOrderByInput =
   | "status_DESC"
   | "apply_url_ASC"
   | "apply_url_DESC"
+  | "last_payment_ASC"
+  | "last_payment_DESC"
   | "company_name_ASC"
   | "company_name_DESC"
   | "company_email_ASC"
@@ -396,6 +398,7 @@ export interface JobCreateWithoutInvoicesInput {
   job_type: JOB_TYPE;
   status: STATUS_TYPE;
   apply_url: String;
+  last_payment: DateTimeInput;
   company?: CompanyCreateOneWithoutJobsInput;
   company_logo?: FileCreateOneInput;
   company_name?: String;
@@ -605,6 +608,14 @@ export interface JobWhereInput {
   apply_url_not_starts_with?: String;
   apply_url_ends_with?: String;
   apply_url_not_ends_with?: String;
+  last_payment?: DateTimeInput;
+  last_payment_not?: DateTimeInput;
+  last_payment_in?: DateTimeInput[] | DateTimeInput;
+  last_payment_not_in?: DateTimeInput[] | DateTimeInput;
+  last_payment_lt?: DateTimeInput;
+  last_payment_lte?: DateTimeInput;
+  last_payment_gt?: DateTimeInput;
+  last_payment_gte?: DateTimeInput;
   company?: CompanyWhereInput;
   company_logo?: FileWhereInput;
   company_name?: String;
@@ -689,6 +700,7 @@ export interface JobCreateWithoutCompanyInput {
   job_type: JOB_TYPE;
   status: STATUS_TYPE;
   apply_url: String;
+  last_payment: DateTimeInput;
   company_logo?: FileCreateOneInput;
   company_name?: String;
   company_email?: String;
@@ -809,6 +821,7 @@ export interface JobUpdateManyMutationInput {
   job_type?: JOB_TYPE;
   status?: STATUS_TYPE;
   apply_url?: String;
+  last_payment?: DateTimeInput;
   company_name?: String;
   company_email?: String;
   company_website?: String;
@@ -830,6 +843,7 @@ export interface JobCreateInput {
   job_type: JOB_TYPE;
   status: STATUS_TYPE;
   apply_url: String;
+  last_payment: DateTimeInput;
   company?: CompanyCreateOneWithoutJobsInput;
   company_logo?: FileCreateOneInput;
   company_name?: String;
@@ -898,6 +912,7 @@ export interface JobUpdateWithoutCompanyDataInput {
   job_type?: JOB_TYPE;
   status?: STATUS_TYPE;
   apply_url?: String;
+  last_payment?: DateTimeInput;
   company_logo?: FileUpdateOneInput;
   company_name?: String;
   company_email?: String;
@@ -914,6 +929,7 @@ export interface JobUpdateWithoutInvoicesDataInput {
   job_type?: JOB_TYPE;
   status?: STATUS_TYPE;
   apply_url?: String;
+  last_payment?: DateTimeInput;
   company?: CompanyUpdateOneWithoutJobsInput;
   company_logo?: FileUpdateOneInput;
   company_name?: String;
@@ -1343,6 +1359,14 @@ export interface JobScalarWhereInput {
   apply_url_not_starts_with?: String;
   apply_url_ends_with?: String;
   apply_url_not_ends_with?: String;
+  last_payment?: DateTimeInput;
+  last_payment_not?: DateTimeInput;
+  last_payment_in?: DateTimeInput[] | DateTimeInput;
+  last_payment_not_in?: DateTimeInput[] | DateTimeInput;
+  last_payment_lt?: DateTimeInput;
+  last_payment_lte?: DateTimeInput;
+  last_payment_gt?: DateTimeInput;
+  last_payment_gte?: DateTimeInput;
   company_name?: String;
   company_name_not?: String;
   company_name_in?: String[] | String;
@@ -1505,6 +1529,7 @@ export interface JobUpdateManyDataInput {
   job_type?: JOB_TYPE;
   status?: STATUS_TYPE;
   apply_url?: String;
+  last_payment?: DateTimeInput;
   company_name?: String;
   company_email?: String;
   company_website?: String;
@@ -1615,6 +1640,7 @@ export interface JobUpdateInput {
   job_type?: JOB_TYPE;
   status?: STATUS_TYPE;
   apply_url?: String;
+  last_payment?: DateTimeInput;
   company?: CompanyUpdateOneWithoutJobsInput;
   company_logo?: FileUpdateOneInput;
   company_name?: String;
@@ -1675,6 +1701,7 @@ export interface Job {
   job_type: JOB_TYPE;
   status: STATUS_TYPE;
   apply_url: String;
+  last_payment: DateTimeOutput;
   company_name?: String;
   company_email?: String;
   company_website?: String;
@@ -1692,6 +1719,7 @@ export interface JobPromise extends Promise<Job>, Fragmentable {
   job_type: () => Promise<JOB_TYPE>;
   status: () => Promise<STATUS_TYPE>;
   apply_url: () => Promise<String>;
+  last_payment: () => Promise<DateTimeOutput>;
   company: <T = CompanyPromise>() => T;
   company_logo: <T = FilePromise>() => T;
   company_name: () => Promise<String>;
@@ -1724,6 +1752,7 @@ export interface JobSubscription
   job_type: () => Promise<AsyncIterator<JOB_TYPE>>;
   status: () => Promise<AsyncIterator<STATUS_TYPE>>;
   apply_url: () => Promise<AsyncIterator<String>>;
+  last_payment: () => Promise<AsyncIterator<DateTimeOutput>>;
   company: <T = CompanySubscription>() => T;
   company_logo: <T = FileSubscription>() => T;
   company_name: () => Promise<AsyncIterator<String>>;
@@ -1851,6 +1880,7 @@ export interface JobPreviousValues {
   job_type: JOB_TYPE;
   status: STATUS_TYPE;
   apply_url: String;
+  last_payment: DateTimeOutput;
   company_name?: String;
   company_email?: String;
   company_website?: String;
@@ -1870,6 +1900,7 @@ export interface JobPreviousValuesPromise
   job_type: () => Promise<JOB_TYPE>;
   status: () => Promise<STATUS_TYPE>;
   apply_url: () => Promise<String>;
+  last_payment: () => Promise<DateTimeOutput>;
   company_name: () => Promise<String>;
   company_email: () => Promise<String>;
   company_website: () => Promise<String>;
@@ -1889,6 +1920,7 @@ export interface JobPreviousValuesSubscription
   job_type: () => Promise<AsyncIterator<JOB_TYPE>>;
   status: () => Promise<AsyncIterator<STATUS_TYPE>>;
   apply_url: () => Promise<AsyncIterator<String>>;
+  last_payment: () => Promise<AsyncIterator<DateTimeOutput>>;
   company_name: () => Promise<AsyncIterator<String>>;
   company_email: () => Promise<AsyncIterator<String>>;
   company_website: () => Promise<AsyncIterator<String>>;

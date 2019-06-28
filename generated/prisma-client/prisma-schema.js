@@ -801,6 +801,7 @@ type Job {
   job_type: JOB_TYPE!
   status: STATUS_TYPE!
   apply_url: String!
+  last_payment: DateTime!
   company: Company
   company_logo: File
   company_name: String
@@ -833,6 +834,7 @@ input JobCreateInput {
   job_type: JOB_TYPE!
   status: STATUS_TYPE!
   apply_url: String!
+  last_payment: DateTime!
   company: CompanyCreateOneWithoutJobsInput
   company_logo: FileCreateOneInput
   company_name: String
@@ -860,6 +862,7 @@ input JobCreateWithoutCompanyInput {
   job_type: JOB_TYPE!
   status: STATUS_TYPE!
   apply_url: String!
+  last_payment: DateTime!
   company_logo: FileCreateOneInput
   company_name: String
   company_email: String
@@ -876,6 +879,7 @@ input JobCreateWithoutInvoicesInput {
   job_type: JOB_TYPE!
   status: STATUS_TYPE!
   apply_url: String!
+  last_payment: DateTime!
   company: CompanyCreateOneWithoutJobsInput
   company_logo: FileCreateOneInput
   company_name: String
@@ -906,6 +910,8 @@ enum JobOrderByInput {
   status_DESC
   apply_url_ASC
   apply_url_DESC
+  last_payment_ASC
+  last_payment_DESC
   company_name_ASC
   company_name_DESC
   company_email_ASC
@@ -929,6 +935,7 @@ type JobPreviousValues {
   job_type: JOB_TYPE!
   status: STATUS_TYPE!
   apply_url: String!
+  last_payment: DateTime!
   company_name: String
   company_email: String
   company_website: String
@@ -1024,6 +1031,14 @@ input JobScalarWhereInput {
   apply_url_not_starts_with: String
   apply_url_ends_with: String
   apply_url_not_ends_with: String
+  last_payment: DateTime
+  last_payment_not: DateTime
+  last_payment_in: [DateTime!]
+  last_payment_not_in: [DateTime!]
+  last_payment_lt: DateTime
+  last_payment_lte: DateTime
+  last_payment_gt: DateTime
+  last_payment_gte: DateTime
   company_name: String
   company_name_not: String
   company_name_in: [String!]
@@ -1121,6 +1136,7 @@ input JobUpdateInput {
   job_type: JOB_TYPE
   status: STATUS_TYPE
   apply_url: String
+  last_payment: DateTime
   company: CompanyUpdateOneWithoutJobsInput
   company_logo: FileUpdateOneInput
   company_name: String
@@ -1138,6 +1154,7 @@ input JobUpdateManyDataInput {
   job_type: JOB_TYPE
   status: STATUS_TYPE
   apply_url: String
+  last_payment: DateTime
   company_name: String
   company_email: String
   company_website: String
@@ -1152,6 +1169,7 @@ input JobUpdateManyMutationInput {
   job_type: JOB_TYPE
   status: STATUS_TYPE
   apply_url: String
+  last_payment: DateTime
   company_name: String
   company_email: String
   company_website: String
@@ -1192,6 +1210,7 @@ input JobUpdateWithoutCompanyDataInput {
   job_type: JOB_TYPE
   status: STATUS_TYPE
   apply_url: String
+  last_payment: DateTime
   company_logo: FileUpdateOneInput
   company_name: String
   company_email: String
@@ -1208,6 +1227,7 @@ input JobUpdateWithoutInvoicesDataInput {
   job_type: JOB_TYPE
   status: STATUS_TYPE
   apply_url: String
+  last_payment: DateTime
   company: CompanyUpdateOneWithoutJobsInput
   company_logo: FileUpdateOneInput
   company_name: String
@@ -1319,6 +1339,14 @@ input JobWhereInput {
   apply_url_not_starts_with: String
   apply_url_ends_with: String
   apply_url_not_ends_with: String
+  last_payment: DateTime
+  last_payment_not: DateTime
+  last_payment_in: [DateTime!]
+  last_payment_not_in: [DateTime!]
+  last_payment_lt: DateTime
+  last_payment_lte: DateTime
+  last_payment_gt: DateTime
+  last_payment_gte: DateTime
   company: CompanyWhereInput
   company_logo: FileWhereInput
   company_name: String
