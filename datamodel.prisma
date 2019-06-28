@@ -71,6 +71,7 @@ type Job {
 	job_type: JOB_TYPE!
 	status: STATUS_TYPE!
 	apply_url: String!
+	last_payment: DateTime!
 	company: Company 
 	company_logo: File @relation(link: TABLE)
 	company_name: String

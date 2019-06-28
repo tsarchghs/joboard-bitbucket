@@ -68,6 +68,7 @@ type Job {
 	job_type: JOB_TYPE!
 	status: STATUS_TYPE!
 	apply_url: String!
+	last_payment: String!
 	company: Company
 	company_logo: File
 	company_name: String

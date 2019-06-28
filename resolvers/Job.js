@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 const job = async (root,args,context,info) => {
-	return await context.db.query.job({where:{id:args.id}},info);
+	return await context.db.query.job({ where: { id: args.id }, orderBy:"last_payment_DESC"},info);
 }
 
 const jobs = async (root,args,context,info) => {
@@ -72,7 +72,8 @@ const createJob = async (root,args,context,info) => {
 		description: args.description,
 		company_name: args.company_name,
 		company_email: args.company_email,
-		company_website: args.company_website
+		company_website: args.company_website,
+		last_payment: new Date()
 	}
 	
 	delete data["stripe_token"];
@@ -155,7 +156,8 @@ const createJobAndLogin = async (root,args,context,info) => {
 			description: args.description,
 			status: args.status,
 			expiresAt: new Date(today.setDate(today.getDate() + 30)),
-			apply_url: args.apply_url
+			apply_url: args.apply_url,
+			last_payment: new Date()
 		}
 	})
 	createInvoice(context, charge, job.id, args.status === "FEATURED")
@@ -192,7 +194,8 @@ const renewJob = async (root,args,context,info) => {
 		},
 		data: {
 			expiresAt: new Date(today.setDate(today.getDate() + 30)),
-			status: args.featured ? "FEATURED" : "TODAY"
+			status: args.featured ? "FEATURED" : "TODAY",
+			last_payment: new Date()
 		}
 	},info)
 	return job;
