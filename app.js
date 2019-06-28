@@ -9,6 +9,7 @@ const { static } = require("express");
 const cron = require('node-cron');
 const path = require("path");
 const fs = require("fs");
+const htmlToText = require('html-to-text');
 
 const prismaDb = new Prisma({
 	typeDefs:prismaTypeDefs,
@@ -100,10 +101,8 @@ if (true){
 	
 	server.express.use((req, res, next) => {
 		let protocol = req.get('x-forwarded-proto');
-		// console.log(req.secure, req.protocol, protocol);
 		if (protocol === "http"){
-			// console.log("REDIRECTED");
-			// return res.redirect(`https://www.flutterjobs.io${req.url}`)
+			return res.redirect(`https://www.flutterjobs.io${req.url}`)
 		}
 		next();
 	})
@@ -156,7 +155,7 @@ if (true){
 				res.send(
 					htmlData.replace("<title>",`<title>${job.position} - Flutterjobs`)
 					.replace("</head>",`
-							<meta property="og:description" content="${job.description}">
+							<meta property="og:description" content="${htmlToText.fromString(job.description)}">
 							${!logo ? ""
 							: `<meta property="og:image" content="${logo}">`
 							}
