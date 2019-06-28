@@ -156,9 +156,9 @@ if (true){
 				res.send(
 					htmlData.replace("<title>",`<title>${job.position} - Flutterjobs`)
 					.replace("</head>",`
-							<meta property="og:description" content="${job.description}" />
+							<meta property="og:description" content="${job.description}">
 							${!logo ? ""
-							: `<meta property="og:image" content="${job.company ? job.company.logo.url : job.company_logo.url}" />`
+							: `<meta property="og:image" content="${job.company ? job.company.logo.url : job.company_logo.url}">`
 							}
 						  </head>
 					`)
