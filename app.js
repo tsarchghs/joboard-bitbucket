@@ -101,7 +101,9 @@ if (true){
 	
 	server.express.use((req, res, next) => {
 		let protocol = req.get('x-forwarded-proto');
+		console.log(protocol,59)
 		if (protocol === "http"){
+			console.log("REDIRECT");
 			return res.redirect(`https://www.flutterjobs.io${req.url}`)
 		}
 		next();
@@ -124,6 +126,7 @@ if (true){
 						id
 						url
 					}
+					title
 					position
 					description
 					company {
