@@ -115,13 +115,14 @@ class JobProfile extends React.Component {
 										__html:job.description
 									}} style={{"whiteSpace":"pre-line"}} className="inside-page__description-part">
 					                </div>
+									  			<a target="_blank" style={{marginBottom: "35px"}} href={this.getAbsoluteUrl(job.apply_url)} className="button blue">Apply for this job</a>													
 					              </div>
 													<div class="socials with-border">
 													<FacebookShareButton title={job.position} url={`https://www.flutterjobs.io${window.location.pathname}`}>
 														<p class="button button--fb"><img src="../../assets/toolkit/images/fb.svg" alt=""/>Share on Facebook</p>
 													</FacebookShareButton>
 													<TwitterShareButton url={`https://www.flutterjobs.io${window.location.pathname}`}>
-														<p style={{marginLeft:30}} class="button button--tw"><img src="../../assets/toolkit/images/tw.svg" alt=""/>Share on Twitter</p>
+														<p class="button button--tw"><img src="../../assets/toolkit/images/tw.svg" alt=""/>Share on Twitter</p>
 													</TwitterShareButton>
 													</div>
 					            </div>

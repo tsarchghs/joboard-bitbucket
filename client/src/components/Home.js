@@ -175,19 +175,21 @@ class Home extends React.Component {
 						(
 							this.state.featured_jobs.map(job => (
 								<div key={job.id} className={`job-listing-table__list home-table ${this.state.featured_jobs[0].id === job.id ? "no-border" : ""}`}>
-									<div className="job-listing-table__logo"
-										style={{
-											backgroundImage: this.getLogo(job)
-										}} />
-									<div className="job-listing-table__info">
-										<Link to={`/job/${job.id}`}>
-											<h4>
-												{job.position}
-											</h4>
-											<h5>
-												{job.company ? job.company.name : job.company_name}
-											</h5>
-										</Link>
+									<div className="job-listing-table__lt">
+										<div className="job-listing-table__logo"
+											style={{
+												backgroundImage: this.getLogo(job)
+											}} />
+										<div className="job-listing-table__info">
+											<Link to={`/job/${job.id}`}>
+												<h4>
+													{job.position}
+												</h4>
+												<h5>
+													{job.company ? job.company.name : job.company_name}
+												</h5>
+											</Link>
+										</div>
 									</div>
 									<div className="job-listing-table__time">
 										{
@@ -213,7 +215,8 @@ class Home extends React.Component {
 	            	(
 	            		this.state.today_jobs.map(job => (
 			              <div key={job.id} className={`job-listing-table__list home-table ${this.state.today_jobs[0].id === job.id ? "no-border" : ""}`}>
-			                <div className="job-listing-table__logo" 
+							<div className="job-listing-table__lt">			                
+							<div className="job-listing-table__logo" 
 			                style={{
 			                	backgroundImage: this.getLogo(job)
 			                }} />
@@ -227,6 +230,7 @@ class Home extends React.Component {
 					                  </h5>
 				            		</Link>
 				                </div>
+							</div>
 			                <div className="job-listing-table__time">
 				                {
 				                	job.status === "FEATURED" 
