@@ -115,34 +115,28 @@ if (true){
 		console.log(12323);
 		let splitted = req.originalUrl.split("/");
 		console.log(splitted);
-		let variables = {};
 		let job;
 		if (splitted[1] === "job"){
 			console.log(0);
-			try{
-				job = await prismaDb.query.job({where:{id:splitted[2]}},`
-					{
+			job = await prismaDb.query.job({where:{id:splitted[2]}},`
+				{
+					id
+					company_logo { 
 						id
-						company_logo { 
+						url
+					}
+					position
+					description
+					company {
+						id
+						logo {
 							id
 							url
 						}
-						title
-						position
-						description
-						company {
-							id
-							logo {
-								id
-								url
-							}
-						}
 					}
-				`);
-			} catch (e) {
-				console.log(e)
-			}
-			variables["title"] = job.title;
+				}
+			`);
+			
 		}
 		let filePath = path.resolve(__dirname, 'build', 'index.html');
 		fs.readFile(filePath, "utf8",(err,htmlData) => {
