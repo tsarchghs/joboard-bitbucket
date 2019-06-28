@@ -43,7 +43,7 @@ class App extends Component {
   }
   render() {
     return (
-      <StripeProvider apiKey="pk_test_qPYFvOuAMinE3mIxP7Gpn70N">
+      <StripeProvider apiKey={true ? "pk_live_VzebAEDh33V8db6oZe4beNA6" : "pk_test_qPYFvOuAMinE3mIxP7Gpn70N"}>
         <ApolloProvider client={client}>
           <Router>
             <Query query={GET_LOGGED_IN_USER}>
