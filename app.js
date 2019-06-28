@@ -129,6 +129,10 @@ if (true){
 			if (job){
 				res.send(
 					htmlData.replace("<title>",`<title>${job.position} - Flutterjobs`)
+					.replace("</head>",`
+						  <meta name="description" content="${job.description}">
+						  </head>
+					`)
 				)
 			} else {
 				res.send(htmlData);
