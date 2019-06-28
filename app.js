@@ -136,8 +136,6 @@ if (true){
 					}
 				}
 			`);
-			console.log(await job);
-			console.log(JSON.stringify(job));
 			variables["title"] = job.title;
 		}
 		let filePath = path.resolve(__dirname, 'build', 'index.html');
@@ -150,15 +148,17 @@ if (true){
 				let logo;
 				if (job.company && job.company.logo && job.company.logo.url){
 					logo = job.company.logo.url.replace("https","http");
+					console.log(logo,555);
 				} else if (job.company_logo && job.company_logo.url){
 					logo = job.company_logo.url.replace("https","http");
+					console.log(logo,555);
 				}
 				res.send(
 					htmlData.replace("<title>",`<title>${job.position} - Flutterjobs`)
 					.replace("</head>",`
 							<meta property="og:description" content="${job.description}">
 							${!logo ? ""
-							: `<meta property="og:image" content="${job.company ? job.company.logo.url : job.company_logo.url}">`
+							: `<meta property="og:image" content="${logo}">`
 							}
 						  </head>
 					`)
