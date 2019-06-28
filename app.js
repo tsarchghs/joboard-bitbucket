@@ -8,7 +8,6 @@ const logger = require("morgan");
 const { static } = require("express");
 const cron = require('node-cron');
 const path = require("path");
-const ejs = require('ejs');
 const fs = require("fs");
 
 const prismaDb = new Prisma({
