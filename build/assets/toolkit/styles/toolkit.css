@@ -5819,7 +5819,7 @@ a.thumbnail {
 
 .menu-1 {
   position: absolute;
-  top: 60px;
+  top: 55px;
   right: 10px; }
 
 .menu-1.open .menu-item {
@@ -6129,6 +6129,12 @@ a.thumbnail {
   display: -ms-flexbox;
   display: flex;
   margin-bottom: 10px; }
+  @media screen and (max-width: 39.9375em) {
+    .card-data__info--data {
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+          -ms-flex-direction: column;
+              flex-direction: column; } }
 
 .socials {
   display: -webkit-box;
@@ -6148,10 +6154,18 @@ a.thumbnail {
         margin-bottom: 10px !important;
         -webkit-box-pack: center;
             -ms-flex-pack: center;
-                justify-content: center; } }
+                justify-content: center; }
+      .socials div {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+        margin-bottom: 15px !important; } }
   .socials.with-border {
     border-top: 1px #dee3e7 solid; }
-  .socials a {
+  .socials div, .socials a {
     -webkit-box-align: center;
         -ms-flex-align: center;
             align-items: center;
@@ -6258,7 +6272,10 @@ a.thumbnail {
   border-bottom: 1px solid #d3d9e5;
   -webkit-box-align: center;
       -ms-flex-align: center;
-          align-items: center; }
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between; }
   @media screen and (max-width: 39.9375em) {
     .job-listing-table__list {
       -webkit-box-orient: vertical;
@@ -6281,7 +6298,8 @@ a.thumbnail {
             justify-content: flex-end;
     min-width: 204px; }
     .job-listing-table__list.home-table .job-listing-table__time h5 {
-      padding-top: 5px; }
+      padding-top: 5px;
+      text-align: left; }
 
 .job-listing-table__title {
   margin-top: 60px;
@@ -6292,14 +6310,16 @@ a.thumbnail {
   height: 50px;
   margin-right: 21px;
   border-radius: 50%;
-  border: 1px solid gray;
+  border: 1px solid #DEE3E7;
   background-repeat: no-repeat;
   background-size: cover;
   overflow: hidden;
   background-position: center; }
   @media screen and (max-width: 39.9375em) {
     .job-listing-table__logo {
-      margin-right: 0; } }
+      margin-right: 10px;
+      min-width: 40px;
+      height: 40px; } }
 
 .job-listing-table__info {
   -webkit-box-flex: 1;
@@ -6307,9 +6327,12 @@ a.thumbnail {
           flex-grow: 1; }
   @media screen and (max-width: 39.9375em) {
     .job-listing-table__info {
-      text-align: center; }
+      text-align: left; }
       .job-listing-table__info h4 {
-        margin: 10px 0px; } }
+        margin: 10px 0px;
+        font-size: 15px; }
+      .job-listing-table__info h5 {
+        font-size: 13px; } }
   .job-listing-table__info h4, .job-listing-table__info h5 {
     margin-bottom: 0; }
   .job-listing-table__info h4 a {
@@ -6319,25 +6342,6 @@ a.thumbnail {
     font-weight: 500;
     line-height: 1.38;
     color: #9b9b9b; }
-
-.job-listing-table__time {
-  margin-right: 60px; }
-  @media screen and (max-width: 39.9375em) {
-    .job-listing-table__time {
-      margin: 0;
-      margin-top: 10px; }
-      .job-listing-table__time .new {
-        -ms-flex-item-align: center;
-            align-self: center; } }
-  .job-listing-table__time .red {
-    color: #fa6a63; }
-  .job-listing-table__time h5 {
-    margin: 0; }
-    .job-listing-table__time h5:first-child {
-      padding-bottom: 10px;
-      font-size: 14px; }
-    .job-listing-table__time h5 img {
-      margin-right: 10px; }
 
 .job-listing-table__more {
   min-width: 145px;
@@ -6369,11 +6373,65 @@ a.thumbnail {
 .home__table-list {
   margin-bottom: 30px; }
 
+.job-listing-table__lt {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; }
+  @media screen and (max-width: 39.9375em) {
+    .job-listing-table__lt {
+      -ms-flex-item-align: end;
+          align-self: end; }
+      .job-listing-table__lt h4 {
+        margin-top: 0; } }
+
+.job-listing-table__time {
+  margin-right: 60px; }
+  @media screen and (max-width: 39.9375em) {
+    .job-listing-table__time {
+      margin: 0;
+      margin-top: 10px;
+      -webkit-box-orient: horizontal !important;
+      -webkit-box-direction: reverse !important;
+          -ms-flex-direction: row-reverse !important;
+              flex-direction: row-reverse !important;
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center;
+      min-height: initial !important;
+      width: 100%; }
+      .job-listing-table__time .new {
+        -ms-flex-item-align: center;
+            align-self: center;
+        margin-bottom: 0;
+        font-size: 12px; }
+      .job-listing-table__time h5 {
+        padding-left: 50px;
+        margin-right: 15px !important;
+        font-size: 12px;
+        text-align: left !important; }
+        .job-listing-table__time h5 img {
+          margin-right: 5px !important; } }
+  .job-listing-table__time .red {
+    color: #fa6a63; }
+  .job-listing-table__time h5 {
+    margin: 0; }
+    .job-listing-table__time h5:first-child {
+      padding-bottom: 10px;
+      font-size: 14px; }
+      @media screen and (max-width: 39.9375em) {
+        .job-listing-table__time h5:first-child {
+          font-size: 12px !important; } }
+    .job-listing-table__time h5 img {
+      margin-right: 10px; }
+
 .master-layout {
   background-image: linear-gradient(57deg, #0072ff, #00c6ff);
   overflow: hidden;
   padding-top: 55px;
   min-height: 100vh; }
+  @media screen and (max-width: 39.9375em) {
+    .master-layout {
+      padding-top: 30px; } }
   .master-layout .header {
     background: transparent; }
 
@@ -6539,6 +6597,9 @@ a.thumbnail {
       padding-left: 0.9375rem; } }
   .home__table:last-child:not(:first-child) {
     float: right; }
+  @media screen and (max-width: 39.9375em) {
+    .home__table {
+      padding: 0px 15px 55px 15px !important; } }
 
 .home__table-title {
   padding: 30px 0px;
@@ -6560,6 +6621,9 @@ a.thumbnail {
   .new.blue {
     background-color: rgba(255, 193, 7, 0.2);
     color: #ffc107; }
+    @media screen and (max-width: 39.9375em) {
+      .new.blue {
+        min-width: 98px; } }
   .new img {
     padding-right: 8px;
     position: relative;
@@ -6999,7 +7063,7 @@ a.thumbnail {
     margin-bottom: 0; }
 
 .inside-page__description-part {
-  margin-bottom: 70px; }
+  margin-bottom: 20px; }
   .inside-page__description-part h4 {
     margin-bottom: 20px; }
 

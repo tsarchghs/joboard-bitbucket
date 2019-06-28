@@ -200,9 +200,6 @@
 	      this.form_field = form_field;
 	      this.options = options1 != null ? options1 : {};
 	      this.label_click_handler = bind(this.label_click_handler, this);
-	      if (!AbstractChosen.browser_is_supported()) {
-	        return;
-	      }
 	      this.is_multiple = this.form_field.multiple;
 	      this.set_default_text();
 	      this.set_default_values();
@@ -721,9 +718,6 @@
 
 	  $.fn.extend({
 	    chosen: function(options) {
-	      if (!AbstractChosen.browser_is_supported()) {
-	        return this;
-	      }
 	      return this.each(function(input_field) {
 	        var $this, chosen;
 	        $this = $(this);
