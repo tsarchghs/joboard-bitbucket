@@ -149,9 +149,9 @@ if (true){
 			if (job){
 				let logo;
 				if (job.company && job.company.logo && job.company.logo.url){
-					logo = job.company.logo.url
+					logo = job.company.logo.url.replace("https","http");
 				} else if (job.company_logo && job.company_logo.url){
-					logo = job.company_logo.url;
+					logo = job.company_logo.url.replace("https","http");
 				}
 				res.send(
 					htmlData.replace("<title>",`<title>${job.position} - Flutterjobs`)
