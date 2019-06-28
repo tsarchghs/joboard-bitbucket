@@ -117,10 +117,14 @@ if (true){
 		let variables = {};
 		let job;
 		if (splitted[1] === "job"){
+			console.log(0);
 			job = await prismaDb.query.job({where:{id:splitted[2]}},`
 				{
 					id
-					company_logo
+					company_logo { 
+						id
+						url
+					}
 					position
 					description
 					company {
@@ -132,6 +136,8 @@ if (true){
 					}
 				}
 			`);
+			console.log(await job);
+			console.log(JSON.stringify(job));
 			variables["title"] = job.title;
 		}
 		let filePath = path.resolve(__dirname, 'build', 'index.html');
@@ -141,11 +147,19 @@ if (true){
 				return res.status(404).end();
 			}
 			if (job){
+				let logo;
+				if (job.company && job.company.logo && job.company.logo.url){
+					logo = job.company.logo.url
+				} else if (job.company_logo && job.company_logo.url){
+					logo = job.company_logo.url;
+				}
 				res.send(
 					htmlData.replace("<title>",`<title>${job.position} - Flutterjobs`)
 					.replace("</head>",`
 							<meta property="og:description" content="${job.description}" />
-							<meta property="og:image" content="${job.company ? job.company.logo.url : job.company_website}" />
+							${!logo ? ""
+							: `<meta property="og:image" content="${job.company ? job.company.logo.url : job.company_logo.url}" />`
+							}
 						  </head>
 					`)
 				)
