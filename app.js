@@ -159,7 +159,8 @@ if (true){
 				email: process.env.EMAIL,
 				favicon_path: process.env.FAVICON_PATH,
 				domain_svg: process.env.DOMAIN_SVG,
-				apollo_client_uri: process.env.APOLLO_CLIENT_URI
+				apollo_client_uri: process.env.APOLLO_CLIENT_URI,
+				above_job_position_text: process.env.ABOVE_JOB_POSITION_TEXT
 			}
 			htmlData = htmlData.replace("</head>",`
 				<link rel="stylesheet" href="${process.env.EXTRA_CSS_PATH}">
@@ -187,7 +188,7 @@ if (true){
 				`)
 				)
 			} else {
-				return res.send(htmlData.replace("<title>","<title>Find only Flutter jobs! - Flutterjobs.io"));
+				return res.send(htmlData.replace("<title>", `<title>${PUBLIC_DATA.head_title}`));
 			}
 		})
 		

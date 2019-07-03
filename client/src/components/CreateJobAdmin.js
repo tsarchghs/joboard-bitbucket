@@ -107,7 +107,7 @@ class _CreateJob extends React.Component {
 				<form onSubmit={this.onSubmit}>
 					<h4>Create job</h4>
 					<div className="create-job">
-					<h5>Hire the flutters. Share your job post with many of job seekers.</h5>
+					<h5>{window.__PUBLIC_DATA__.above_job_position_text}</h5>
 					<div className="create-job__input">
 						<label className="create-job__input--label"><span className="create-job__input--span">Position</span>
 						<input 

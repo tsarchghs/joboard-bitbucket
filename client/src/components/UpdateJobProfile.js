@@ -97,7 +97,7 @@ class _UpdateJobProfile extends React.Component {
                     <form onSubmit={this.onSubmit}>
                         <h4>Create job</h4>
                         <div className="create-job">
-                            <h5>Hire the flutters. Share your job post with many of job seekers.</h5>
+                            <h5>{window.__PUBLIC_DATA__.above_job_position_text}</h5>
                             <center style={{display: this.state.loading_all ? "block" : "none"}}><LoadingAnimation loading_type={2}/></center>
                             <div style={{display: this.state.loading_all ? "none" : "block"}}>
                                 <div>
