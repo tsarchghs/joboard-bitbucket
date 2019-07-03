@@ -55,6 +55,7 @@ class _CreateJob extends React.Component {
 	async createStripeToken(){
 		let stripe_res = await this.props.stripe.createToken({ name: "Job Posting" });
 		if (stripe_res.error) {
+			console.log(stripe_res.error.message,123);
 			this.setState({
 				card_error: stripe_res.error.message,
 				loading: false
@@ -188,6 +189,7 @@ class _CreateJob extends React.Component {
 				currentModal: "CreateAccountQuestionModal"
 			})
 		} catch (e) {
+			console.log(e);
 			if (e.message.indexOf("CardError") !== -1){
 				this.setState({
 					card_error: e.message.split(":")[2]
@@ -466,7 +468,7 @@ class _CreateJob extends React.Component {
 						</div>
 					}
 					<label style={{marginTop: this.state.hasAccount ? 0 : 0}} className="create-job__input--label"><span className="create-job__input--span">Company card</span>   
-						<CardElement />
+						<CardElement hidePostalCode={true} />
 						<p style={{ "color": "red", margin:10 }}>{this.state.card_error}</p>
 					</label>
 					<div className="text-center">

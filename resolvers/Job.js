@@ -48,7 +48,7 @@ const createInvoice = async (context,charge,job_id, featured) => {
 const chargeCard = async (status,position,token) => {
 	try {
 		charge = await stripe.charges.create({
-			amount: status === "FEATURED" ? 100 * 1 : 100 * 1,
+			amount: status === "FEATURED" ? 100 * 249 : 100 * 199,
 			currency: 'usd',
 			description: position,
 			source: token

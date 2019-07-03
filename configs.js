@@ -5,7 +5,7 @@ module.exports = {
 	mailgun:{
 		apiKey:"DSADAS"
 	},
-	stripe_secret_key: true ? "sk_live_sWBTfENL2bASW71FOvbSGdhA" : "sk_test_EP0OmYeR6C05xL2Z45BYmhaj",
+	stripe_secret_key: false ? "sk_live_sWBTfENL2bASW71FOvbSGdhA" : "sk_test_l0HJNJGrFjfZvVc7afriu6nU00J8rKAYcI",
 	s3: {
 		bucketName: "uxstories",
 		accessKeyId: "AKIAU7ZLBUXTEV6MN7W7",

@@ -23,7 +23,7 @@ import { GET_LOGGED_IN_USER } from "./Queries"
 
 //https://frozen-refuge-32300.herokuapp.com
 const client = new ApolloClient({
-  uri: "https://frozen-refuge-32300.herokuapp.com",
+  uri: window.__PUBLIC_DATA__ === undefined ? "http://localhost:4000" : window.__PUBLIC_DATA__.apollo_client_uri,
   request: async (operation) => {
     const token = Cookies.get("token");
     operation.setContext({
@@ -40,10 +40,13 @@ class App extends Component {
     this.state = {
       user: undefined
     }
+    if (window.__PUBLIC_DATA__ === undefined){
+      window.__PUBLIC_DATA__ = {}
+    }
   }
   render() {
     return (
-      <StripeProvider apiKey={true ? "pk_live_VzebAEDh33V8db6oZe4beNA6" : "pk_test_qPYFvOuAMinE3mIxP7Gpn70N"}>
+      <StripeProvider apiKey={false ? "pk_live_VzebAEDh33V8db6oZe4beNA6" : "pk_test_N1sdoxQTHRHokGxvtutLWw0x00HDZ2RDsi"}>
         <ApolloProvider client={client}>
           <Router>
             <Query query={GET_LOGGED_IN_USER}>

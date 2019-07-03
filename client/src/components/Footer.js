@@ -12,15 +12,15 @@ class Footer extends React.Component {
 		return (
 	        <div className="footer">
                 <div className="footer__title">
-                    <Link to="/"><img src="../../assets/toolkit/images/fl-logo.svg" alt="" /></Link>
+                    <Link to="/"><img src={window.__PUBLIC_DATA__.favicon_path} alt="" /></Link>
                     <div>
-                        <Link to="/"><img src="../../assets/toolkit/images/flutterjobs-io.svg" alt=""/></Link>
-                        <p>Find only Flutter jobs!</p>
+                        <Link to="/"><img className="domain-svg-footer" src={window.__PUBLIC_DATA__.domain_svg} alt=""/></Link>
+                        <p>{window.__PUBLIC_DATA__.find_only_text}</p>
                     </div>
                 </div>
                 <div className="footer__contact">
-                    <p>Find us on  <a href="https://www.twitter.com">Twitter!</a></p>
-                    <p>Contact us at <a href="#">info@flutterjobs.io</a></p>
+                    <p>Find us on  <a href={window.__PUBLIC_DATA__.twitter}>Twitter!</a></p>
+                    <p>Contact us at <a href="#">{window.__PUBLIC_DATA__.email}</a></p>
                 </div>
             </div>
 		);

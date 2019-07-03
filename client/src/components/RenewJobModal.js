@@ -132,7 +132,7 @@ class _RenewJobModal extends React.Component{
                                 }}>
                                     <h1>Renew job</h1>
                                     <label className="create-job__input--label" style={{marginTop:15}}>
-                                        <CardElement />
+                                        <CardElement hidePostalCode={true}/>
                                         <p style={{ "color": "red", margin: 10 }}>{this.state.card_error}</p>
                                     </label>
                                         <label className="checkbox-container">

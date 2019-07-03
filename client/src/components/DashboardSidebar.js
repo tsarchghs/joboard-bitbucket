@@ -10,9 +10,9 @@ class DashboardSidebar extends React.Component {
 		}
 		console.log(url);
 		return (
-	        <div className="sidebar">
+			<div className="sidebar">
 			<Link to="/">
-	          <h3 className="sidebar__title">Flutter.jobs</h3>
+	          <h3 className="sidebar__title">{window.__PUBLIC_DATA__.domain}</h3>
 			</Link>
 	          <div className="sidebar__ul">
 	            <Link to="/dashboard" className={url === "dashboard" ? "active" : ""}>

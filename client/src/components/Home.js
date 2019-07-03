@@ -119,10 +119,13 @@ class Home extends React.Component {
 	}
 	render(){
 		return (
-	      <div className="master-layout">
+	      <div>
 	        <div className="master-layout__header">
-	          <h1>Find only Flutter jobs!</h1>
-	          <h5>Flutter allows you to build beautiful native apps on <br />iOS and Android from a single codebase.</h5>
+	          <h1>{window.__PUBLIC_DATA__.find_only_text}</h1>
+	          <div dangerouslySetInnerHTML={{
+				  __html: window.__PUBLIC_DATA__.below_find_only_html
+			  }}>
+			  </div>
 	          <div className="home__search">
 	            <label><span>Location</span>
 	              <div className="home__input">

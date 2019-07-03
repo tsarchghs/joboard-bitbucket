@@ -10,11 +10,11 @@ class Header extends React.Component {
 	}
 	render(){
 		return (
-	        <div className="header">
+			<div className="header">
 	          <div className="header__container">
 	            <div className="header__content">
 		          <Link to="/">
-		            <div className="header__logo"><Link to="/"><img src="/assets/Flutterjobs.svg"/></Link></div>
+		            <div className="header__logo"><Link to="/"><img src={window.__PUBLIC_DATA__.logo_url}/></Link></div>
 		          </Link>
 	              <div className="header__nav">
 	              {

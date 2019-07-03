@@ -10,10 +10,14 @@ const cron = require('node-cron');
 const path = require("path");
 const fs = require("fs");
 const htmlToText = require('html-to-text');
+const compression = require('compression');
+
+require('dotenv').config()
+
 
 const prismaDb = new Prisma({
 	typeDefs:prismaTypeDefs,
-	endpoint:"https://eu1.prisma.sh/gjergj-kadriu-c6f550/joboard/dev",
+	endpoint: process.env.prisma_endpoint,
 	debug: false
 })
 const EVERY_MIDNIGHT = "0 0 0 * * *"
@@ -28,7 +32,7 @@ var daysDifference = (data1, data2) => {
 	return diffDays
 }
 
-cron.schedule(EVERY_MINUTE, async () => {
+cron.schedule("0 */30 * * * *", async () => {
 	console.log("STARTED")
 	let dayInMs = 86400000
 	let today = new Date().getTime();
@@ -96,82 +100,101 @@ const server = new graphqlServer({
 
 
 if (true){
+	server.express.use(logger("dev"));
+	server.express.use(compression());
+
 	server.express.use((req, res, next) => {
 		let protocol = req.get('x-forwarded-proto');
-		console.log(protocol,59)
-		if (protocol === "http"){
+		if (protocol === "http" && configs.production){
 			console.log("REDIRECT");
 			return res.redirect(`https://www.flutterjobs.io${req.url}`)
 		}
 		next();
 	})
-	server.express.use('/assets', static(path.join(__dirname, 'public')))
-	server.express.use('/', static(path.join(__dirname, 'build')))
-	
-	
-	server.express.use(static(path.join(__dirname, 'build')));
 
-	server.express.get('/*', async (req, res) => {
-		console.log(12323);
+	server.express.use('/assets', static(path.join(__dirname, 'public')))
+	server.express.use(static(path.join(__dirname, 'client/build'), { index: false}));
+	// server.express.use("/",static(path.join(__dirname, 'client/build')))
+	
+	server.express.get('*', async (req, res) => {
+		console.log(req.body)
 		let splitted = req.originalUrl.split("/");
-		console.log(splitted);
 		let job;
 		if (splitted[1] === "job"){
-			console.log(0);
 			job = await prismaDb.query.job({where:{id:splitted[2]}},`
-				{
+			{
+				id
+				company_logo { 
 					id
-					company_logo { 
+					url
+				}
+				position
+				description
+				company {
+					id
+					logo {
 						id
 						url
 					}
-					position
-					description
-					company {
-						id
-						logo {
-							id
-							url
-						}
 					}
 				}
-			`);
+				`);
 			
 		}
-		let filePath = path.resolve(__dirname, 'build', 'index.html');
+
+		let filePath = path.resolve(__dirname, 'client/build', 'index.html');
 		fs.readFile(filePath, "utf8",(err,htmlData) => {
 			if (err){
 				console.log(err);
 				return res.status(404).end();
 			}
+			let PUBLIC_DATA = {
+				logo_url: process.env.LOGO_URL,
+				domain: process.env.DOMAIN,
+				head_title: process.env.HEAD_TITLE,
+				website_name: process.env.WEBSITE_NAME,
+				find_only_text: process.env.FIND_ONLY_TEXT,
+				below_find_only_html: process.env.BELOW_FIND_ONLY_HTML,
+				twitter: process.env.TWITTER,
+				email: process.env.EMAIL,
+				favicon_path: process.env.FAVICON_PATH,
+				domain_svg: process.env.DOMAIN_SVG,
+				apollo_client_uri: process.env.APOLLO_CLIENT_URI
+			}
+			htmlData = htmlData.replace("</head>",`
+				<link rel="stylesheet" href="${process.env.EXTRA_CSS_PATH}">
+				<script>
+					window.__PUBLIC_DATA__=${JSON.stringify(PUBLIC_DATA)}
+				</script>
+				<link rel="shortcut icon" href="${PUBLIC_DATA.favicon_path}"/>
+				</head>	
+			`)
 			if (job){
 				let logo;
 				if (job.company && job.company.logo && job.company.logo.url){
 					logo = job.company.logo.url.replace("https","http");
-					console.log(logo,555);
 				} else if (job.company_logo && job.company_logo.url){
 					logo = job.company_logo.url.replace("https","http");
-					console.log(logo,555);
 				}
-				res.send(
+				return res.send(
 					htmlData.replace("<title>",`<title>${job.position} - Flutterjobs`)
 					.replace("</head>",`
-							<meta property="og:description" content="${htmlToText.fromString(job.description)}">
-							${!logo ? ""
-							: `<meta property="og:image" content="${logo}">`
-							}
-						  </head>
-					`)
+					<meta property="og:description" content="${htmlToText.fromString(job.description)}">
+					${!logo ? ""
+					: `<meta property="og:image" content="${logo}">`
+				}
+				</head>
+				`)
 				)
 			} else {
-				res.send(htmlData.replace("<title>","<title>Find only Flutter jobs! - Flutterjobs.io"));
+				return res.send(htmlData.replace("<title>","<title>Find only Flutter jobs! - Flutterjobs.io"));
 			}
 		})
+		
 	});
 }
 
 
-server.express.use(logger("dev"));
 server.start({
 	bodyParserOptions: { limit: "100mb", type: "application/json" }
 },() => console.log("Running on 4000"));
