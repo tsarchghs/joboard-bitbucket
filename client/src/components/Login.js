@@ -64,14 +64,14 @@ class Login extends React.Component {
 													<label><span>Password</span>
 														<input value={this.state.password} onChange={(e) => this.setState({password:e.target.value})} className="input" type="password" placeholder="Your password here" />
 													</label>
-												<button className="button blue">Sign in</button>
-											</div>
-										}
+													<button className="button blue">Sign in</button>
+												</div>
+											}
 										</div>
 										<p>By signing in to your account, you agree to <a href="#">Terms of Service.</a></p>
 									</div>
 									</div>
-							 <p className="login__post">Do you want to post a job? <Link to="/create_job"><p className="button black">Post a job</p></Link></p>
+							 <p className="login__post">Do you want to post a job? <Link to="/create_job"><p className="button blue">Post a job</p></Link></p>
 				      </div>
 			    	</form>
 			    )
