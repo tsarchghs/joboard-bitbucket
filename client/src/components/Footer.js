@@ -12,7 +12,7 @@ class Footer extends React.Component {
 		return (
 	        <div className="footer">
                 <div className="footer__title">
-                    <Link to="/"><img src={window.__PUBLIC_DATA__.favicon_path} alt="" /></Link>
+                    <Link to="/"><img style={{width:54}} src={window.__PUBLIC_DATA__.favicon_path} alt="" /></Link>
                     <div>
                         <Link to="/"><img className="domain-svg-footer" src={window.__PUBLIC_DATA__.domain_svg} alt=""/></Link>
                         <p>{window.__PUBLIC_DATA__.find_only_text}</p>

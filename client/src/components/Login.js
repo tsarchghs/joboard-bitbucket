@@ -47,7 +47,7 @@ class Login extends React.Component {
 						Cookies.set("token",data.data.login.token);
 				 		this.props.refetchApp();
 				 	}}>
-			    	   <div className="login">
+			    	   <div className="master-layout login">
 				        <Header/>
 								<div className="login__container">
 					        <div className="login__card">
