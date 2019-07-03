@@ -107,7 +107,11 @@ if (true){
 		let protocol = req.get('x-forwarded-proto');
 		if (protocol === "http" && configs.production){
 			console.log("REDIRECT");
-			return res.redirect(`https://www.${req.get('host')}${req.url}`)
+			if (req.get('host').indexOf("unityjobs") !== -1){
+				return res.redirect(`https://www.unityjobs.io${req.url}`)
+			} else {
+				return res.redirect(`https://www.flutterjobs.io${req.url}`)
+			}
 		}
 		next();
 	})
