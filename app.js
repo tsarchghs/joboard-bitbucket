@@ -17,7 +17,7 @@ require('dotenv').config()
 
 const prismaDb = new Prisma({
 	typeDefs:prismaTypeDefs,
-	endpoint: process.env.prisma_endpoint,
+	endpoint: process.env.PRISMA_ENDPOINT,
 	debug: false
 })
 const EVERY_MIDNIGHT = "0 0 0 * * *"
