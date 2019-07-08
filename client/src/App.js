@@ -23,7 +23,7 @@ import { GET_LOGGED_IN_USER } from "./Queries"
 
 //https://frozen-refuge-32300.herokuapp.com
 const client = new ApolloClient({
-  uri: window.__PUBLIC_DATA__ === undefined ? "http://localhost:4000" : window.__PUBLIC_DATA__.apollo_client_uri,
+  uri: "https://frozen-refuge-32300.herokuapp.com",
   request: async (operation) => {
     const token = Cookies.get("token");
     operation.setContext({

@@ -13,6 +13,7 @@ class Home extends React.Component {
 	constructor(props){
 		super(props)
 		this.state = {
+			moveCheckbox: false,
 			search_value: undefined,
 			job_type: undefined,
 			featured_jobs: undefined,
@@ -136,7 +137,7 @@ class Home extends React.Component {
 	                	className="input" 
 	                	type="email" 
 						disabled={this.state.only_remote}
-	                	placeholder="Search for state, city" />
+	                	placeholder="Position, skills" />
 	                <img src="../assets/toolkit/images/placeholder.svg" alt=""/>				
 	              </div>
 					<label style={{marginTop: 10}} className="checkbox-container">
@@ -148,8 +149,17 @@ class Home extends React.Component {
 						 })} />
 						<span className="checkmark" />
 						<p style={{color: "white"}}>Remote/anywhere</p>
-						</label>	           
-					</label>
+					</label>	           
+				</label>
+				<label><span>Type of work</span>
+          <div className="home__input">
+             <div className="home__input--extra">
+              <p>Select location</p>
+              <img src="../assets/toolkit/images/placeholder.svg" alt=""/>				
+						 	<span className="arrow-down"><img src="../assets/toolkit/images/white-arrow.svg" /></span>
+             </div>
+            </div>
+						</label>
 	            <label><span>Type of work</span>
 	              <div className="home__select">
 	                <select ref={node => this.jobTypeRef = node} data-placeholder="Full time/part time ..." className="chosen-select">
@@ -164,6 +174,58 @@ class Home extends React.Component {
 	              </div>
 	            </label>
 	          </div>
+
+						<div className="home__selected open">
+						<div className="home__selected-container move">
+              <div className="select-card select-more">
+                <p className="select-card__title">Select country and city</p>
+                <div className="select-card__items">
+                  <div className="select-card__item">
+                    <img src="../assets/toolkit/images/al.jpg" />
+                    <p>Kosova</p>
+                    <img className="select-card__item--icon" src="../assets/toolkit/images/gray-arrow.svg" />
+                  </div>
+                  <div className="select-card__item">
+                    <img src="../assets/toolkit/images/kos.jpg" />
+                    <p>Albania</p>
+                    <img className="select-card__item--icon" src="../assets/toolkit/images/gray-arrow.svg" />
+                  </div>
+                </div>
+
+							</div>
+							<div className="select-card select-more">
+								<div className="select-card__more--title">
+									<img className="select-card__more--icon" src="../assets/toolkit/images/gray-arrow.svg" />
+									<img src="../assets/toolkit/images/kos.jpg" />
+									<p className="select-card__title">Kosova</p>
+								</div>
+								<div className="select-card__items">
+									<div className="select-card__item">
+										<p>Prishtinë</p>
+										<label className="container card__checkbox">
+											<input type="radio" name="radio" />
+											<span className="checkmark"></span>
+										</label>
+									</div>
+									<div className="select-card__item">
+										<p>Pejë</p>
+										<label className="container card__checkbox">
+											<input type="radio" name="radio" />
+											<span className="checkmark"></span>
+										</label>
+									</div>
+									<div className="select-card__item">
+										<p>Mitrovicë</p>
+										<label className="container card__checkbox">
+											<input type="radio" name="radio" />
+											<span className="checkmark"></span>
+										</label>
+									</div>
+								</div>
+							</div>
+					</div>
+				</div>
+				
 	        </div>
 	        <div className="master-layout__hero">
 	          <div className="home__table">
@@ -319,7 +381,10 @@ class Home extends React.Component {
 							</div>
 						</div> */}
 	        </div>
+
+
 					<Footer/>
+					
 	      </div>
 	    </div>
 				
