@@ -8,6 +8,7 @@ import Footer from "./Footer";
 import { Link } from "react-router-dom";
 import { loadAfterHomeMount } from "../helpers"
 import LoadingAnimation from "./LoadingAnimation";
+import { COUNTRIES_QUERY } from "../Queries";
 
 class Home extends React.Component {
 	constructor(props){
@@ -28,7 +29,7 @@ class Home extends React.Component {
 	}
 	componentDidMount(){
 		loadAfterHomeMount()
-		this.jobTypeRef.onchange = this.update;
+		if (this.jobTypeRef) this.jobTypeRef.onchange = this.update;
 		this.update();
 	}
 	async updateJobs(to,id_not_in, status_not_in, status_type, createdAt_gte, createdAt_lte, first,skip,orderBy){
@@ -36,14 +37,15 @@ class Home extends React.Component {
 			jobFilter: {
 				id_not_in,
 				status_not_in,
-				location_contains: this.state.only_remote ? "remote/everywhere" : this.state.search_value,
+				query: this.state.only_remote ? "remote/everywhere" : this.state.search_value,
 				status_type,
 				job_type: this.jobTypeRef && this.jobTypeRef.value === "ALL" ? undefined : this.jobTypeRef.value,
 				createdAt_gte,
 				createdAt_lte,
 				first,
 				skip,
-				orderBy
+				orderBy,
+				city: this.state.city ? this.state.city : undefined
 			}
 		}
 		let res = await this.props.client.query({
@@ -98,6 +100,11 @@ class Home extends React.Component {
 		
 	}
 	updateFilter(e,to){
+		if (to == "city"){
+			this.setState({
+				selectedLocation: e.target.id
+			})
+		}
 		this.setState({
 			[to]: e.target.value
 		})
@@ -151,16 +158,30 @@ class Home extends React.Component {
 						<p style={{color: "white"}}>Remote/anywhere</p>
 					</label>	           
 				</label>
-				<label><span>Type of work</span>
-          <div className="home__input">
-             <div className="home__input--extra">
-              <p>Select location</p>
-              <img src="../assets/toolkit/images/placeholder.svg" alt=""/>				
-						 	<span className="arrow-down"><img src="../assets/toolkit/images/white-arrow.svg" /></span>
-             </div>
-            </div>
-						</label>
-	            <label><span>Type of work</span>
+				
+		{
+			window.__PUBLIC_DATA__.use_predefined_location &&
+				<React.Fragment>
+				<label><span>Location</span>
+					<div className="home__input">
+						<div className="home__input--extra" style={{cursor:"pointer"}} onClick={e => {
+							this.setState(prevState => {
+								prevState.hideLocationDropdown = !prevState.hideLocationDropdown 
+								return prevState;
+							})
+						}}>
+						<p>{this.state.selectedLocation ? this.state.selectedLocation : "Select location"}</p>
+						<img src="../assets/toolkit/images/placeholder.svg" alt=""/>				
+										<span className="arrow-down"><img src="../assets/toolkit/images/white-arrow.svg" /></span>
+						</div>
+						</div>
+				</label>
+
+				</React.Fragment>
+
+		}
+	            <label>
+				<span>Type of work</span>
 	              <div className="home__select">
 	                <select ref={node => this.jobTypeRef = node} data-placeholder="Full time/part time ..." className="chosen-select">
 	                  <option value="ALL" default={true}>All</option>
@@ -174,57 +195,81 @@ class Home extends React.Component {
 	              </div>
 	            </label>
 	          </div>
+					 <Query query={COUNTRIES_QUERY}>
+					 	{({loading,error,data}) => {
+							if (loading) return null;
+							if (error) return error.message;
+							let countries = data.countries
+							let cities = [];
+							for (var x in countries){
+								let country = countries[x];
+								if (country.name === this.state.insideState){
+									cities = country.cities
+								}
+							}
+							return (
+								!this.state.hideLocationDropdown ? null : 
+								<div className="home__selected open">
+									<div className={`home__selected-container ${this.state.insideState ? "move" : ""}`}>
+										<div className="select-card select-more">
+											<p className="select-card__title">Select country and city</p>
+											<div className="select-card__items">
+											{
+												countries.map(country => (
+													<div className="select-card__item" onClick={e => {
+														this.setState({
+															insideState: country.name
+														})
+													}}>
+														<img src="../assets/toolkit/images/al.jpg" />
+														<p>{country.name}</p>
+														<img className="select-card__item--icon" src="../assets/toolkit/images/gray-arrow.svg" />
+													</div>
 
-						<div className="home__selected open">
-						<div className="home__selected-container move">
-              <div className="select-card select-more">
-                <p className="select-card__title">Select country and city</p>
-                <div className="select-card__items">
-                  <div className="select-card__item">
-                    <img src="../assets/toolkit/images/al.jpg" />
-                    <p>Kosova</p>
-                    <img className="select-card__item--icon" src="../assets/toolkit/images/gray-arrow.svg" />
-                  </div>
-                  <div className="select-card__item">
-                    <img src="../assets/toolkit/images/kos.jpg" />
-                    <p>Albania</p>
-                    <img className="select-card__item--icon" src="../assets/toolkit/images/gray-arrow.svg" />
-                  </div>
-                </div>
+												))
+											}
+											</div>
+										</div>
+										<div className="select-card select-more">
+											<div className="select-card__more--title">
+												<img 
+													className="select-card__more--icon" 
+													src="../assets/toolkit/images/gray-arrow.svg" 
+													onClick={e => this.setState({insideState:false})}
+													style={{ cursor: "pointer" }}	
+												/>
+												<img src="../assets/toolkit/images/kos.jpg" />
+												<p className="select-card__title">Kosova</p>
+											</div>
+											<div className="select-card__items">
+												{
+													cities.map(city => (
+														<div className="select-card__item">
+															<p>{city.name}</p>
+															<label className="container card__checkbox">
+																<input 
+																	onChange={e => this.updateFilter(e,"city")} 
+																	checked={this.state.city === city.id} 
+																	value={city.id} 
+																	type="radio" 
+																	name="radio" 
+																	id={city.name}
+																/>
+																<span className="checkmark"></span>
+															</label>
+														</div>
 
-							</div>
-							<div className="select-card select-more">
-								<div className="select-card__more--title">
-									<img className="select-card__more--icon" src="../assets/toolkit/images/gray-arrow.svg" />
-									<img src="../assets/toolkit/images/kos.jpg" />
-									<p className="select-card__title">Kosova</p>
-								</div>
-								<div className="select-card__items">
-									<div className="select-card__item">
-										<p>Prishtinë</p>
-										<label className="container card__checkbox">
-											<input type="radio" name="radio" />
-											<span className="checkmark"></span>
-										</label>
-									</div>
-									<div className="select-card__item">
-										<p>Pejë</p>
-										<label className="container card__checkbox">
-											<input type="radio" name="radio" />
-											<span className="checkmark"></span>
-										</label>
-									</div>
-									<div className="select-card__item">
-										<p>Mitrovicë</p>
-										<label className="container card__checkbox">
-											<input type="radio" name="radio" />
-											<span className="checkmark"></span>
-										</label>
+													))	
+												}
+											</div>
+										</div>
 									</div>
 								</div>
-							</div>
-					</div>
-				</div>
+
+							)
+						 }}
+
+					 </Query>
 				
 	        </div>
 	        <div className="master-layout__hero">

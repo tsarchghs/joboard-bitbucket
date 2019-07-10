@@ -30,11 +30,8 @@ class Login extends React.Component {
 				 let password;
 				 let alertMessage;
 				 if (error){
-				 	if (error.message === "GraphQL error: Invalid credentials"){
-				 		alertMessage = "InvalidCredentials"
-				 	}
-				 	if (error.message === "GraphQL error: Please check that all of your arguments are not empty!"){
-				 		alertMessage = "Please check that all of your arguments are not empty!"
+					 if (error.message.indexOf("credentials") !== -1 || error.message === "GraphQL error: Please check that all of your arguments are not empty!"){
+				 		alertMessage = "Invalid username or password."
 				 	}
 				 	if (!alertMessage){
 				 		return <p>{error.message}</p>

@@ -143,7 +143,8 @@ const DELETE_JOB_MUTATITON = gql`
 const CREATE_JOB_MUTATION = gql`
     mutation CreateJob(
         $position: String!
-        $location: String!
+        $location: String
+        $city: ID
         $salary: Int
         $job_type: JOB_TYPE!
         $status: STATUS_TYPE!
@@ -160,6 +161,7 @@ const CREATE_JOB_MUTATION = gql`
         createJob(
             position: $position
             location: $location
+            city: $city
             salary: $salary
             job_type: $job_type
             status: $status
@@ -218,6 +220,18 @@ const CREATE_JOB_AND_LOGIN_MUTATION = gql`
     }
 `
 
+const COUNTRIES_QUERY = gql`
+    query {
+        countries {
+            id
+            name
+            cities {
+                id
+                name
+            }
+        }
+    }
+`
 export {
     INVOICES_QUERY,
     GET_LOGGED_IN_USER,
@@ -225,5 +239,6 @@ export {
     UPDATE_JOB_QUERY,
     DELETE_JOB_MUTATITON,
     CREATE_JOB_MUTATION,
-    CREATE_JOB_AND_LOGIN_MUTATION
+    CREATE_JOB_AND_LOGIN_MUTATION,
+    COUNTRIES_QUERY
 }

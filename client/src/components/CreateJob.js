@@ -3,9 +3,8 @@ import { CardElement, injectStripe } from 'react-stripe-elements';
 import RichEditor from "./RichEditor";
 import "../richEditor.css"
 import { convertToHTML } from "draft-convert";
-import { withApollo } from 'react-apollo';
+import { withApollo, Query } from 'react-apollo';
 import { compose } from "recompose"
-import gql from "graphql-tag";
 import CreateAccountQuestionModal from "./CreateAccountQuestionModal";
 import TypePasswordModal from "./TypePasswordModal";
 import { withRouter } from "react-router";
@@ -15,6 +14,7 @@ import { handleUploadPhotoInput } from "../helpers";
 import { CREATE_JOB_MUTATION, CREATE_JOB_AND_LOGIN_MUTATION } from "../Queries";
 import Cookies from 'js-cookie';
 import LoadingAnimation from "./LoadingAnimation";
+import { COUNTRIES_QUERY } from "../Queries";
 
 class _CreateJob extends React.Component {
 	constructor(props){
@@ -26,7 +26,7 @@ class _CreateJob extends React.Component {
 			position: "",
 			editorState: undefined,
 			location: "",
-			locationInputDisabled: true,
+			locationInputDisabled: !window.__PUBLIC_DATA__.use_predefined_location,
 			salaryInputDisabled: false,
 			salary: "",
 			job_type: "FULL_TIME",
@@ -43,7 +43,8 @@ class _CreateJob extends React.Component {
 			hasAccount: false,
 			email: "",
 			password: "",
-			under_company_info_error: ""
+			under_company_info_error: "",
+			city: window.__PUBLIC_DATA__.use_predefined_location ? "cjxx5ieu1kfxx0b3677nbsntq" : false
 		}
 		this.onChange = this.onChange.bind(this)
 		this.toggleLocationInput = this.toggleLocationInput.bind(this)
@@ -86,14 +87,15 @@ class _CreateJob extends React.Component {
 			password: this.state.password,
 			position: this.state.position,
 			location: this.state.locationInputDisabled ? "remote/everywhere" : this.state.location,
+			city: this.state.city ? this.state.city : undefined,
 			salary: this.state.salaryInputDisabled ? null : Number(this.state.salary),
 			job_type: this.state.job_type,
 			status: this.state.featured ? "FEATURED" : "TODAY",
 			apply_url: this.state.apply_url,
 			description: job_description_html_output,
-			stripe_token: stripe_token
+			stripe_token: stripe_token,
 		}
-		console.log(variables)
+		console.log(variables, this.state.city)
 
 		let res;
 		try {
@@ -151,6 +153,7 @@ class _CreateJob extends React.Component {
 		variables.salary = Number(variables.salary)
 		variables.status = this.state.featured ? "FEATURED" : "TODAY"
 		variables.stripe_token = stripe_token
+		variables.city = this.state.city ? this.state.city : undefined;
 		console.log(variables);
 		let res;
 		if (this.companyLogoInput && this.companyLogoInput.base64){
@@ -266,19 +269,55 @@ class _CreateJob extends React.Component {
 							<RichEditor onChangeParentApp={editorState => this.setState({editorState})} />
 						</label>
 						<label className="create-job__input--label"><span className="create-job__input--span">Location</span>
-						<input 
-							className="input" 
-							type="text" 
-							placeholder="Location of the job" 
-							value={this.state.location}
-							onChange={e => this.onChange(e,"location")}
-							disabled={this.state.locationInputDisabled}
-						/>
-						<label className="checkbox-container">
-							<input type="checkbox" checked={this.state.locationInputDisabled} onChange={this.toggleLocationInput}/>
-							<span className="checkmark" />
-							<p>Remote/anywhere</p>
-						</label>
+						{
+							window.__PUBLIC_DATA__.use_predefined_location &&
+							<Query 
+								query={COUNTRIES_QUERY}
+							>
+								{({loading,error,data}) => {
+									if (error) return error.message;
+									if (loading) return "Loading";
+									console.log(data)
+									let countries = data.countries;
+									let cities = countries.map(country => country.cities).flat();
+
+									return (
+										<div className="create-job__checkbox">
+										{
+											cities.map(city => (
+												<label className="radio-container">
+													<input value={city.id} onChange={e => this.onChange(e, "city")} checked={this.state.city === city.id} type="checkbox" name="radio" />
+													<span className="checkmarked">
+														<p>{city.name}</p>
+													</span>
+												</label>
+											))
+										}
+											
+										</div>
+									)
+								}}
+							</Query>
+						}
+						{
+							!window.__PUBLIC_DATA__.use_predefined_location
+							&&
+							<React.Fragment>
+								<input 
+									className="input" 
+									type="text" 
+									placeholder="Location of the job" 
+									value={this.state.location}
+									onChange={e => this.onChange(e,"location")}
+									disabled={this.state.locationInputDisabled}
+								/>
+								<label className="checkbox-container">
+									<input type="checkbox" checked={this.state.locationInputDisabled} onChange={this.toggleLocationInput}/>
+									<span className="checkmark" />
+									<p>Remote/anywhere</p>
+								</label>
+							</React.Fragment>
+						}
 						</label>
 						<label className="create-job__input--label"><span className="create-job__input--span">Salary</span>
 							<input className="input" type="text" type="number" placeholder="Type the salary here" 
