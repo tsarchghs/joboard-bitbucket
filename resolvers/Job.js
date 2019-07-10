@@ -14,13 +14,22 @@ const job = async (root,args,context,info) => {
 const jobs = async (root,args,context,info) => {
 	where = {}
 	if (args.jobFilter){
-		args.jobFilter.location_contains ? where["location_contains"] = args.jobFilter.location_contains :  null
+		args.jobFilter.query ? where["OR"] = [
+			{
+				"location_contains": args.jobFilter.query,
+			},
+			{
+				"position_contains": args.jobFilter.query
+			}
+		] :  null
 		args.jobFilter.status_type ? where["status"] = args.jobFilter.status_type :  null
 		args.jobFilter.job_type ? where["job_type"] = args.jobFilter.job_type :  null
 		args.jobFilter.createdAt_gte ? where["createdAt_gte"] = args.jobFilter.createdAt_gte :  null	
 		args.jobFilter.createdAt_lte ? where["createdAt_lte"] = args.jobFilter.createdAt_lte :  null
 		args.jobFilter.id_not_in ? where["id_not_in"] = args.jobFilter.id_not_in :  null
 		args.jobFilter.status_not_in ? where["status_not_in"] = args.jobFilter.status_not_in : null
+		args.jobFilter.city ? where["city"] = { id: args.jobFilter.city } : null
+	
 	}
 	return await context.db.query.jobs({
 		where,
@@ -75,7 +84,10 @@ const createJob = async (root,args,context,info) => {
 		company_website: args.company_website,
 		last_payment: new Date()
 	}
-	
+	console.log(args,5999);
+	if (args.city){
+		data["city"] = { connect: { id: args.city }}
+	}
 	delete data["stripe_token"];
 	if (!args.company && !(args.company_name && args.company_email && args.company_website)){
 		throw new Error("Must be related to a company");
@@ -146,20 +158,22 @@ const createJobAndLogin = async (root,args,context,info) => {
 	}
 	let charge = await chargeCard(args.status, args.position, args.stripe_token);
 	let today = new Date();
-	const job = await context.db.mutation.createJob({
-		data:{
-			company: { connect: { id: user.company.id }},
-			position: args.position,
-			location: args.location,
-			salary: args.salary,
-			job_type: args.job_type,
-			description: args.description,
-			status: args.status,
-			expiresAt: new Date(today.setDate(today.getDate() + 30)),
-			apply_url: args.apply_url,
-			last_payment: new Date()
-		}
-	})
+	let data = {
+		company: { connect: { id: user.company.id } },
+		position: args.position,
+		location: args.location,
+		salary: args.salary,
+		job_type: args.job_type,
+		description: args.description,
+		status: args.status,
+		expiresAt: new Date(today.setDate(today.getDate() + 30)),
+		apply_url: args.apply_url,
+		last_payment: new Date()
+	}
+	if (args.city){
+		data["city"] = { connect: { id: args.city}}
+	}
+	const job = await context.db.mutation.createJob({data})
 	createInvoice(context, charge, job.id, args.status === "FEATURED")
 	let auth_data = {
 		user,
