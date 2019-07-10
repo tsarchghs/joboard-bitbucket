@@ -63,7 +63,8 @@ type Invoice {
 type Job {
 	id: ID!
 	position: String!
-	location: String!
+	location: String
+	city: City
 	salary: Int
 	job_type: JOB_TYPE!
 	status: STATUS_TYPE!
@@ -80,9 +81,27 @@ type Job {
 	expiresAt: String!
 }
 
+type Country {
+	id: ID! 
+	name: String!
+	cities: [City!]!
+	createdAt: String!
+	updatedAt: String!	
+}
+
+type City {
+	id: ID!
+	name: String!
+	country: Country!
+	jobs: [Job!]!
+	createdAt: String!
+	updatedAt: String!	
+}
+
 input CreateJob {
 	position: String!
-	location: String!
+	location: String
+	city: ID
 	salary: Int
 	job_type: JOB_TYPE!
 	status: STATUS_TYPE!
@@ -115,7 +134,8 @@ input CreateCompanyInput {
 input JobFilterInput {
 	id_not_in: [ID!]
 	status_not_in: [STATUS_TYPE!]
-	location_contains: String
+	query: String
+	city: ID
 	status_type: STATUS_TYPE
 	job_type: JOB_TYPE
 	createdAt_gte: String
@@ -131,6 +151,7 @@ type Query {
 	jobs(jobFilter:JobFilterInput): [Job!]!
 	job(id: ID!): Job!
 	invoices: [Invoice!]!
+	countries: [Country!]!
 }
 
 type CreateJobAndLoginInfo {
@@ -171,7 +192,8 @@ type Mutation {
 
 	createJob(
 		position: String!
-		location: String!
+		location: String
+		city: ID
 		salary: Int
 		job_type: JOB_TYPE!
 		status: STATUS_TYPE!
@@ -190,7 +212,8 @@ type Mutation {
 		email: String!
 		password: String!
 		position: String!
-		location: String!
+		location: String
+		city: ID
 		salary: Int
 		job_type: JOB_TYPE!
 		status: STATUS_TYPE!

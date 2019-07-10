@@ -25,6 +25,14 @@ var models = [
     embedded: false
   },
   {
+    name: "Country",
+    embedded: false
+  },
+  {
+    name: "City",
+    embedded: false
+  },
+  {
     name: "JOB_TYPE",
     embedded: false
   },

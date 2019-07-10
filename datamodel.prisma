@@ -65,7 +65,8 @@ type Invoice {
 type Job {
 	id: ID! @id
 	position: String!
-	location: String!
+	location: String
+	city: City
 	salary: Int
 	description: String!
 	job_type: JOB_TYPE!
@@ -81,4 +82,21 @@ type Job {
 	expiresAt: DateTime!
 	createdAt: DateTime! @createdAt
 	updatedAt: DateTime! @updatedAt
+}
+
+type Country {
+	id: ID! @id
+	name: String! @unique
+	cities: [City!]!
+	createdAt: DateTime! @createdAt
+	updatedAt: DateTime! @updatedAt	
+}
+
+type City {
+	id: ID! @id
+	name: String! @unique
+	country: Country!
+	jobs: [Job!]!
+	createdAt: DateTime! @createdAt
+	updatedAt: DateTime! @updatedAt	
 }

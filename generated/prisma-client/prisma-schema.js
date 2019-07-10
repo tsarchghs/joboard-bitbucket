@@ -3,7 +3,15 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateCompany {
+/* GraphQL */ `type AggregateCity {
+  count: Int!
+}
+
+type AggregateCompany {
+  count: Int!
+}
+
+type AggregateCountry {
   count: Int!
 }
 
@@ -25,6 +33,263 @@ type AggregateUser {
 
 type BatchPayload {
   count: Long!
+}
+
+type City {
+  id: ID!
+  name: String!
+  country: Country!
+  jobs(where: JobWhereInput, orderBy: JobOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Job!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type CityConnection {
+  pageInfo: PageInfo!
+  edges: [CityEdge]!
+  aggregate: AggregateCity!
+}
+
+input CityCreateInput {
+  name: String!
+  country: CountryCreateOneWithoutCitiesInput!
+  jobs: JobCreateManyWithoutCityInput
+}
+
+input CityCreateManyWithoutCountryInput {
+  create: [CityCreateWithoutCountryInput!]
+  connect: [CityWhereUniqueInput!]
+}
+
+input CityCreateOneWithoutJobsInput {
+  create: CityCreateWithoutJobsInput
+  connect: CityWhereUniqueInput
+}
+
+input CityCreateWithoutCountryInput {
+  name: String!
+  jobs: JobCreateManyWithoutCityInput
+}
+
+input CityCreateWithoutJobsInput {
+  name: String!
+  country: CountryCreateOneWithoutCitiesInput!
+}
+
+type CityEdge {
+  node: City!
+  cursor: String!
+}
+
+enum CityOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type CityPreviousValues {
+  id: ID!
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input CityScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [CityScalarWhereInput!]
+  OR: [CityScalarWhereInput!]
+  NOT: [CityScalarWhereInput!]
+}
+
+type CitySubscriptionPayload {
+  mutation: MutationType!
+  node: City
+  updatedFields: [String!]
+  previousValues: CityPreviousValues
+}
+
+input CitySubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: CityWhereInput
+  AND: [CitySubscriptionWhereInput!]
+  OR: [CitySubscriptionWhereInput!]
+  NOT: [CitySubscriptionWhereInput!]
+}
+
+input CityUpdateInput {
+  name: String
+  country: CountryUpdateOneRequiredWithoutCitiesInput
+  jobs: JobUpdateManyWithoutCityInput
+}
+
+input CityUpdateManyDataInput {
+  name: String
+}
+
+input CityUpdateManyMutationInput {
+  name: String
+}
+
+input CityUpdateManyWithoutCountryInput {
+  create: [CityCreateWithoutCountryInput!]
+  delete: [CityWhereUniqueInput!]
+  connect: [CityWhereUniqueInput!]
+  set: [CityWhereUniqueInput!]
+  disconnect: [CityWhereUniqueInput!]
+  update: [CityUpdateWithWhereUniqueWithoutCountryInput!]
+  upsert: [CityUpsertWithWhereUniqueWithoutCountryInput!]
+  deleteMany: [CityScalarWhereInput!]
+  updateMany: [CityUpdateManyWithWhereNestedInput!]
+}
+
+input CityUpdateManyWithWhereNestedInput {
+  where: CityScalarWhereInput!
+  data: CityUpdateManyDataInput!
+}
+
+input CityUpdateOneWithoutJobsInput {
+  create: CityCreateWithoutJobsInput
+  update: CityUpdateWithoutJobsDataInput
+  upsert: CityUpsertWithoutJobsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: CityWhereUniqueInput
+}
+
+input CityUpdateWithoutCountryDataInput {
+  name: String
+  jobs: JobUpdateManyWithoutCityInput
+}
+
+input CityUpdateWithoutJobsDataInput {
+  name: String
+  country: CountryUpdateOneRequiredWithoutCitiesInput
+}
+
+input CityUpdateWithWhereUniqueWithoutCountryInput {
+  where: CityWhereUniqueInput!
+  data: CityUpdateWithoutCountryDataInput!
+}
+
+input CityUpsertWithoutJobsInput {
+  update: CityUpdateWithoutJobsDataInput!
+  create: CityCreateWithoutJobsInput!
+}
+
+input CityUpsertWithWhereUniqueWithoutCountryInput {
+  where: CityWhereUniqueInput!
+  update: CityUpdateWithoutCountryDataInput!
+  create: CityCreateWithoutCountryInput!
+}
+
+input CityWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  country: CountryWhereInput
+  jobs_every: JobWhereInput
+  jobs_some: JobWhereInput
+  jobs_none: JobWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [CityWhereInput!]
+  OR: [CityWhereInput!]
+  NOT: [CityWhereInput!]
+}
+
+input CityWhereUniqueInput {
+  id: ID
+  name: String
 }
 
 type Company {
@@ -269,6 +534,158 @@ input CompanyWhereInput {
 
 input CompanyWhereUniqueInput {
   id: ID
+}
+
+type Country {
+  id: ID!
+  name: String!
+  cities(where: CityWhereInput, orderBy: CityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [City!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type CountryConnection {
+  pageInfo: PageInfo!
+  edges: [CountryEdge]!
+  aggregate: AggregateCountry!
+}
+
+input CountryCreateInput {
+  name: String!
+  cities: CityCreateManyWithoutCountryInput
+}
+
+input CountryCreateOneWithoutCitiesInput {
+  create: CountryCreateWithoutCitiesInput
+  connect: CountryWhereUniqueInput
+}
+
+input CountryCreateWithoutCitiesInput {
+  name: String!
+}
+
+type CountryEdge {
+  node: Country!
+  cursor: String!
+}
+
+enum CountryOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type CountryPreviousValues {
+  id: ID!
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type CountrySubscriptionPayload {
+  mutation: MutationType!
+  node: Country
+  updatedFields: [String!]
+  previousValues: CountryPreviousValues
+}
+
+input CountrySubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: CountryWhereInput
+  AND: [CountrySubscriptionWhereInput!]
+  OR: [CountrySubscriptionWhereInput!]
+  NOT: [CountrySubscriptionWhereInput!]
+}
+
+input CountryUpdateInput {
+  name: String
+  cities: CityUpdateManyWithoutCountryInput
+}
+
+input CountryUpdateManyMutationInput {
+  name: String
+}
+
+input CountryUpdateOneRequiredWithoutCitiesInput {
+  create: CountryCreateWithoutCitiesInput
+  update: CountryUpdateWithoutCitiesDataInput
+  upsert: CountryUpsertWithoutCitiesInput
+  connect: CountryWhereUniqueInput
+}
+
+input CountryUpdateWithoutCitiesDataInput {
+  name: String
+}
+
+input CountryUpsertWithoutCitiesInput {
+  update: CountryUpdateWithoutCitiesDataInput!
+  create: CountryCreateWithoutCitiesInput!
+}
+
+input CountryWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  cities_every: CityWhereInput
+  cities_some: CityWhereInput
+  cities_none: CityWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [CountryWhereInput!]
+  OR: [CountryWhereInput!]
+  NOT: [CountryWhereInput!]
+}
+
+input CountryWhereUniqueInput {
+  id: ID
+  name: String
 }
 
 scalar DateTime
@@ -795,7 +1212,8 @@ input InvoiceWhereUniqueInput {
 type Job {
   id: ID!
   position: String!
-  location: String!
+  location: String
+  city: City
   salary: Int
   description: String!
   job_type: JOB_TYPE!
@@ -828,7 +1246,8 @@ type JobConnection {
 
 input JobCreateInput {
   position: String!
-  location: String!
+  location: String
+  city: CityCreateOneWithoutJobsInput
   salary: Int
   description: String!
   job_type: JOB_TYPE!
@@ -844,6 +1263,11 @@ input JobCreateInput {
   expiresAt: DateTime!
 }
 
+input JobCreateManyWithoutCityInput {
+  create: [JobCreateWithoutCityInput!]
+  connect: [JobWhereUniqueInput!]
+}
+
 input JobCreateManyWithoutCompanyInput {
   create: [JobCreateWithoutCompanyInput!]
   connect: [JobWhereUniqueInput!]
@@ -854,9 +1278,28 @@ input JobCreateOneWithoutInvoicesInput {
   connect: JobWhereUniqueInput
 }
 
+input JobCreateWithoutCityInput {
+  position: String!
+  location: String
+  salary: Int
+  description: String!
+  job_type: JOB_TYPE!
+  status: STATUS_TYPE!
+  apply_url: String!
+  last_payment: DateTime!
+  company: CompanyCreateOneWithoutJobsInput
+  company_logo: FileCreateOneInput
+  company_name: String
+  company_email: String
+  company_website: String
+  invoices: InvoiceCreateManyWithoutJobInput
+  expiresAt: DateTime!
+}
+
 input JobCreateWithoutCompanyInput {
   position: String!
-  location: String!
+  location: String
+  city: CityCreateOneWithoutJobsInput
   salary: Int
   description: String!
   job_type: JOB_TYPE!
@@ -873,7 +1316,8 @@ input JobCreateWithoutCompanyInput {
 
 input JobCreateWithoutInvoicesInput {
   position: String!
-  location: String!
+  location: String
+  city: CityCreateOneWithoutJobsInput
   salary: Int
   description: String!
   job_type: JOB_TYPE!
@@ -929,7 +1373,7 @@ enum JobOrderByInput {
 type JobPreviousValues {
   id: ID!
   position: String!
-  location: String!
+  location: String
   salary: Int
   description: String!
   job_type: JOB_TYPE!
@@ -1131,6 +1575,7 @@ input JobSubscriptionWhereInput {
 input JobUpdateInput {
   position: String
   location: String
+  city: CityUpdateOneWithoutJobsInput
   salary: Int
   description: String
   job_type: JOB_TYPE
@@ -1176,6 +1621,18 @@ input JobUpdateManyMutationInput {
   expiresAt: DateTime
 }
 
+input JobUpdateManyWithoutCityInput {
+  create: [JobCreateWithoutCityInput!]
+  delete: [JobWhereUniqueInput!]
+  connect: [JobWhereUniqueInput!]
+  set: [JobWhereUniqueInput!]
+  disconnect: [JobWhereUniqueInput!]
+  update: [JobUpdateWithWhereUniqueWithoutCityInput!]
+  upsert: [JobUpsertWithWhereUniqueWithoutCityInput!]
+  deleteMany: [JobScalarWhereInput!]
+  updateMany: [JobUpdateManyWithWhereNestedInput!]
+}
+
 input JobUpdateManyWithoutCompanyInput {
   create: [JobCreateWithoutCompanyInput!]
   delete: [JobWhereUniqueInput!]
@@ -1202,9 +1659,28 @@ input JobUpdateOneWithoutInvoicesInput {
   connect: JobWhereUniqueInput
 }
 
+input JobUpdateWithoutCityDataInput {
+  position: String
+  location: String
+  salary: Int
+  description: String
+  job_type: JOB_TYPE
+  status: STATUS_TYPE
+  apply_url: String
+  last_payment: DateTime
+  company: CompanyUpdateOneWithoutJobsInput
+  company_logo: FileUpdateOneInput
+  company_name: String
+  company_email: String
+  company_website: String
+  invoices: InvoiceUpdateManyWithoutJobInput
+  expiresAt: DateTime
+}
+
 input JobUpdateWithoutCompanyDataInput {
   position: String
   location: String
+  city: CityUpdateOneWithoutJobsInput
   salary: Int
   description: String
   job_type: JOB_TYPE
@@ -1222,6 +1698,7 @@ input JobUpdateWithoutCompanyDataInput {
 input JobUpdateWithoutInvoicesDataInput {
   position: String
   location: String
+  city: CityUpdateOneWithoutJobsInput
   salary: Int
   description: String
   job_type: JOB_TYPE
@@ -1236,6 +1713,11 @@ input JobUpdateWithoutInvoicesDataInput {
   expiresAt: DateTime
 }
 
+input JobUpdateWithWhereUniqueWithoutCityInput {
+  where: JobWhereUniqueInput!
+  data: JobUpdateWithoutCityDataInput!
+}
+
 input JobUpdateWithWhereUniqueWithoutCompanyInput {
   where: JobWhereUniqueInput!
   data: JobUpdateWithoutCompanyDataInput!
@@ -1244,6 +1726,12 @@ input JobUpdateWithWhereUniqueWithoutCompanyInput {
 input JobUpsertWithoutInvoicesInput {
   update: JobUpdateWithoutInvoicesDataInput!
   create: JobCreateWithoutInvoicesInput!
+}
+
+input JobUpsertWithWhereUniqueWithoutCityInput {
+  where: JobWhereUniqueInput!
+  update: JobUpdateWithoutCityDataInput!
+  create: JobCreateWithoutCityInput!
 }
 
 input JobUpsertWithWhereUniqueWithoutCompanyInput {
@@ -1295,6 +1783,7 @@ input JobWhereInput {
   location_not_starts_with: String
   location_ends_with: String
   location_not_ends_with: String
+  city: CityWhereInput
   salary: Int
   salary_not: Int
   salary_in: [Int!]
@@ -1430,12 +1919,24 @@ input JobWhereUniqueInput {
 scalar Long
 
 type Mutation {
+  createCity(data: CityCreateInput!): City!
+  updateCity(data: CityUpdateInput!, where: CityWhereUniqueInput!): City
+  updateManyCities(data: CityUpdateManyMutationInput!, where: CityWhereInput): BatchPayload!
+  upsertCity(where: CityWhereUniqueInput!, create: CityCreateInput!, update: CityUpdateInput!): City!
+  deleteCity(where: CityWhereUniqueInput!): City
+  deleteManyCities(where: CityWhereInput): BatchPayload!
   createCompany(data: CompanyCreateInput!): Company!
   updateCompany(data: CompanyUpdateInput!, where: CompanyWhereUniqueInput!): Company
   updateManyCompanies(data: CompanyUpdateManyMutationInput!, where: CompanyWhereInput): BatchPayload!
   upsertCompany(where: CompanyWhereUniqueInput!, create: CompanyCreateInput!, update: CompanyUpdateInput!): Company!
   deleteCompany(where: CompanyWhereUniqueInput!): Company
   deleteManyCompanies(where: CompanyWhereInput): BatchPayload!
+  createCountry(data: CountryCreateInput!): Country!
+  updateCountry(data: CountryUpdateInput!, where: CountryWhereUniqueInput!): Country
+  updateManyCountries(data: CountryUpdateManyMutationInput!, where: CountryWhereInput): BatchPayload!
+  upsertCountry(where: CountryWhereUniqueInput!, create: CountryCreateInput!, update: CountryUpdateInput!): Country!
+  deleteCountry(where: CountryWhereUniqueInput!): Country
+  deleteManyCountries(where: CountryWhereInput): BatchPayload!
   createFile(data: FileCreateInput!): File!
   updateFile(data: FileUpdateInput!, where: FileWhereUniqueInput!): File
   updateManyFiles(data: FileUpdateManyMutationInput!, where: FileWhereInput): BatchPayload!
@@ -1480,9 +1981,15 @@ type PageInfo {
 }
 
 type Query {
+  city(where: CityWhereUniqueInput!): City
+  cities(where: CityWhereInput, orderBy: CityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [City]!
+  citiesConnection(where: CityWhereInput, orderBy: CityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CityConnection!
   company(where: CompanyWhereUniqueInput!): Company
   companies(where: CompanyWhereInput, orderBy: CompanyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Company]!
   companiesConnection(where: CompanyWhereInput, orderBy: CompanyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CompanyConnection!
+  country(where: CountryWhereUniqueInput!): Country
+  countries(where: CountryWhereInput, orderBy: CountryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Country]!
+  countriesConnection(where: CountryWhereInput, orderBy: CountryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CountryConnection!
   file(where: FileWhereUniqueInput!): File
   files(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File]!
   filesConnection(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FileConnection!
@@ -1512,7 +2019,9 @@ enum STATUS_TYPE {
 }
 
 type Subscription {
+  city(where: CitySubscriptionWhereInput): CitySubscriptionPayload
   company(where: CompanySubscriptionWhereInput): CompanySubscriptionPayload
+  country(where: CountrySubscriptionWhereInput): CountrySubscriptionPayload
   file(where: FileSubscriptionWhereInput): FileSubscriptionPayload
   invoice(where: InvoiceSubscriptionWhereInput): InvoiceSubscriptionPayload
   job(where: JobSubscriptionWhereInput): JobSubscriptionPayload
