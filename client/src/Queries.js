@@ -60,6 +60,14 @@ const JOB_QUERY = gql`
                 website
                 email
             }
+            city {
+                id
+                name
+                country {
+                    id
+                    name
+                }
+            }
             expiresAt
             description
             apply_url

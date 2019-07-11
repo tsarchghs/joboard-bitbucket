@@ -20,7 +20,8 @@ class Home extends React.Component {
 			featured_jobs: undefined,
 			today_jobs: undefined,
 			week_jobs: undefined,
-			month_jobs: undefined
+			month_jobs: undefined,
+			hideLocationDropdown: true
 		}
 		this.jobTypeRef = undefined;
 		this.update = debounce(this.update.bind(this),250);
@@ -73,6 +74,14 @@ class Home extends React.Component {
 					company_logo {
 						id
 						url
+					}
+					city {
+						id
+						name
+						country {
+							id
+							name
+						}
 					}
 				    company_name
 				    company_email
@@ -150,6 +159,11 @@ class Home extends React.Component {
 					<label style={{marginTop: 10}} className="checkbox-container">
 						<input type="checkbox" checked={this.state.only_remote} onChange={e => this.setState(nextState => {
 							nextState.only_remote = !nextState.only_remote;
+							if (nextState.only_remote){
+								nextState.selectedLocation = false;
+								nextState.city = undefined
+							}
+							nextState.hideLocationDropdown = true;
 							nextState.search_value = "";
 							this.update();
 							return nextState
@@ -208,7 +222,7 @@ class Home extends React.Component {
 								}
 							}
 							return (
-								!this.state.hideLocationDropdown ? null : 
+								this.state.hideLocationDropdown ? null : 
 								<div className="home__selected open">
 									<div className={`home__selected-container ${this.state.insideState ? "move" : ""}`}>
 										<div className="select-card select-more">
@@ -307,7 +321,7 @@ class Home extends React.Component {
 												? <span className="new blue"><img src="/assets/toolkit/images/blue-star.svg" alt="" />Featured</span>
 												: <span className="new "><img src="/assets/toolkit/images/blue-star.svg" alt="" />New</span>
 										}
-										<h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt="" />{job.location}</h5>
+										<h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt="" />{window.__PUBLIC_DATA__.use_predefined_location ? `${job.city.name}, ${job.city.country.name}` : job.location}</h5>
 									</div>
 								</div>
 							))
@@ -347,7 +361,9 @@ class Home extends React.Component {
 				                	? <span className="new blue"><img src="/assets/toolkit/images/blue-star.svg" alt=""/>Featured</span>
 				                	: <span className="new ">New</span>
 				                }
-			                  <h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt=""/>{job.location}</h5>
+								<h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt="" />
+								{window.__PUBLIC_DATA__.use_predefined_location ? `${job.city.name}, ${job.city.country.name}` : job.location}
+								</h5>
 			                </div>
 		              	</div>
 	            		))
@@ -378,7 +394,7 @@ class Home extends React.Component {
 				                </Link>
 			                </div>
 			                <div className="job-listing-table__time">
-			                  <h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt=""/>{job.location}</h5>
+			                  <h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt=""/>{window.__PUBLIC_DATA__.use_predefined_location ? `${job.city.name}, ${job.city.country.name}` : job.location}</h5>
 			                </div>
 		              	</div>
 	            		))
@@ -409,7 +425,7 @@ class Home extends React.Component {
 											</Link>
 										</div>
 										<div className="job-listing-table__time">
-											<h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt="" />{job.location}</h5>
+											<h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt="" />{window.__PUBLIC_DATA__.use_predefined_location ? `${job.city.name}, ${job.city.country.name}` : job.location}</h5>
 										</div>
 									</div>
 								))

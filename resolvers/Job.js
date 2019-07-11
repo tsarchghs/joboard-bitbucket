@@ -29,7 +29,7 @@ const jobs = async (root,args,context,info) => {
 		args.jobFilter.id_not_in ? where["id_not_in"] = args.jobFilter.id_not_in :  null
 		args.jobFilter.status_not_in ? where["status_not_in"] = args.jobFilter.status_not_in : null
 		args.jobFilter.city ? where["city"] = { id: args.jobFilter.city } : null
-	
+		console.log(where["OR"])
 	}
 	return await context.db.query.jobs({
 		where,

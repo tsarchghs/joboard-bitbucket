@@ -80,13 +80,13 @@ class JobProfile extends React.Component {
 											<Link to="/" className="back-to"><img src="../../assets/toolkit/images/004-left-arrow.svg" alt=""/><p>Back to other jobs</p></Link>
 					              <div className="inside-page__card" >
 					                <div className="flex">
-					                  <div className="card__logo" style={{backgroundImage,backgroundSize:"cover"}} />
+					                  <div className="card__logo" style={{backgroundImage,backgroundSize:"cover	"}} />
 					                  <div className="card-data">
 					                    <div className="card-data__title"><a href="#" className="card-data__title">{job.position}</a></div>
 					                    <div className="card-data__subtitle"><a href="#" className="card-data__subtitle">{job.company ? job.company.name : job.company_name}</a></div>
 					                    <div className="card-data__info">
-																<div className="card-data__info--data">
-																	<p><img src="/assets/toolkit/images/gray-placeholder.svg" alt />{job.location}</p>
+													<div className="card-data__info--data">
+													<p><img src="/assets/toolkit/images/gray-placeholder.svg" alt />{window.__PUBLIC_DATA__.use_predefined_location ? `${job.city.name}, ${job.city.country.name}` : job.location}</p>
 																	<p><img src="/assets/toolkit/images/gray-portfolio.svg" alt />{this.getJobType(job.job_type)}</p>
 													{
 														!job.salary ? null :
