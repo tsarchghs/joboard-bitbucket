@@ -105,7 +105,7 @@ if (true){
 
 	server.express.use((req, res, next) => {
 		let protocol = req.get('x-forwarded-proto');
-		if (protocol === "http" && configs.production){
+		if (false){
 			console.log("REDIRECT");
 			if (req.get('host').indexOf("unityjobs") !== -1){
 				return res.redirect(`https://www.unityjobs.io${req.url}`)
@@ -164,7 +164,8 @@ if (true){
 				favicon_path: process.env.FAVICON_PATH,
 				domain_svg: process.env.DOMAIN_SVG,
 				apollo_client_uri: process.env.APOLLO_CLIENT_URI,
-				above_job_position_text: process.env.ABOVE_JOB_POSITION_TEXT
+				above_job_position_text: process.env.ABOVE_JOB_POSITION_TEXT,
+				use_predefined_location: process.env.USE_PREDEFINED_LOCATION
 			}
 			htmlData = htmlData.replace("</head>",`
 				<link rel="stylesheet" href="${process.env.EXTRA_CSS_PATH}">
