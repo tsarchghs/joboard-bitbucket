@@ -1,6 +1,13 @@
-endpoint: https://eu1.prisma.sh/gjergj-kadriu-c6f550/joboard/dev
+# endpoint: https://eu1.prisma.sh/gjergj-kadriu-c6f550/joboard/dev
+# datamodel: datamodel.prisma
+
+# generate:
+#   - generator: javascript-client
+#     output: ./generated/prisma-client/
+
+endpoint: https://eu1.prisma.sh/gjergj-kadriu/albjobs/dev
 datamodel: datamodel.prisma
 
 generate:
-  - generator: javascript-client
+  - generator: typescript-client
     output: ./generated/prisma-client/

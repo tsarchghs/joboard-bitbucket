@@ -1,0 +1,280 @@
+.master-layout {
+    background: linear-gradient(to bottom, #7d3984, #d85470)!important;
+}
+
+.header {
+    background: linear-gradient(to left, #d85470, #7d3984);
+}
+
+.radio-container input:checked ~ .checkmarked {
+    background-color: #2f2f3c;
+}
+
+.button.blue {
+    background-color: #2f2f3c;
+}
+
+.button.blue:hover {
+    background-color: #2f2f3c;
+}
+
+.sidebar {
+    background: linear-gradient(to bottom, #444354, #23232d)!important;
+
+}
+
+.jobs-card {
+    background-color: #2f2f3c;
+}
+
+.card-data__info a:first-child {
+
+}
+
+.highlighted {
+    background-color: #2f2f3c !important;
+}
+
+.home__search {
+    width: 820px!important;
+}
+
+.home__search input {
+    background-color: rgba(216, 216, 216, 0.3);
+}
+
+.arrow-down {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    width: 18px;
+    height: 100%;
+}
+
+.arrow-down img {
+    right: 10px;
+    left: initial;
+}
+
+.arrow-down b {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: url("chosen-sprite.png") no-repeat -30px -20px;
+}
+
+.home__input--extra {
+    background-color: rgba(216, 216, 216, 0.3);
+    border-radius: 6px;
+    padding: 6px 6px 6px 25px;
+}
+
+.home__input--extra p {
+    text-transform: initial;
+}
+
+.chosen-single {
+    background-color: rgba(216, 216, 216, 0.3)!important;
+}
+
+.select-card {
+
+    border-radius: 8px;
+    width: 300px;
+    box-shadow: 2px 3px 24px 0 rgba(107, 107, 107, 0.5);
+    background-color: #ffffff;
+    margin-right: 65px;
+}
+
+.select-card__title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #5b5d6e;
+    padding: 15px;
+    text-transform: capitalize;
+    border-bottom: 1px solid #d2cbcb;
+    margin-bottom: 0;
+}
+
+.select-card__item {
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-bottom: 8px;
+    padding: 10px;
+    cursor: pointer;
+    background-color: rgba(91, 93, 110, 0.12);
+}
+
+
+.select-card__item p {
+    margin-bottom: 0;
+    color: #5b5d6e;
+    margin-left: 7px;
+}
+
+.select-card__items {
+    padding: 15px;
+}
+
+.select-card__item--icon {
+    position: absolute;
+    right: 7px;
+    top: 50%;
+    top: 42%;
+    transform: rotate(270deg);
+}
+
+.home__selected {
+    left: 565px;
+    top: 250px;
+    min-height: 285px;
+    display: none;
+    position: absolute;
+    width: 360px;
+    overflow: hidden;
+    padding-left: 25px;
+    padding-bottom: 40px;
+}
+
+.home__selected.open {
+    display: flex;
+}
+
+.home__selected-container {
+    display: flex;
+}
+
+.home__selected-container.move {
+    left: -340px;
+    position: absolute;
+}
+
+
+.select-card__more--title {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #d2cbcb;
+}
+
+.select-card__more--title p {
+    border-bottom: none;
+}
+
+.select-card__more--title {
+    padding: 0px 15px;
+}
+
+
+.select-card__more--icon {
+    margin-right: 10px;
+    transform: rotate(90deg);
+    width: 16px;
+}
+
+.select-card__item p {
+    text-transform: capitalize;
+}
+
+.checkmark {
+    /* display: none; */
+}
+
+.card__checkbox {
+    width: 100%;
+    position: absolute;
+    right: 0;
+    height: 100%;
+}
+
+.card__checkbox input {
+    position: absolute;
+    right: 0;
+    top: 48%;
+    transform: translateY(-50%);
+    margin: 0;
+    width: 20px!important;
+
+}
+
+
+
+
+.container {
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* Hide the browser's default radio button */
+  .card__checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  /* Create a custom radio button */
+  .card__checkbox .checkmark {
+    position: absolute;
+    border-color: #5b5d6e!important;
+    top: 0;
+    right: 10px;
+    left: initial;
+    height: 20px;
+    width: 20px;
+    background-color: transparent;
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  /* On mouse-over, add a grey background color */
+  .card__checkbox .card__checkbox:hover input ~ .checkmark {
+    background-color: #ccc;
+  }
+  
+  /* When the radio button is checked, add a blue background */
+  .card__checkbox .card__checkbox input:checked ~ .checkmark {
+    background-color: #2196F3;
+  }
+  
+  /* Create the indicator (the dot/circle - hidden when not checked) */
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  /* Show the indicator (dot/circle) when checked */
+  .card__checkbox input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+  /* Style the indicator (dot/circle) */
+  .card__checkbox .checkmark:after {
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      border-radius: 50%;
+      background: #5b5d6e;
+  }
+
+  .home__input--extra {
+    width: 260px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .home__input--extra p {
+    margin-bottom: 0;
+  }
+
+  .home__search label {
+      position: relative;
+  }
