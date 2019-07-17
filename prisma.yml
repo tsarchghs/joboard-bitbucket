@@ -5,7 +5,14 @@
 #   - generator: javascript-client
 #     output: ./generated/prisma-client/
 
-endpoint: https://eu1.prisma.sh/gjergj-kadriu/albjobs/dev
+# endpoint: https://eu1.prisma.sh/gjergj-kadriu/albjobs/dev
+# datamodel: datamodel.prisma
+
+# generate:
+#   - generator: typescript-client
+#     output: ./generated/prisma-client/
+
+endpoint: https://eu1.prisma.sh/gjergj-kadriu-c6f550/unityjobs_prisma/dev
 datamodel: datamodel.prisma
 
 generate:

@@ -109,8 +109,10 @@ if (process.env.production){
 			console.log("REDIRECT");
 			if (req.get('host').indexOf("unityjobs") !== -1){
 				return res.redirect(`https://www.unityjobs.io${req.url}`)
-			} else {
+			} else if (req.get('host').indexOf("flutterjobs") !== -1) {
 				return res.redirect(`https://www.flutterjobs.io${req.url}`)
+			} else {
+				return res.redirect(`https://alb-jobs.herokuapp.com/${req.url}`)
 			}
 		}
 		next();
