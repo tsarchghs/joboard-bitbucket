@@ -99,13 +99,13 @@ const server = new graphqlServer({
 });
 
 
-if (true){
+if (process.env.production){
 	server.express.use(logger("dev"));
 	server.express.use(compression());
 
 	server.express.use((req, res, next) => {
 		let protocol = req.get('x-forwarded-proto');
-		if (false){
+		if (protocol !== "https"){
 			console.log("REDIRECT");
 			if (req.get('host').indexOf("unityjobs") !== -1){
 				return res.redirect(`https://www.unityjobs.io${req.url}`)

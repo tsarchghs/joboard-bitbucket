@@ -6182,6 +6182,9 @@ a.thumbnail {
     .socials .button--tw:hover, .socials .button--tw:focus {
       background-color: #55acee; }
 
+ .job-listing-table__lt { flex: 1 }
+.job-listing-table__time { flex: 0.5 } 
+
 .custom-dropdown {
   display: none;
   padding: 20px;
