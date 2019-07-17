@@ -5,6 +5,18 @@ var typeDefs = require("./prisma-schema").typeDefs;
 
 var models = [
   {
+    name: "JOB_TYPE",
+    embedded: false
+  },
+  {
+    name: "STATUS_TYPE",
+    embedded: false
+  },
+  {
+    name: "ROLE_TYPE",
+    embedded: false
+  },
+  {
     name: "User",
     embedded: false
   },
@@ -30,18 +42,6 @@ var models = [
   },
   {
     name: "City",
-    embedded: false
-  },
-  {
-    name: "JOB_TYPE",
-    embedded: false
-  },
-  {
-    name: "STATUS_TYPE",
-    embedded: false
-  },
-  {
-    name: "ROLE_TYPE",
     embedded: false
   }
 ];

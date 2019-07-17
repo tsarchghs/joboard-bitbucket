@@ -362,6 +362,12 @@ class _CreateJob extends React.Component {
 							<p>Contract</p>
 							</span>
 						</label>
+						<label className="radio-container">
+							<input value="UNSPECIFIED" onChange={e => this.onChange(e,"job_type")} checked={this.state.job_type === "UNSPECIFIED"} type="radio" name="radio" />
+							<span className="checkmarked">
+							<p>Unspecified</p>
+							</span>
+						</label>
 						</div>
 						<label className="create-job__input--label"><span className="create-job__input--span">Apply url</span>
 						<input onChange={e => this.onChange(e,"apply_url")} value={this.state.apply_url} required className="input" type="text" placeholder="Where people can apply" />

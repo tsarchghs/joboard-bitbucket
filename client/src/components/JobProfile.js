@@ -32,6 +32,8 @@ class JobProfile extends React.Component {
 			jobType = "Contract";
 		} else if (jobType === "FREELANCNE"){
 			jobType = "Freelance";
+		} else if (jobType === "UNSPECIFIED") {
+			jobType = "Unspecified";
 		}
 		return jobType;
 	}

@@ -202,7 +202,8 @@ class Home extends React.Component {
 	                  <option value="FULL_TIME">Full Time</option>
 	                  <option value="PART_TIME">Part Time</option>
 	                  <option value="FREELANCE">Freelance</option>
-	                  <option value="CONTRACT">Contract</option>
+					  <option value="CONTRACT">Contract</option>
+					  <option value="UNSPECIFIED">Unspecified</option>
 	                </select>
 	                <img className="home__select-before" src="../assets/toolkit/images/portfolio.svg" alt=""/>
 	                <img className="home__select-after" src="../assets/toolkit/images/downwards-arrow-key.svg" alt=""/>
@@ -379,20 +380,22 @@ class Home extends React.Component {
 	            	(
 	            		this.state.week_jobs.map(job => (
 			              <div key={job.id} className={`job-listing-table__list home-table ${this.state.week_jobs[0].id === job.id ? "no-border" : ""}`}>
-								<div className="job-listing-table__logo"
-									style={{
-										backgroundImage: this.getLogo(job),
-									}} />
-			                <div className="job-listing-table__info">
-			                	<Link to={`/job/${job.id}`}>
-				                  <h4>
-				                    <p>{job.position}</p>
-				                  </h4>
-				                  <h5>
-				                    <p>{job.company ? job.company.name : job.company_name}</p>
-				                  </h5>
-				                </Link>
-			                </div>
+							<div className="job-listing-table__lt">
+									<div className="job-listing-table__logo"
+										style={{
+											backgroundImage: this.getLogo(job),
+										}} />
+								<div className="job-listing-table__info">
+									<Link to={`/job/${job.id}`}>
+									<h4>
+										{job.position}
+									</h4>
+									<h5>
+										<p>{job.company ? job.company.name : job.company_name}</p>
+									</h5>
+									</Link>
+								</div>
+							</div>
 			                <div className="job-listing-table__time">
 			                  <h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt=""/>{window.__PUBLIC_DATA__.use_predefined_location ? `${job.city.name}, ${job.city.country.name}` : job.location}</h5>
 			                </div>
@@ -410,22 +413,24 @@ class Home extends React.Component {
 							(
 								this.state.month_jobs.map(job => (
 									<div key={job.id} className={`job-listing-table__list home-table ${this.state.month_jobs[0].id === job.id ? "no-border" : ""}`}>
-										<div className="job-listing-table__logo"
-											style={{
-												backgroundImage: this.getLogo(job),
-											}} />
-										<div className="job-listing-table__info">
-											<Link to={`/job/${job.id}`}>
-												<h4>
-													<p>{job.position}</p>
-												</h4>
-												<h5>
-													<p>{job.company ? job.company.name : job.company_name}</p>
-												</h5>
-											</Link>
-										</div>
-										<div className="job-listing-table__time">
-											<h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt="" />{window.__PUBLIC_DATA__.use_predefined_location ? `${job.city.name}, ${job.city.country.name}` : job.location}</h5>
+										<div className="job-listing-table__lt">
+											<div className="job-listing-table__logo"
+												style={{
+													backgroundImage: this.getLogo(job),
+												}} />
+											<div className="job-listing-table__info">
+												<Link to={`/job/${job.id}`}>
+													<h4>
+														{job.position}
+													</h4>
+													<h5>
+														<p>{job.company ? job.company.name : job.company_name}</p>
+													</h5>
+												</Link>
+											</div>
+											<div className="job-listing-table__time">
+												<h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt="" />{window.__PUBLIC_DATA__.use_predefined_location ? `${job.city.name}, ${job.city.country.name}` : job.location}</h5>
+											</div>
 										</div>
 									</div>
 								))
