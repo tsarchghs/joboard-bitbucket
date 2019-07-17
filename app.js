@@ -112,7 +112,7 @@ if (process.env.production){
 			} else if (req.get('host').indexOf("flutterjobs") !== -1) {
 				return res.redirect(`https://www.flutterjobs.io${req.url}`)
 			} else {
-				return res.redirect(`https://alb-jobs.herokuapp.com/${req.url}`)
+				return res.redirect(`https://alb-jobs.herokuapp.com${req.url}`)
 			}
 		}
 		next();

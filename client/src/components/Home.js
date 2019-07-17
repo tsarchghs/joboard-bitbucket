@@ -4,11 +4,11 @@ import { debounce } from "lodash";
 import { withApollo, Query } from 'react-apollo';
 import gql from "graphql-tag";
 import Footer from "./Footer";
-
 import { Link } from "react-router-dom";
 import { loadAfterHomeMount } from "../helpers"
 import LoadingAnimation from "./LoadingAnimation";
 import { COUNTRIES_QUERY } from "../Queries";
+import EventListener from 'react-event-listener';
 
 class Home extends React.Component {
 	constructor(props){
@@ -27,6 +27,9 @@ class Home extends React.Component {
 		this.update = debounce(this.update.bind(this),250);
 		this.updateFilter = this.updateFilter.bind(this)
 		this.updateJobs = this.updateJobs.bind(this)
+		this.handleClick = this.handleClick.bind(this)
+		this.openLocationDropdownButton = undefined;
+		this.countriesDropdown = undefined;
 	}
 	componentDidMount(){
 		loadAfterHomeMount()
@@ -134,9 +137,19 @@ class Home extends React.Component {
 		}
 		return backgroundImage
 	}
+	handleClick(e){
+		if (this.countriesDropdown && !this.countriesDropdown.contains(e.target) && !this.openLocationDropdownButton.contains(e.target)){
+			this.setState({hideLocationDropdown: true})
+		}
+	}
 	render(){
 		return (
 	      <div>
+			<EventListener
+				target="window"
+				onMouseDown={this.handleClick}
+				onMouseUp={this.handleClick}
+			/>
 	        <div className="master-layout__header">
 	          <h1>{window.__PUBLIC_DATA__.find_only_text}</h1>
 	          <div dangerouslySetInnerHTML={{
@@ -177,7 +190,7 @@ class Home extends React.Component {
 			window.__PUBLIC_DATA__.use_predefined_location &&
 				<React.Fragment>
 				<label><span>Location</span>
-					<div className="home__input">
+					<div ref={node => this.openLocationDropdownButton = node} className="home__input">
 						<div className="home__input--extra" style={{cursor:"pointer"}} onClick={e => {
 							this.setState(prevState => {
 								prevState.hideLocationDropdown = !prevState.hideLocationDropdown 
@@ -224,8 +237,11 @@ class Home extends React.Component {
 							}
 							return (
 								this.state.hideLocationDropdown ? null : 
-								<div className="home__selected open">
-									<div className={`home__selected-container ${this.state.insideState ? "move" : ""}`}>
+								<div ref={node => this.countriesDropdown = node} className="home__selected open">
+									<div onBlur={e => {
+										console.log(e)
+										this.setState({hideLocationDropdown:true})
+									}} className={`home__selected-container ${this.state.insideState ? "move" : ""}`}>
 										<div className="select-card select-more">
 											<p className="select-card__title">Select country and city</p>
 											<div className="select-card__items">
