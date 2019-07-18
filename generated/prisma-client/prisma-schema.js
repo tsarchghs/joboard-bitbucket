@@ -1231,7 +1231,6 @@ type Job {
   location: String
   remote: Boolean!
   city: City
-  salary: Int
   salary_currency: CURRENCY
   min_salary: Int
   max_salary: Int
@@ -1271,7 +1270,6 @@ input JobCreateInput {
   location: String
   remote: Boolean!
   city: CityCreateOneWithoutJobsInput
-  salary: Int
   salary_currency: CURRENCY
   min_salary: Int
   max_salary: Int
@@ -1313,7 +1311,6 @@ input JobCreateWithoutCityInput {
   position: String!
   location: String
   remote: Boolean!
-  salary: Int
   salary_currency: CURRENCY
   min_salary: Int
   max_salary: Int
@@ -1337,7 +1334,6 @@ input JobCreateWithoutCompanyInput {
   location: String
   remote: Boolean!
   city: CityCreateOneWithoutJobsInput
-  salary: Int
   salary_currency: CURRENCY
   min_salary: Int
   max_salary: Int
@@ -1360,7 +1356,6 @@ input JobCreateWithoutInvoicesInput {
   location: String
   remote: Boolean!
   city: CityCreateOneWithoutJobsInput
-  salary: Int
   salary_currency: CURRENCY
   min_salary: Int
   max_salary: Int
@@ -1391,8 +1386,6 @@ enum JobOrderByInput {
   location_DESC
   remote_ASC
   remote_DESC
-  salary_ASC
-  salary_DESC
   salary_currency_ASC
   salary_currency_DESC
   min_salary_ASC
@@ -1426,7 +1419,6 @@ type JobPreviousValues {
   position: String!
   location: String
   remote: Boolean!
-  salary: Int
   salary_currency: CURRENCY
   min_salary: Int
   max_salary: Int
@@ -1488,14 +1480,6 @@ input JobScalarWhereInput {
   location_not_ends_with: String
   remote: Boolean
   remote_not: Boolean
-  salary: Int
-  salary_not: Int
-  salary_in: [Int!]
-  salary_not_in: [Int!]
-  salary_lt: Int
-  salary_lte: Int
-  salary_gt: Int
-  salary_gte: Int
   salary_currency: CURRENCY
   salary_currency_not: CURRENCY
   salary_currency_in: [CURRENCY!]
@@ -1650,7 +1634,6 @@ input JobUpdateInput {
   location: String
   remote: Boolean
   city: CityUpdateOneWithoutJobsInput
-  salary: Int
   salary_currency: CURRENCY
   min_salary: Int
   max_salary: Int
@@ -1676,7 +1659,6 @@ input JobUpdateManyDataInput {
   position: String
   location: String
   remote: Boolean
-  salary: Int
   salary_currency: CURRENCY
   min_salary: Int
   max_salary: Int
@@ -1695,7 +1677,6 @@ input JobUpdateManyMutationInput {
   position: String
   location: String
   remote: Boolean
-  salary: Int
   salary_currency: CURRENCY
   min_salary: Int
   max_salary: Int
@@ -1752,7 +1733,6 @@ input JobUpdateWithoutCityDataInput {
   position: String
   location: String
   remote: Boolean
-  salary: Int
   salary_currency: CURRENCY
   min_salary: Int
   max_salary: Int
@@ -1775,7 +1755,6 @@ input JobUpdateWithoutCompanyDataInput {
   location: String
   remote: Boolean
   city: CityUpdateOneWithoutJobsInput
-  salary: Int
   salary_currency: CURRENCY
   min_salary: Int
   max_salary: Int
@@ -1797,7 +1776,6 @@ input JobUpdateWithoutInvoicesDataInput {
   location: String
   remote: Boolean
   city: CityUpdateOneWithoutJobsInput
-  salary: Int
   salary_currency: CURRENCY
   min_salary: Int
   max_salary: Int
@@ -1887,14 +1865,6 @@ input JobWhereInput {
   remote: Boolean
   remote_not: Boolean
   city: CityWhereInput
-  salary: Int
-  salary_not: Int
-  salary_in: [Int!]
-  salary_not_in: [Int!]
-  salary_lt: Int
-  salary_lte: Int
-  salary_gt: Int
-  salary_gte: Int
   salary_currency: CURRENCY
   salary_currency_not: CURRENCY
   salary_currency_in: [CURRENCY!]

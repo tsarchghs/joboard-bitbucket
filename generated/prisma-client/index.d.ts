@@ -376,8 +376,6 @@ export type UserOrderByInput =
 
 export type STATUS_TYPE = "FEATURED" | "TODAY" | "WEEK" | "MONTH" | "CLOSED";
 
-export type CURRENCY = "EURO" | "DOLLAR";
-
 export type CityOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -388,6 +386,8 @@ export type CityOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
+export type CURRENCY = "EURO" | "DOLLAR";
+
 export type JobOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -397,8 +397,6 @@ export type JobOrderByInput =
   | "location_DESC"
   | "remote_ASC"
   | "remote_DESC"
-  | "salary_ASC"
-  | "salary_DESC"
   | "salary_currency_ASC"
   | "salary_currency_DESC"
   | "min_salary_ASC"
@@ -804,14 +802,6 @@ export interface JobWhereInput {
   remote?: Maybe<Boolean>;
   remote_not?: Maybe<Boolean>;
   city?: Maybe<CityWhereInput>;
-  salary?: Maybe<Int>;
-  salary_not?: Maybe<Int>;
-  salary_in?: Maybe<Int[] | Int>;
-  salary_not_in?: Maybe<Int[] | Int>;
-  salary_lt?: Maybe<Int>;
-  salary_lte?: Maybe<Int>;
-  salary_gt?: Maybe<Int>;
-  salary_gte?: Maybe<Int>;
   salary_currency?: Maybe<CURRENCY>;
   salary_currency_not?: Maybe<CURRENCY>;
   salary_currency_in?: Maybe<CURRENCY[] | CURRENCY>;
@@ -1035,7 +1025,6 @@ export interface JobUpdateWithoutCityDataInput {
   position?: Maybe<String>;
   location?: Maybe<String>;
   remote?: Maybe<Boolean>;
-  salary?: Maybe<Int>;
   salary_currency?: Maybe<CURRENCY>;
   min_salary?: Maybe<Int>;
   max_salary?: Maybe<Int>;
@@ -1176,7 +1165,6 @@ export interface JobCreateInput {
   location?: Maybe<String>;
   remote: Boolean;
   city?: Maybe<CityCreateOneWithoutJobsInput>;
-  salary?: Maybe<Int>;
   salary_currency?: Maybe<CURRENCY>;
   min_salary?: Maybe<Int>;
   max_salary?: Maybe<Int>;
@@ -1214,7 +1202,6 @@ export interface JobUpdateWithoutInvoicesDataInput {
   location?: Maybe<String>;
   remote?: Maybe<Boolean>;
   city?: Maybe<CityUpdateOneWithoutJobsInput>;
-  salary?: Maybe<Int>;
   salary_currency?: Maybe<CURRENCY>;
   min_salary?: Maybe<Int>;
   max_salary?: Maybe<Int>;
@@ -1257,7 +1244,6 @@ export interface JobCreateWithoutInvoicesInput {
   location?: Maybe<String>;
   remote: Boolean;
   city?: Maybe<CityCreateOneWithoutJobsInput>;
-  salary?: Maybe<Int>;
   salary_currency?: Maybe<CURRENCY>;
   min_salary?: Maybe<Int>;
   max_salary?: Maybe<Int>;
@@ -1642,14 +1628,6 @@ export interface JobScalarWhereInput {
   location_not_ends_with?: Maybe<String>;
   remote?: Maybe<Boolean>;
   remote_not?: Maybe<Boolean>;
-  salary?: Maybe<Int>;
-  salary_not?: Maybe<Int>;
-  salary_in?: Maybe<Int[] | Int>;
-  salary_not_in?: Maybe<Int[] | Int>;
-  salary_lt?: Maybe<Int>;
-  salary_lte?: Maybe<Int>;
-  salary_gt?: Maybe<Int>;
-  salary_gte?: Maybe<Int>;
   salary_currency?: Maybe<CURRENCY>;
   salary_currency_not?: Maybe<CURRENCY>;
   salary_currency_in?: Maybe<CURRENCY[] | CURRENCY>;
@@ -1812,7 +1790,6 @@ export interface JobUpdateManyDataInput {
   position?: Maybe<String>;
   location?: Maybe<String>;
   remote?: Maybe<Boolean>;
-  salary?: Maybe<Int>;
   salary_currency?: Maybe<CURRENCY>;
   min_salary?: Maybe<Int>;
   max_salary?: Maybe<Int>;
@@ -1867,7 +1844,6 @@ export interface JobUpdateInput {
   location?: Maybe<String>;
   remote?: Maybe<Boolean>;
   city?: Maybe<CityUpdateOneWithoutJobsInput>;
-  salary?: Maybe<Int>;
   salary_currency?: Maybe<CURRENCY>;
   min_salary?: Maybe<Int>;
   max_salary?: Maybe<Int>;
@@ -1914,7 +1890,6 @@ export interface JobCreateWithoutCompanyInput {
   location?: Maybe<String>;
   remote: Boolean;
   city?: Maybe<CityCreateOneWithoutJobsInput>;
-  salary?: Maybe<Int>;
   salary_currency?: Maybe<CURRENCY>;
   min_salary?: Maybe<Int>;
   max_salary?: Maybe<Int>;
@@ -2016,7 +1991,6 @@ export interface JobUpdateWithoutCompanyDataInput {
   location?: Maybe<String>;
   remote?: Maybe<Boolean>;
   city?: Maybe<CityUpdateOneWithoutJobsInput>;
-  salary?: Maybe<Int>;
   salary_currency?: Maybe<CURRENCY>;
   min_salary?: Maybe<Int>;
   max_salary?: Maybe<Int>;
@@ -2099,7 +2073,6 @@ export interface JobUpdateManyMutationInput {
   position?: Maybe<String>;
   location?: Maybe<String>;
   remote?: Maybe<Boolean>;
-  salary?: Maybe<Int>;
   salary_currency?: Maybe<CURRENCY>;
   min_salary?: Maybe<Int>;
   max_salary?: Maybe<Int>;
@@ -2151,7 +2124,6 @@ export interface JobCreateWithoutCityInput {
   position: String;
   location?: Maybe<String>;
   remote: Boolean;
-  salary?: Maybe<Int>;
   salary_currency?: Maybe<CURRENCY>;
   min_salary?: Maybe<Int>;
   max_salary?: Maybe<Int>;
@@ -2450,7 +2422,6 @@ export interface Job {
   position: String;
   location?: String;
   remote: Boolean;
-  salary?: Int;
   salary_currency?: CURRENCY;
   min_salary?: Int;
   max_salary?: Int;
@@ -2473,7 +2444,6 @@ export interface JobPromise extends Promise<Job>, Fragmentable {
   location: () => Promise<String>;
   remote: () => Promise<Boolean>;
   city: <T = CityPromise>() => T;
-  salary: () => Promise<Int>;
   salary_currency: () => Promise<CURRENCY>;
   min_salary: () => Promise<Int>;
   max_salary: () => Promise<Int>;
@@ -2509,7 +2479,6 @@ export interface JobSubscription
   location: () => Promise<AsyncIterator<String>>;
   remote: () => Promise<AsyncIterator<Boolean>>;
   city: <T = CitySubscription>() => T;
-  salary: () => Promise<AsyncIterator<Int>>;
   salary_currency: () => Promise<AsyncIterator<CURRENCY>>;
   min_salary: () => Promise<AsyncIterator<Int>>;
   max_salary: () => Promise<AsyncIterator<Int>>;
@@ -2543,7 +2512,6 @@ export interface JobNullablePromise extends Promise<Job | null>, Fragmentable {
   location: () => Promise<String>;
   remote: () => Promise<Boolean>;
   city: <T = CityPromise>() => T;
-  salary: () => Promise<Int>;
   salary_currency: () => Promise<CURRENCY>;
   min_salary: () => Promise<Int>;
   max_salary: () => Promise<Int>;
@@ -2733,7 +2701,6 @@ export interface JobPreviousValues {
   position: String;
   location?: String;
   remote: Boolean;
-  salary?: Int;
   salary_currency?: CURRENCY;
   min_salary?: Int;
   max_salary?: Int;
@@ -2757,7 +2724,6 @@ export interface JobPreviousValuesPromise
   position: () => Promise<String>;
   location: () => Promise<String>;
   remote: () => Promise<Boolean>;
-  salary: () => Promise<Int>;
   salary_currency: () => Promise<CURRENCY>;
   min_salary: () => Promise<Int>;
   max_salary: () => Promise<Int>;
@@ -2781,7 +2747,6 @@ export interface JobPreviousValuesSubscription
   position: () => Promise<AsyncIterator<String>>;
   location: () => Promise<AsyncIterator<String>>;
   remote: () => Promise<AsyncIterator<Boolean>>;
-  salary: () => Promise<AsyncIterator<Int>>;
   salary_currency: () => Promise<AsyncIterator<CURRENCY>>;
   min_salary: () => Promise<AsyncIterator<Int>>;
   max_salary: () => Promise<AsyncIterator<Int>>;
