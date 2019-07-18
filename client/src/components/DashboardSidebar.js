@@ -16,13 +16,13 @@ class DashboardSidebar extends React.Component {
 			</Link>
 	          <div className="sidebar__ul">
 	            <Link to="/dashboard" className={url === "dashboard" ? "active" : ""}>
-	            	<img src="/assets/toolkit/images/listing.svg" alt /><span>Job listing</span>
+	            	<img src="/assets/toolkit/images/listing.svg" alt="" /><span>Job listing</span>
 	            </Link>
 	            <Link to="/payments" className={url === "payments" ? "active" : ""}>
-	            	<img src="/assets/toolkit/images/payment.svg" alt /><span>Payments</span>
+	            	<img src="/assets/toolkit/images/payment.svg" alt="" /><span>Payments</span>
 	            </Link>
 	            <Link to="/settings" className={url === "settings" ? "active" : ""}>
-		            <img src="/assets/toolkit/images/settings.svg" alt /><span>Company Settings</span>
+		            <img src="/assets/toolkit/images/settings.svg" alt="" /><span>Company Settings</span>
 		        </Link>
 	          </div>
 	        </div>

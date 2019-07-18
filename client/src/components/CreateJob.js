@@ -26,10 +26,12 @@ class _CreateJob extends React.Component {
 			position: "",
 			editorState: undefined,
 			location: "",
-			locationInputDisabled: !window.__PUBLIC_DATA__.use_predefined_location,
 			salaryInputDisabled: false,
-			salary: "",
-			job_type: "FULL_TIME",
+			min_salary: undefined,
+			max_salary: undefined,
+			remote: false,
+			salary_currency: "DOLLAR",
+			job_types: ["FULL_TIME"],
 			apply_url: "",
 			company_logo: undefined,
 			company_name: "",
@@ -47,7 +49,6 @@ class _CreateJob extends React.Component {
 			city: window.__PUBLIC_DATA__.use_predefined_location ? "cjxx5ieu1kfxx0b3677nbsntq" : false
 		}
 		this.onChange = this.onChange.bind(this)
-		this.toggleLocationInput = this.toggleLocationInput.bind(this)
 		this.closeModal = this.closeModal.bind(this)
 		this.openModal = this.openModal.bind(this)
 		this.companyLogoInput = undefined; //ref
@@ -86,10 +87,13 @@ class _CreateJob extends React.Component {
 			email: this.state.email,
 			password: this.state.password,
 			position: this.state.position,
-			location: this.state.locationInputDisabled ? "remote/everywhere" : this.state.location,
+			location: this.state.location,
+			remote: this.state.remote,
 			city: this.state.city ? this.state.city : undefined,
-			salary: this.state.salaryInputDisabled ? null : Number(this.state.salary),
-			job_type: this.state.job_type,
+			min_salary: this.state.salaryInputDisabled ? null : Number(this.state.min_salary),
+			max_salary: this.state.salaryInputDisabled ? null : Number(this.state.max_salary),
+			salary_currency: this.state.salary_currency,
+			job_types: this.state.job_types,
 			status: this.state.featured ? "FEATURED" : "TODAY",
 			apply_url: this.state.apply_url,
 			description: job_description_html_output,
@@ -144,13 +148,15 @@ class _CreateJob extends React.Component {
 
 		let variables = { ...this.state};
 		variables.description = job_description_html_output
-		if (this.state.locationInputDisabled){
-			variables.location = "remote/everywhere"
-		}
+		variables.remote = this.state.remote
 		if (this.props.user){
 			variables.company = this.props.user.company.id
 		}
-		variables.salary = Number(variables.salary)
+		
+		variables.min_salary =  this.state.salaryInputDisabled ? null : Number(this.state.min_salary)
+		variables.max_salary =  this.state.salaryInputDisabled ? null : Number(this.state.max_salary)
+		variables.salary_currency =  this.state.salary_currency
+		
 		variables.status = this.state.featured ? "FEATURED" : "TODAY"
 		variables.stripe_token = stripe_token
 		variables.city = this.state.city ? this.state.city : undefined;
@@ -205,21 +211,21 @@ class _CreateJob extends React.Component {
 		})
 	}
 	onChange(e,key){
-		if (key === "salary" && Number(e.target.value) < 0) e.target.value = 0
-		this.setState({
-			[key]: e.target.value
-		})
-	}
-	toggleLocationInput(){
-		if (this.state.locationInputDisabled){
-			this.setState({
-				locationInputDisabled: false,
-				location: ""
+		if (key.indexOf("salary") !== -1 && Number(e.target.value) < 0) e.target.value = 0
+		if (key === "job_types"){
+			e.persist()
+			this.setState(prevState => {
+				let val = e.target.value
+				if (prevState.job_types.includes(val)){
+					prevState.job_types = prevState.job_types.filter(x => x !== val)
+				} else {
+					prevState.job_types.push(val)
+				}
+				return prevState
 			})
 		} else {
 			this.setState({
-				locationInputDisabled: true,
-				location:""
+				[key]: e.target.value
 			})
 		}
 	}
@@ -309,23 +315,49 @@ class _CreateJob extends React.Component {
 									placeholder="Location of the job" 
 									value={this.state.location}
 									onChange={e => this.onChange(e,"location")}
-									disabled={this.state.locationInputDisabled}
+									required={!this.state.remote}
 								/>
 								<label className="checkbox-container">
-									<input type="checkbox" checked={this.state.locationInputDisabled} onChange={this.toggleLocationInput}/>
+									<input type="checkbox" checked={this.state.remote} onChange={e => {
+										this.setState(prevState => {
+											prevState.remote = !prevState.remote;
+											return prevState; 
+										})
+									}}/>
 									<span className="checkmark" />
-									<p>Remote/anywhere</p>
+									<p>{this.state.location ? "Or Remote/anywhere" : "Remote/anywhere"}</p>
 								</label>
 							</React.Fragment>
 						}
 						</label>
-						<label className="create-job__input--label"><span className="create-job__input--span">Salary</span>
-							<input className="input" type="text" type="number" placeholder="Type the salary here" 
-								onChange={e => this.onChange(e,"salary")}
+						<label className="create-job__input--label"><span className="create-job__input--span">Salary</span> 
+							Switch to range: <input type="checkbox" checked={this.state.isRange} onChange={e => {
+								this.setState(prevState => {
+									prevState.isRange = !prevState.isRange
+									prevState.max_salary = undefined;
+									return prevState;
+								})
+							}}/>
+							
+							<input className="input" type="text" type="number" placeholder={this.state.isRange ? "Type the minimum salary" : "Type the salary here"} 
+								onChange={e => this.onChange(e,"min_salary")}
 								disabled={this.state.salaryInputDisabled}
-								value={this.state.salary}
+								value={this.state.min_salary}
 								required
 							/>
+							{
+								!this.state.isRange ? null
+								: <input className="input" type="text" type="number" placeholder="Type the maximum salary"
+									onChange={e => this.onChange(e, "max_salary")}
+									disabled={this.state.salaryInputDisabled}
+									value={this.state.max_salary}
+									required
+								/> 
+							}
+							<select value={this.state.salary_currency} onChange={e => this.setState({salary_currency: e.target.value})} disabled={this.state.salaryInputDisabled}>
+								<option value="DOLLAR">Dollar</option>
+								<option value="EURO">Euro</option>
+							</select>
 							<label className="checkbox-container">
 								<input type="checkbox" checked={this.state.salaryInputDisabled} onChange={e => this.setState(nextState => { 
 									nextState.salaryInputDisabled = !nextState.salaryInputDisabled 
@@ -339,31 +371,31 @@ class _CreateJob extends React.Component {
 						<label className="create-job__input--label less-margin"><span className="create-job__input--span">Job type</span></label>
 						<div className="create-job__checkbox">
 						<label className="radio-container">
-							<input value="FULL_TIME" onChange={e => this.onChange(e,"job_type")} checked={this.state.job_type === "FULL_TIME"} type="radio" name="radio" />
+							<input value="FULL_TIME" onChange={e => this.onChange(e,"job_types")} checked={this.state.job_types.includes("FULL_TIME")} type="checkbox" />
 							<span className="checkmarked">
 							<p>Full time</p>
 							</span>
 						</label>
 						<label className="radio-container">
-							<input value="PART_TIME" onChange={e => this.onChange(e,"job_type")} checked={this.state.job_type === "PART_TIME"} type="radio" name="radio" />
+							<input value="PART_TIME" onChange={e => this.onChange(e,"job_types")} checked={this.state.job_types.includes("PART_TIME")} type="checkbox" />
 							<span className="checkmarked">
 							<p>Part-time</p>
 							</span>
 						</label>
 						<label className="radio-container">
-							<input value="FREELANCE" onChange={e => this.onChange(e,"job_type")} checked={this.state.job_type === "FREELANCE"} type="radio" name="radio" />
+							<input value="FREELANCE" onChange={e => this.onChange(e,"job_types")} checked={this.state.job_types.includes("FREELANCE")} type="checkbox" />
 							<span className="checkmarked">
 							<p>Freelance</p>
 							</span>
 						</label>
 						<label className="radio-container">
-							<input value="CONTRACT" onChange={e => this.onChange(e,"job_type")} checked={this.state.job_type === "CONTRACT"} type="radio" name="radio" />
+							<input value="CONTRACT" onChange={e => this.onChange(e,"job_types")} checked={this.state.job_types.includes("CONTRACT")} type="checkbox" />
 							<span className="checkmarked">
 							<p>Contract</p>
 							</span>
 						</label>
 						<label className="radio-container">
-							<input value="UNSPECIFIED" onChange={e => this.onChange(e,"job_type")} checked={this.state.job_type === "UNSPECIFIED"} type="radio" name="radio" />
+							<input value="UNSPECIFIED" onChange={e => this.onChange(e,"job_types")} checked={this.state.job_types.includes("UNSPECIFIED")} type="checkbox" />
 							<span className="checkmarked">
 							<p>Unspecified</p>
 							</span>

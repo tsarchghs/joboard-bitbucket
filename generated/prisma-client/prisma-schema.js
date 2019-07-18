@@ -696,6 +696,11 @@ input CountryWhereUniqueInput {
   name: String
 }
 
+enum CURRENCY {
+  EURO
+  DOLLAR
+}
+
 scalar DateTime
 
 type File {
@@ -1224,10 +1229,14 @@ type Job {
   id: ID!
   position: String!
   location: String
+  remote: Boolean!
   city: City
   salary: Int
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String!
-  job_type: JOB_TYPE!
+  job_types: [JOB_TYPE!]!
   status: STATUS_TYPE!
   apply_url: String!
   last_payment: DateTime!
@@ -1260,10 +1269,14 @@ input JobCreateInput {
   id: ID
   position: String!
   location: String
+  remote: Boolean!
   city: CityCreateOneWithoutJobsInput
   salary: Int
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String!
-  job_type: JOB_TYPE!
+  job_types: JobCreatejob_typesInput
   status: STATUS_TYPE!
   apply_url: String!
   last_payment: DateTime!
@@ -1274,6 +1287,10 @@ input JobCreateInput {
   company_website: String
   invoices: InvoiceCreateManyWithoutJobInput
   expiresAt: DateTime!
+}
+
+input JobCreatejob_typesInput {
+  set: [JOB_TYPE!]
 }
 
 input JobCreateManyWithoutCityInput {
@@ -1295,9 +1312,13 @@ input JobCreateWithoutCityInput {
   id: ID
   position: String!
   location: String
+  remote: Boolean!
   salary: Int
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String!
-  job_type: JOB_TYPE!
+  job_types: JobCreatejob_typesInput
   status: STATUS_TYPE!
   apply_url: String!
   last_payment: DateTime!
@@ -1314,10 +1335,14 @@ input JobCreateWithoutCompanyInput {
   id: ID
   position: String!
   location: String
+  remote: Boolean!
   city: CityCreateOneWithoutJobsInput
   salary: Int
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String!
-  job_type: JOB_TYPE!
+  job_types: JobCreatejob_typesInput
   status: STATUS_TYPE!
   apply_url: String!
   last_payment: DateTime!
@@ -1333,10 +1358,14 @@ input JobCreateWithoutInvoicesInput {
   id: ID
   position: String!
   location: String
+  remote: Boolean!
   city: CityCreateOneWithoutJobsInput
   salary: Int
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String!
-  job_type: JOB_TYPE!
+  job_types: JobCreatejob_typesInput
   status: STATUS_TYPE!
   apply_url: String!
   last_payment: DateTime!
@@ -1360,12 +1389,18 @@ enum JobOrderByInput {
   position_DESC
   location_ASC
   location_DESC
+  remote_ASC
+  remote_DESC
   salary_ASC
   salary_DESC
+  salary_currency_ASC
+  salary_currency_DESC
+  min_salary_ASC
+  min_salary_DESC
+  max_salary_ASC
+  max_salary_DESC
   description_ASC
   description_DESC
-  job_type_ASC
-  job_type_DESC
   status_ASC
   status_DESC
   apply_url_ASC
@@ -1390,9 +1425,13 @@ type JobPreviousValues {
   id: ID!
   position: String!
   location: String
+  remote: Boolean!
   salary: Int
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String!
-  job_type: JOB_TYPE!
+  job_types: [JOB_TYPE!]!
   status: STATUS_TYPE!
   apply_url: String!
   last_payment: DateTime!
@@ -1447,6 +1486,8 @@ input JobScalarWhereInput {
   location_not_starts_with: String
   location_ends_with: String
   location_not_ends_with: String
+  remote: Boolean
+  remote_not: Boolean
   salary: Int
   salary_not: Int
   salary_in: [Int!]
@@ -1455,6 +1496,26 @@ input JobScalarWhereInput {
   salary_lte: Int
   salary_gt: Int
   salary_gte: Int
+  salary_currency: CURRENCY
+  salary_currency_not: CURRENCY
+  salary_currency_in: [CURRENCY!]
+  salary_currency_not_in: [CURRENCY!]
+  min_salary: Int
+  min_salary_not: Int
+  min_salary_in: [Int!]
+  min_salary_not_in: [Int!]
+  min_salary_lt: Int
+  min_salary_lte: Int
+  min_salary_gt: Int
+  min_salary_gte: Int
+  max_salary: Int
+  max_salary_not: Int
+  max_salary_in: [Int!]
+  max_salary_not_in: [Int!]
+  max_salary_lt: Int
+  max_salary_lte: Int
+  max_salary_gt: Int
+  max_salary_gte: Int
   description: String
   description_not: String
   description_in: [String!]
@@ -1469,10 +1530,6 @@ input JobScalarWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
-  job_type: JOB_TYPE
-  job_type_not: JOB_TYPE
-  job_type_in: [JOB_TYPE!]
-  job_type_not_in: [JOB_TYPE!]
   status: STATUS_TYPE
   status_not: STATUS_TYPE
   status_in: [STATUS_TYPE!]
@@ -1591,10 +1648,14 @@ input JobSubscriptionWhereInput {
 input JobUpdateInput {
   position: String
   location: String
+  remote: Boolean
   city: CityUpdateOneWithoutJobsInput
   salary: Int
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String
-  job_type: JOB_TYPE
+  job_types: JobUpdatejob_typesInput
   status: STATUS_TYPE
   apply_url: String
   last_payment: DateTime
@@ -1607,12 +1668,20 @@ input JobUpdateInput {
   expiresAt: DateTime
 }
 
+input JobUpdatejob_typesInput {
+  set: [JOB_TYPE!]
+}
+
 input JobUpdateManyDataInput {
   position: String
   location: String
+  remote: Boolean
   salary: Int
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String
-  job_type: JOB_TYPE
+  job_types: JobUpdatejob_typesInput
   status: STATUS_TYPE
   apply_url: String
   last_payment: DateTime
@@ -1625,9 +1694,13 @@ input JobUpdateManyDataInput {
 input JobUpdateManyMutationInput {
   position: String
   location: String
+  remote: Boolean
   salary: Int
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String
-  job_type: JOB_TYPE
+  job_types: JobUpdatejob_typesInput
   status: STATUS_TYPE
   apply_url: String
   last_payment: DateTime
@@ -1678,9 +1751,13 @@ input JobUpdateOneWithoutInvoicesInput {
 input JobUpdateWithoutCityDataInput {
   position: String
   location: String
+  remote: Boolean
   salary: Int
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String
-  job_type: JOB_TYPE
+  job_types: JobUpdatejob_typesInput
   status: STATUS_TYPE
   apply_url: String
   last_payment: DateTime
@@ -1696,10 +1773,14 @@ input JobUpdateWithoutCityDataInput {
 input JobUpdateWithoutCompanyDataInput {
   position: String
   location: String
+  remote: Boolean
   city: CityUpdateOneWithoutJobsInput
   salary: Int
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String
-  job_type: JOB_TYPE
+  job_types: JobUpdatejob_typesInput
   status: STATUS_TYPE
   apply_url: String
   last_payment: DateTime
@@ -1714,10 +1795,14 @@ input JobUpdateWithoutCompanyDataInput {
 input JobUpdateWithoutInvoicesDataInput {
   position: String
   location: String
+  remote: Boolean
   city: CityUpdateOneWithoutJobsInput
   salary: Int
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String
-  job_type: JOB_TYPE
+  job_types: JobUpdatejob_typesInput
   status: STATUS_TYPE
   apply_url: String
   last_payment: DateTime
@@ -1799,6 +1884,8 @@ input JobWhereInput {
   location_not_starts_with: String
   location_ends_with: String
   location_not_ends_with: String
+  remote: Boolean
+  remote_not: Boolean
   city: CityWhereInput
   salary: Int
   salary_not: Int
@@ -1808,6 +1895,26 @@ input JobWhereInput {
   salary_lte: Int
   salary_gt: Int
   salary_gte: Int
+  salary_currency: CURRENCY
+  salary_currency_not: CURRENCY
+  salary_currency_in: [CURRENCY!]
+  salary_currency_not_in: [CURRENCY!]
+  min_salary: Int
+  min_salary_not: Int
+  min_salary_in: [Int!]
+  min_salary_not_in: [Int!]
+  min_salary_lt: Int
+  min_salary_lte: Int
+  min_salary_gt: Int
+  min_salary_gte: Int
+  max_salary: Int
+  max_salary_not: Int
+  max_salary_in: [Int!]
+  max_salary_not_in: [Int!]
+  max_salary_lt: Int
+  max_salary_lte: Int
+  max_salary_gt: Int
+  max_salary_gte: Int
   description: String
   description_not: String
   description_in: [String!]
@@ -1822,10 +1929,6 @@ input JobWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
-  job_type: JOB_TYPE
-  job_type_not: JOB_TYPE
-  job_type_in: [JOB_TYPE!]
-  job_type_not_in: [JOB_TYPE!]
   status: STATUS_TYPE
   status_not: STATUS_TYPE
   status_in: [STATUS_TYPE!]

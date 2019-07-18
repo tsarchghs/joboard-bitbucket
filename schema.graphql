@@ -7,6 +7,11 @@ enum JOB_TYPE {
 	UNSPECIFIED
 }
 
+enum CURRENCY {
+	EURO
+	DOLLAR
+}
+
 enum STATUS_TYPE {
 	FEATURED
 	TODAY
@@ -65,9 +70,12 @@ type Job {
 	id: ID!
 	position: String!
 	location: String
+	remote: Boolean!
 	city: City
-	salary: Int
-	job_type: JOB_TYPE!
+	min_salary: Int
+	max_salary: Int
+	salary_currency: CURRENCY
+	job_types: [JOB_TYPE!]!
 	status: STATUS_TYPE!
 	apply_url: String!
 	last_payment: String!
@@ -102,9 +110,12 @@ type City {
 input CreateJob {
 	position: String!
 	location: String
+	remote: Boolean!
 	city: ID
-	salary: Int
-	job_type: JOB_TYPE!
+	min_salary: Int
+	max_salary: Int
+	salary_currency: CURRENCY
+	job_types: [JOB_TYPE!]!
 	status: STATUS_TYPE!
 	apply_url: String!
 	description: String!
@@ -138,7 +149,7 @@ input JobFilterInput {
 	query: String
 	city: ID
 	status_type: STATUS_TYPE
-	job_type: JOB_TYPE
+	job_types: [JOB_TYPE!]
 	createdAt_gte: String
 	createdAt_lte: String
 	first: Int
@@ -194,9 +205,12 @@ type Mutation {
 	createJob(
 		position: String!
 		location: String
+		remote: Boolean!
 		city: ID
-		salary: Int
-		job_type: JOB_TYPE!
+		min_salary: Int
+		max_salary: Int
+		salary_currency: CURRENCY
+		job_types: [JOB_TYPE!]!
 		status: STATUS_TYPE!
 		apply_url: String!
 		description: String
@@ -214,9 +228,12 @@ type Mutation {
 		password: String!
 		position: String!
 		location: String
+		remote: Boolean!
 		city: ID
-		salary: Int
-		job_type: JOB_TYPE!
+		min_salary: Int
+		max_salary: Int
+		salary_currency: CURRENCY
+		job_types: [JOB_TYPE!]!
 		status: STATUS_TYPE!
 		apply_url: String!
 		description: String!
@@ -228,8 +245,11 @@ type Mutation {
 		position: String
 		description: String
 		location: String
-		salary: Int
-		job_type: JOB_TYPE
+		remote: Boolean
+		min_salary: Int
+		max_salary: Int
+		salary_currency: CURRENCY
+		job_types: [JOB_TYPE!]!
 		apply_url: String
 	): Job!
 

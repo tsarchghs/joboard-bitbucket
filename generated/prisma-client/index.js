@@ -9,6 +9,10 @@ var models = [
     embedded: false
   },
   {
+    name: "CURRENCY",
+    embedded: false
+  },
+  {
     name: "STATUS_TYPE",
     embedded: false
   },

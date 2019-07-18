@@ -353,14 +353,30 @@ export type InvoiceOrderByInput =
 
 export type ROLE_TYPE = "NORMAL" | "ADMIN";
 
-export type STATUS_TYPE = "FEATURED" | "TODAY" | "WEEK" | "MONTH" | "CLOSED";
-
 export type JOB_TYPE =
   | "FULL_TIME"
   | "PART_TIME"
   | "FREELANCE"
   | "CONTRACT"
   | "UNSPECIFIED";
+
+export type UserOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "email_ASC"
+  | "email_DESC"
+  | "password_ASC"
+  | "password_DESC"
+  | "role_ASC"
+  | "role_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type STATUS_TYPE = "FEATURED" | "TODAY" | "WEEK" | "MONTH" | "CLOSED";
+
+export type CURRENCY = "EURO" | "DOLLAR";
 
 export type CityOrderByInput =
   | "id_ASC"
@@ -379,12 +395,18 @@ export type JobOrderByInput =
   | "position_DESC"
   | "location_ASC"
   | "location_DESC"
+  | "remote_ASC"
+  | "remote_DESC"
   | "salary_ASC"
   | "salary_DESC"
+  | "salary_currency_ASC"
+  | "salary_currency_DESC"
+  | "min_salary_ASC"
+  | "min_salary_DESC"
+  | "max_salary_ASC"
+  | "max_salary_DESC"
   | "description_ASC"
   | "description_DESC"
-  | "job_type_ASC"
-  | "job_type_DESC"
   | "status_ASC"
   | "status_DESC"
   | "apply_url_ASC"
@@ -399,6 +421,22 @@ export type JobOrderByInput =
   | "company_website_DESC"
   | "expiresAt_ASC"
   | "expiresAt_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type FileOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "filename_ASC"
+  | "filename_DESC"
+  | "mimetype_ASC"
+  | "mimetype_DESC"
+  | "encoding_ASC"
+  | "encoding_DESC"
+  | "url_ASC"
+  | "url_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -430,47 +468,94 @@ export type CountryOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type FileOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "filename_ASC"
-  | "filename_DESC"
-  | "mimetype_ASC"
-  | "mimetype_DESC"
-  | "encoding_ASC"
-  | "encoding_DESC"
-  | "url_ASC"
-  | "url_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
-
-export type UserOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "email_ASC"
-  | "email_DESC"
-  | "password_ASC"
-  | "password_DESC"
-  | "role_ASC"
-  | "role_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
-
-export interface FileUpdateDataInput {
-  filename?: Maybe<String>;
-  mimetype?: Maybe<String>;
-  encoding?: Maybe<String>;
-  url?: Maybe<String>;
+export interface FileUpdateOneInput {
+  create?: Maybe<FileCreateInput>;
+  update?: Maybe<FileUpdateDataInput>;
+  upsert?: Maybe<FileUpsertNestedInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
+  connect?: Maybe<FileWhereUniqueInput>;
 }
 
 export type CityWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
   name?: Maybe<String>;
 }>;
+
+export interface InvoiceUpsertWithWhereUniqueWithoutJobInput {
+  where: InvoiceWhereUniqueInput;
+  update: InvoiceUpdateWithoutJobDataInput;
+  create: InvoiceCreateWithoutJobInput;
+}
+
+export interface UserWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  email?: Maybe<String>;
+  email_not?: Maybe<String>;
+  email_in?: Maybe<String[] | String>;
+  email_not_in?: Maybe<String[] | String>;
+  email_lt?: Maybe<String>;
+  email_lte?: Maybe<String>;
+  email_gt?: Maybe<String>;
+  email_gte?: Maybe<String>;
+  email_contains?: Maybe<String>;
+  email_not_contains?: Maybe<String>;
+  email_starts_with?: Maybe<String>;
+  email_not_starts_with?: Maybe<String>;
+  email_ends_with?: Maybe<String>;
+  email_not_ends_with?: Maybe<String>;
+  password?: Maybe<String>;
+  password_not?: Maybe<String>;
+  password_in?: Maybe<String[] | String>;
+  password_not_in?: Maybe<String[] | String>;
+  password_lt?: Maybe<String>;
+  password_lte?: Maybe<String>;
+  password_gt?: Maybe<String>;
+  password_gte?: Maybe<String>;
+  password_contains?: Maybe<String>;
+  password_not_contains?: Maybe<String>;
+  password_starts_with?: Maybe<String>;
+  password_not_starts_with?: Maybe<String>;
+  password_ends_with?: Maybe<String>;
+  password_not_ends_with?: Maybe<String>;
+  role?: Maybe<ROLE_TYPE>;
+  role_not?: Maybe<ROLE_TYPE>;
+  role_in?: Maybe<ROLE_TYPE[] | ROLE_TYPE>;
+  role_not_in?: Maybe<ROLE_TYPE[] | ROLE_TYPE>;
+  company?: Maybe<CompanyWhereInput>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  AND?: Maybe<UserWhereInput[] | UserWhereInput>;
+  OR?: Maybe<UserWhereInput[] | UserWhereInput>;
+  NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
+}
 
 export interface InvoiceScalarWhereInput {
   id?: Maybe<ID_Input>;
@@ -550,80 +635,6 @@ export interface InvoiceScalarWhereInput {
   AND?: Maybe<InvoiceScalarWhereInput[] | InvoiceScalarWhereInput>;
   OR?: Maybe<InvoiceScalarWhereInput[] | InvoiceScalarWhereInput>;
   NOT?: Maybe<InvoiceScalarWhereInput[] | InvoiceScalarWhereInput>;
-}
-
-export interface UserWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  email?: Maybe<String>;
-  email_not?: Maybe<String>;
-  email_in?: Maybe<String[] | String>;
-  email_not_in?: Maybe<String[] | String>;
-  email_lt?: Maybe<String>;
-  email_lte?: Maybe<String>;
-  email_gt?: Maybe<String>;
-  email_gte?: Maybe<String>;
-  email_contains?: Maybe<String>;
-  email_not_contains?: Maybe<String>;
-  email_starts_with?: Maybe<String>;
-  email_not_starts_with?: Maybe<String>;
-  email_ends_with?: Maybe<String>;
-  email_not_ends_with?: Maybe<String>;
-  password?: Maybe<String>;
-  password_not?: Maybe<String>;
-  password_in?: Maybe<String[] | String>;
-  password_not_in?: Maybe<String[] | String>;
-  password_lt?: Maybe<String>;
-  password_lte?: Maybe<String>;
-  password_gt?: Maybe<String>;
-  password_gte?: Maybe<String>;
-  password_contains?: Maybe<String>;
-  password_not_contains?: Maybe<String>;
-  password_starts_with?: Maybe<String>;
-  password_not_starts_with?: Maybe<String>;
-  password_ends_with?: Maybe<String>;
-  password_not_ends_with?: Maybe<String>;
-  role?: Maybe<ROLE_TYPE>;
-  role_not?: Maybe<ROLE_TYPE>;
-  role_in?: Maybe<ROLE_TYPE[] | ROLE_TYPE>;
-  role_not_in?: Maybe<ROLE_TYPE[] | ROLE_TYPE>;
-  company?: Maybe<CompanyWhereInput>;
-  createdAt?: Maybe<DateTimeInput>;
-  createdAt_not?: Maybe<DateTimeInput>;
-  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_lt?: Maybe<DateTimeInput>;
-  createdAt_lte?: Maybe<DateTimeInput>;
-  createdAt_gt?: Maybe<DateTimeInput>;
-  createdAt_gte?: Maybe<DateTimeInput>;
-  updatedAt?: Maybe<DateTimeInput>;
-  updatedAt_not?: Maybe<DateTimeInput>;
-  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updatedAt_lt?: Maybe<DateTimeInput>;
-  updatedAt_lte?: Maybe<DateTimeInput>;
-  updatedAt_gt?: Maybe<DateTimeInput>;
-  updatedAt_gte?: Maybe<DateTimeInput>;
-  AND?: Maybe<UserWhereInput[] | UserWhereInput>;
-  OR?: Maybe<UserWhereInput[] | UserWhereInput>;
-  NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
-}
-
-export interface InvoiceUpdateManyWithWhereNestedInput {
-  where: InvoiceScalarWhereInput;
-  data: InvoiceUpdateManyDataInput;
 }
 
 export interface FileWhereInput {
@@ -736,11 +747,9 @@ export interface InvoiceCreateWithoutJobInput {
   receipt_url: String;
 }
 
-export interface InvoiceUpdateManyDataInput {
-  last_four_digits?: Maybe<Int>;
-  price?: Maybe<Int>;
-  status?: Maybe<String>;
-  receipt_url?: Maybe<String>;
+export interface InvoiceUpdateManyWithWhereNestedInput {
+  where: InvoiceScalarWhereInput;
+  data: InvoiceUpdateManyDataInput;
 }
 
 export interface CityUpdateInput {
@@ -749,15 +758,194 @@ export interface CityUpdateInput {
   jobs?: Maybe<JobUpdateManyWithoutCityInput>;
 }
 
-export interface JobSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<JobWhereInput>;
-  AND?: Maybe<JobSubscriptionWhereInput[] | JobSubscriptionWhereInput>;
-  OR?: Maybe<JobSubscriptionWhereInput[] | JobSubscriptionWhereInput>;
-  NOT?: Maybe<JobSubscriptionWhereInput[] | JobSubscriptionWhereInput>;
+export interface JobWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  position?: Maybe<String>;
+  position_not?: Maybe<String>;
+  position_in?: Maybe<String[] | String>;
+  position_not_in?: Maybe<String[] | String>;
+  position_lt?: Maybe<String>;
+  position_lte?: Maybe<String>;
+  position_gt?: Maybe<String>;
+  position_gte?: Maybe<String>;
+  position_contains?: Maybe<String>;
+  position_not_contains?: Maybe<String>;
+  position_starts_with?: Maybe<String>;
+  position_not_starts_with?: Maybe<String>;
+  position_ends_with?: Maybe<String>;
+  position_not_ends_with?: Maybe<String>;
+  location?: Maybe<String>;
+  location_not?: Maybe<String>;
+  location_in?: Maybe<String[] | String>;
+  location_not_in?: Maybe<String[] | String>;
+  location_lt?: Maybe<String>;
+  location_lte?: Maybe<String>;
+  location_gt?: Maybe<String>;
+  location_gte?: Maybe<String>;
+  location_contains?: Maybe<String>;
+  location_not_contains?: Maybe<String>;
+  location_starts_with?: Maybe<String>;
+  location_not_starts_with?: Maybe<String>;
+  location_ends_with?: Maybe<String>;
+  location_not_ends_with?: Maybe<String>;
+  remote?: Maybe<Boolean>;
+  remote_not?: Maybe<Boolean>;
+  city?: Maybe<CityWhereInput>;
+  salary?: Maybe<Int>;
+  salary_not?: Maybe<Int>;
+  salary_in?: Maybe<Int[] | Int>;
+  salary_not_in?: Maybe<Int[] | Int>;
+  salary_lt?: Maybe<Int>;
+  salary_lte?: Maybe<Int>;
+  salary_gt?: Maybe<Int>;
+  salary_gte?: Maybe<Int>;
+  salary_currency?: Maybe<CURRENCY>;
+  salary_currency_not?: Maybe<CURRENCY>;
+  salary_currency_in?: Maybe<CURRENCY[] | CURRENCY>;
+  salary_currency_not_in?: Maybe<CURRENCY[] | CURRENCY>;
+  min_salary?: Maybe<Int>;
+  min_salary_not?: Maybe<Int>;
+  min_salary_in?: Maybe<Int[] | Int>;
+  min_salary_not_in?: Maybe<Int[] | Int>;
+  min_salary_lt?: Maybe<Int>;
+  min_salary_lte?: Maybe<Int>;
+  min_salary_gt?: Maybe<Int>;
+  min_salary_gte?: Maybe<Int>;
+  max_salary?: Maybe<Int>;
+  max_salary_not?: Maybe<Int>;
+  max_salary_in?: Maybe<Int[] | Int>;
+  max_salary_not_in?: Maybe<Int[] | Int>;
+  max_salary_lt?: Maybe<Int>;
+  max_salary_lte?: Maybe<Int>;
+  max_salary_gt?: Maybe<Int>;
+  max_salary_gte?: Maybe<Int>;
+  description?: Maybe<String>;
+  description_not?: Maybe<String>;
+  description_in?: Maybe<String[] | String>;
+  description_not_in?: Maybe<String[] | String>;
+  description_lt?: Maybe<String>;
+  description_lte?: Maybe<String>;
+  description_gt?: Maybe<String>;
+  description_gte?: Maybe<String>;
+  description_contains?: Maybe<String>;
+  description_not_contains?: Maybe<String>;
+  description_starts_with?: Maybe<String>;
+  description_not_starts_with?: Maybe<String>;
+  description_ends_with?: Maybe<String>;
+  description_not_ends_with?: Maybe<String>;
+  status?: Maybe<STATUS_TYPE>;
+  status_not?: Maybe<STATUS_TYPE>;
+  status_in?: Maybe<STATUS_TYPE[] | STATUS_TYPE>;
+  status_not_in?: Maybe<STATUS_TYPE[] | STATUS_TYPE>;
+  apply_url?: Maybe<String>;
+  apply_url_not?: Maybe<String>;
+  apply_url_in?: Maybe<String[] | String>;
+  apply_url_not_in?: Maybe<String[] | String>;
+  apply_url_lt?: Maybe<String>;
+  apply_url_lte?: Maybe<String>;
+  apply_url_gt?: Maybe<String>;
+  apply_url_gte?: Maybe<String>;
+  apply_url_contains?: Maybe<String>;
+  apply_url_not_contains?: Maybe<String>;
+  apply_url_starts_with?: Maybe<String>;
+  apply_url_not_starts_with?: Maybe<String>;
+  apply_url_ends_with?: Maybe<String>;
+  apply_url_not_ends_with?: Maybe<String>;
+  last_payment?: Maybe<DateTimeInput>;
+  last_payment_not?: Maybe<DateTimeInput>;
+  last_payment_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  last_payment_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  last_payment_lt?: Maybe<DateTimeInput>;
+  last_payment_lte?: Maybe<DateTimeInput>;
+  last_payment_gt?: Maybe<DateTimeInput>;
+  last_payment_gte?: Maybe<DateTimeInput>;
+  company?: Maybe<CompanyWhereInput>;
+  company_logo?: Maybe<FileWhereInput>;
+  company_name?: Maybe<String>;
+  company_name_not?: Maybe<String>;
+  company_name_in?: Maybe<String[] | String>;
+  company_name_not_in?: Maybe<String[] | String>;
+  company_name_lt?: Maybe<String>;
+  company_name_lte?: Maybe<String>;
+  company_name_gt?: Maybe<String>;
+  company_name_gte?: Maybe<String>;
+  company_name_contains?: Maybe<String>;
+  company_name_not_contains?: Maybe<String>;
+  company_name_starts_with?: Maybe<String>;
+  company_name_not_starts_with?: Maybe<String>;
+  company_name_ends_with?: Maybe<String>;
+  company_name_not_ends_with?: Maybe<String>;
+  company_email?: Maybe<String>;
+  company_email_not?: Maybe<String>;
+  company_email_in?: Maybe<String[] | String>;
+  company_email_not_in?: Maybe<String[] | String>;
+  company_email_lt?: Maybe<String>;
+  company_email_lte?: Maybe<String>;
+  company_email_gt?: Maybe<String>;
+  company_email_gte?: Maybe<String>;
+  company_email_contains?: Maybe<String>;
+  company_email_not_contains?: Maybe<String>;
+  company_email_starts_with?: Maybe<String>;
+  company_email_not_starts_with?: Maybe<String>;
+  company_email_ends_with?: Maybe<String>;
+  company_email_not_ends_with?: Maybe<String>;
+  company_website?: Maybe<String>;
+  company_website_not?: Maybe<String>;
+  company_website_in?: Maybe<String[] | String>;
+  company_website_not_in?: Maybe<String[] | String>;
+  company_website_lt?: Maybe<String>;
+  company_website_lte?: Maybe<String>;
+  company_website_gt?: Maybe<String>;
+  company_website_gte?: Maybe<String>;
+  company_website_contains?: Maybe<String>;
+  company_website_not_contains?: Maybe<String>;
+  company_website_starts_with?: Maybe<String>;
+  company_website_not_starts_with?: Maybe<String>;
+  company_website_ends_with?: Maybe<String>;
+  company_website_not_ends_with?: Maybe<String>;
+  invoices_every?: Maybe<InvoiceWhereInput>;
+  invoices_some?: Maybe<InvoiceWhereInput>;
+  invoices_none?: Maybe<InvoiceWhereInput>;
+  expiresAt?: Maybe<DateTimeInput>;
+  expiresAt_not?: Maybe<DateTimeInput>;
+  expiresAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  expiresAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  expiresAt_lt?: Maybe<DateTimeInput>;
+  expiresAt_lte?: Maybe<DateTimeInput>;
+  expiresAt_gt?: Maybe<DateTimeInput>;
+  expiresAt_gte?: Maybe<DateTimeInput>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  AND?: Maybe<JobWhereInput[] | JobWhereInput>;
+  OR?: Maybe<JobWhereInput[] | JobWhereInput>;
+  NOT?: Maybe<JobWhereInput[] | JobWhereInput>;
 }
 
 export interface CountryUpdateOneRequiredWithoutCitiesInput {
@@ -767,30 +955,30 @@ export interface CountryUpdateOneRequiredWithoutCitiesInput {
   connect?: Maybe<CountryWhereUniqueInput>;
 }
 
-export interface FileSubscriptionWhereInput {
+export interface InvoiceSubscriptionWhereInput {
   mutation_in?: Maybe<MutationType[] | MutationType>;
   updatedFields_contains?: Maybe<String>;
   updatedFields_contains_every?: Maybe<String[] | String>;
   updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<FileWhereInput>;
-  AND?: Maybe<FileSubscriptionWhereInput[] | FileSubscriptionWhereInput>;
-  OR?: Maybe<FileSubscriptionWhereInput[] | FileSubscriptionWhereInput>;
-  NOT?: Maybe<FileSubscriptionWhereInput[] | FileSubscriptionWhereInput>;
+  node?: Maybe<InvoiceWhereInput>;
+  AND?: Maybe<InvoiceSubscriptionWhereInput[] | InvoiceSubscriptionWhereInput>;
+  OR?: Maybe<InvoiceSubscriptionWhereInput[] | InvoiceSubscriptionWhereInput>;
+  NOT?: Maybe<InvoiceSubscriptionWhereInput[] | InvoiceSubscriptionWhereInput>;
 }
 
 export interface CountryUpdateWithoutCitiesDataInput {
   name?: Maybe<String>;
 }
 
-export interface CompanySubscriptionWhereInput {
+export interface CountrySubscriptionWhereInput {
   mutation_in?: Maybe<MutationType[] | MutationType>;
   updatedFields_contains?: Maybe<String>;
   updatedFields_contains_every?: Maybe<String[] | String>;
   updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<CompanyWhereInput>;
-  AND?: Maybe<CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput>;
-  OR?: Maybe<CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput>;
-  NOT?: Maybe<CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput>;
+  node?: Maybe<CountryWhereInput>;
+  AND?: Maybe<CountrySubscriptionWhereInput[] | CountrySubscriptionWhereInput>;
+  OR?: Maybe<CountrySubscriptionWhereInput[] | CountrySubscriptionWhereInput>;
+  NOT?: Maybe<CountrySubscriptionWhereInput[] | CountrySubscriptionWhereInput>;
 }
 
 export interface CountryUpsertWithoutCitiesInput {
@@ -798,10 +986,15 @@ export interface CountryUpsertWithoutCitiesInput {
   create: CountryCreateWithoutCitiesInput;
 }
 
-export interface UserUpdateManyMutationInput {
-  email?: Maybe<String>;
-  password?: Maybe<String>;
-  role?: Maybe<ROLE_TYPE>;
+export interface CitySubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<CityWhereInput>;
+  AND?: Maybe<CitySubscriptionWhereInput[] | CitySubscriptionWhereInput>;
+  OR?: Maybe<CitySubscriptionWhereInput[] | CitySubscriptionWhereInput>;
+  NOT?: Maybe<CitySubscriptionWhereInput[] | CitySubscriptionWhereInput>;
 }
 
 export interface JobUpdateManyWithoutCityInput {
@@ -824,12 +1017,9 @@ export interface JobUpdateManyWithoutCityInput {
   >;
 }
 
-export interface CompanyUpdateWithoutCreatedByDataInput {
-  email?: Maybe<String>;
-  name?: Maybe<String>;
-  website?: Maybe<String>;
-  logo?: Maybe<FileUpdateOneInput>;
-  jobs?: Maybe<JobUpdateManyWithoutCompanyInput>;
+export interface CompanyUpsertWithoutCreatedByInput {
+  update: CompanyUpdateWithoutCreatedByDataInput;
+  create: CompanyCreateWithoutCreatedByInput;
 }
 
 export interface JobUpdateWithWhereUniqueWithoutCityInput {
@@ -844,9 +1034,13 @@ export type CompanyWhereUniqueInput = AtLeastOne<{
 export interface JobUpdateWithoutCityDataInput {
   position?: Maybe<String>;
   location?: Maybe<String>;
+  remote?: Maybe<Boolean>;
   salary?: Maybe<Int>;
+  salary_currency?: Maybe<CURRENCY>;
+  min_salary?: Maybe<Int>;
+  max_salary?: Maybe<Int>;
   description?: Maybe<String>;
-  job_type?: Maybe<JOB_TYPE>;
+  job_types?: Maybe<JobUpdatejob_typesInput>;
   status?: Maybe<STATUS_TYPE>;
   apply_url?: Maybe<String>;
   last_payment?: Maybe<DateTimeInput>;
@@ -859,11 +1053,24 @@ export interface JobUpdateWithoutCityDataInput {
   expiresAt?: Maybe<DateTimeInput>;
 }
 
-export interface UserUpdateInput {
-  email?: Maybe<String>;
-  password?: Maybe<String>;
-  role?: Maybe<ROLE_TYPE>;
-  company?: Maybe<CompanyUpdateOneRequiredWithoutCreatedByInput>;
+export interface CompanyUpdateOneRequiredWithoutCreatedByInput {
+  create?: Maybe<CompanyCreateWithoutCreatedByInput>;
+  update?: Maybe<CompanyUpdateWithoutCreatedByDataInput>;
+  upsert?: Maybe<CompanyUpsertWithoutCreatedByInput>;
+  connect?: Maybe<CompanyWhereUniqueInput>;
+}
+
+export interface JobUpdatejob_typesInput {
+  set?: Maybe<JOB_TYPE[] | JOB_TYPE>;
+}
+
+export interface CompanyCreateWithoutCreatedByInput {
+  id?: Maybe<ID_Input>;
+  email: String;
+  name: String;
+  website: String;
+  logo?: Maybe<FileCreateOneInput>;
+  jobs?: Maybe<JobCreateManyWithoutCompanyInput>;
 }
 
 export interface CompanyUpdateOneWithoutJobsInput {
@@ -873,19 +1080,6 @@ export interface CompanyUpdateOneWithoutJobsInput {
   delete?: Maybe<Boolean>;
   disconnect?: Maybe<Boolean>;
   connect?: Maybe<CompanyWhereUniqueInput>;
-}
-
-export interface CompanyCreateOneWithoutCreatedByInput {
-  create?: Maybe<CompanyCreateWithoutCreatedByInput>;
-  connect?: Maybe<CompanyWhereUniqueInput>;
-}
-
-export interface CompanyUpdateWithoutJobsDataInput {
-  createdBy?: Maybe<UserUpdateOneRequiredWithoutCompanyInput>;
-  email?: Maybe<String>;
-  name?: Maybe<String>;
-  website?: Maybe<String>;
-  logo?: Maybe<FileUpdateOneInput>;
 }
 
 export interface CityWhereInput {
@@ -942,6 +1136,22 @@ export interface CityWhereInput {
   NOT?: Maybe<CityWhereInput[] | CityWhereInput>;
 }
 
+export interface CompanyUpdateWithoutJobsDataInput {
+  createdBy?: Maybe<UserUpdateOneRequiredWithoutCompanyInput>;
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  website?: Maybe<String>;
+  logo?: Maybe<FileUpdateOneInput>;
+}
+
+export interface UserCreateInput {
+  id?: Maybe<ID_Input>;
+  email: String;
+  password: String;
+  role: ROLE_TYPE;
+  company: CompanyCreateOneWithoutCreatedByInput;
+}
+
 export interface UserUpdateOneRequiredWithoutCompanyInput {
   create?: Maybe<UserCreateWithoutCompanyInput>;
   update?: Maybe<UserUpdateWithoutCompanyDataInput>;
@@ -949,20 +1159,10 @@ export interface UserUpdateOneRequiredWithoutCompanyInput {
   connect?: Maybe<UserWhereUniqueInput>;
 }
 
-export interface JobUpdateManyMutationInput {
-  position?: Maybe<String>;
-  location?: Maybe<String>;
-  salary?: Maybe<Int>;
-  description?: Maybe<String>;
-  job_type?: Maybe<JOB_TYPE>;
-  status?: Maybe<STATUS_TYPE>;
-  apply_url?: Maybe<String>;
-  last_payment?: Maybe<DateTimeInput>;
-  company_name?: Maybe<String>;
-  company_email?: Maybe<String>;
-  company_website?: Maybe<String>;
-  expiresAt?: Maybe<DateTimeInput>;
-}
+export type FileWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  url?: Maybe<String>;
+}>;
 
 export interface UserUpdateWithoutCompanyDataInput {
   email?: Maybe<String>;
@@ -970,39 +1170,56 @@ export interface UserUpdateWithoutCompanyDataInput {
   role?: Maybe<ROLE_TYPE>;
 }
 
-export type FileWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-  url?: Maybe<String>;
-}>;
+export interface JobCreateInput {
+  id?: Maybe<ID_Input>;
+  position: String;
+  location?: Maybe<String>;
+  remote: Boolean;
+  city?: Maybe<CityCreateOneWithoutJobsInput>;
+  salary?: Maybe<Int>;
+  salary_currency?: Maybe<CURRENCY>;
+  min_salary?: Maybe<Int>;
+  max_salary?: Maybe<Int>;
+  description: String;
+  job_types?: Maybe<JobCreatejob_typesInput>;
+  status: STATUS_TYPE;
+  apply_url: String;
+  last_payment: DateTimeInput;
+  company?: Maybe<CompanyCreateOneWithoutJobsInput>;
+  company_logo?: Maybe<FileCreateOneInput>;
+  company_name?: Maybe<String>;
+  company_email?: Maybe<String>;
+  company_website?: Maybe<String>;
+  invoices?: Maybe<InvoiceCreateManyWithoutJobInput>;
+  expiresAt: DateTimeInput;
+}
 
 export interface UserUpsertWithoutCompanyInput {
   update: UserUpdateWithoutCompanyDataInput;
   create: UserCreateWithoutCompanyInput;
 }
 
-export interface InvoiceUpdateManyMutationInput {
-  last_four_digits?: Maybe<Int>;
-  price?: Maybe<Int>;
-  status?: Maybe<String>;
-  receipt_url?: Maybe<String>;
+export interface JobUpsertWithoutInvoicesInput {
+  update: JobUpdateWithoutInvoicesDataInput;
+  create: JobCreateWithoutInvoicesInput;
 }
 
-export interface FileUpdateOneInput {
-  create?: Maybe<FileCreateInput>;
-  update?: Maybe<FileUpdateDataInput>;
-  upsert?: Maybe<FileUpsertNestedInput>;
-  delete?: Maybe<Boolean>;
-  disconnect?: Maybe<Boolean>;
-  connect?: Maybe<FileWhereUniqueInput>;
+export interface CityUpdateManyWithWhereNestedInput {
+  where: CityScalarWhereInput;
+  data: CityUpdateManyDataInput;
 }
 
 export interface JobUpdateWithoutInvoicesDataInput {
   position?: Maybe<String>;
   location?: Maybe<String>;
+  remote?: Maybe<Boolean>;
   city?: Maybe<CityUpdateOneWithoutJobsInput>;
   salary?: Maybe<Int>;
+  salary_currency?: Maybe<CURRENCY>;
+  min_salary?: Maybe<Int>;
+  max_salary?: Maybe<Int>;
   description?: Maybe<String>;
-  job_type?: Maybe<JOB_TYPE>;
+  job_types?: Maybe<JobUpdatejob_typesInput>;
   status?: Maybe<STATUS_TYPE>;
   apply_url?: Maybe<String>;
   last_payment?: Maybe<DateTimeInput>;
@@ -1014,63 +1231,19 @@ export interface JobUpdateWithoutInvoicesDataInput {
   expiresAt?: Maybe<DateTimeInput>;
 }
 
-export interface CityScalarWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  name?: Maybe<String>;
-  name_not?: Maybe<String>;
-  name_in?: Maybe<String[] | String>;
-  name_not_in?: Maybe<String[] | String>;
-  name_lt?: Maybe<String>;
-  name_lte?: Maybe<String>;
-  name_gt?: Maybe<String>;
-  name_gte?: Maybe<String>;
-  name_contains?: Maybe<String>;
-  name_not_contains?: Maybe<String>;
-  name_starts_with?: Maybe<String>;
-  name_not_starts_with?: Maybe<String>;
-  name_ends_with?: Maybe<String>;
-  name_not_ends_with?: Maybe<String>;
-  createdAt?: Maybe<DateTimeInput>;
-  createdAt_not?: Maybe<DateTimeInput>;
-  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_lt?: Maybe<DateTimeInput>;
-  createdAt_lte?: Maybe<DateTimeInput>;
-  createdAt_gt?: Maybe<DateTimeInput>;
-  createdAt_gte?: Maybe<DateTimeInput>;
-  updatedAt?: Maybe<DateTimeInput>;
-  updatedAt_not?: Maybe<DateTimeInput>;
-  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updatedAt_lt?: Maybe<DateTimeInput>;
-  updatedAt_lte?: Maybe<DateTimeInput>;
-  updatedAt_gt?: Maybe<DateTimeInput>;
-  updatedAt_gte?: Maybe<DateTimeInput>;
-  AND?: Maybe<CityScalarWhereInput[] | CityScalarWhereInput>;
-  OR?: Maybe<CityScalarWhereInput[] | CityScalarWhereInput>;
-  NOT?: Maybe<CityScalarWhereInput[] | CityScalarWhereInput>;
+export interface FileUpdateDataInput {
+  filename?: Maybe<String>;
+  mimetype?: Maybe<String>;
+  encoding?: Maybe<String>;
+  url?: Maybe<String>;
 }
 
-export interface JobUpdateOneWithoutInvoicesInput {
-  create?: Maybe<JobCreateWithoutInvoicesInput>;
-  update?: Maybe<JobUpdateWithoutInvoicesDataInput>;
-  upsert?: Maybe<JobUpsertWithoutInvoicesInput>;
-  delete?: Maybe<Boolean>;
-  disconnect?: Maybe<Boolean>;
-  connect?: Maybe<JobWhereUniqueInput>;
+export interface InvoiceUpdateInput {
+  job?: Maybe<JobUpdateOneWithoutInvoicesInput>;
+  last_four_digits?: Maybe<Int>;
+  price?: Maybe<Int>;
+  status?: Maybe<String>;
+  receipt_url?: Maybe<String>;
 }
 
 export interface FileUpsertNestedInput {
@@ -1082,10 +1255,14 @@ export interface JobCreateWithoutInvoicesInput {
   id?: Maybe<ID_Input>;
   position: String;
   location?: Maybe<String>;
+  remote: Boolean;
   city?: Maybe<CityCreateOneWithoutJobsInput>;
   salary?: Maybe<Int>;
+  salary_currency?: Maybe<CURRENCY>;
+  min_salary?: Maybe<Int>;
+  max_salary?: Maybe<Int>;
   description: String;
-  job_type: JOB_TYPE;
+  job_types?: Maybe<JobCreatejob_typesInput>;
   status: STATUS_TYPE;
   apply_url: String;
   last_payment: DateTimeInput;
@@ -1102,9 +1279,13 @@ export interface CompanyUpsertWithoutJobsInput {
   create: CompanyCreateWithoutJobsInput;
 }
 
-export interface JobCreateOneWithoutInvoicesInput {
-  create?: Maybe<JobCreateWithoutInvoicesInput>;
-  connect?: Maybe<JobWhereUniqueInput>;
+export interface InvoiceCreateInput {
+  id?: Maybe<ID_Input>;
+  job?: Maybe<JobCreateOneWithoutInvoicesInput>;
+  last_four_digits: Int;
+  price: Int;
+  status?: Maybe<String>;
+  receipt_url: String;
 }
 
 export interface InvoiceUpdateManyWithoutJobInput {
@@ -1140,11 +1321,8 @@ export interface InvoiceUpdateWithWhereUniqueWithoutJobInput {
   data: InvoiceUpdateWithoutJobDataInput;
 }
 
-export interface FileUpdateInput {
-  filename?: Maybe<String>;
-  mimetype?: Maybe<String>;
-  encoding?: Maybe<String>;
-  url?: Maybe<String>;
+export interface CountryUpdateManyMutationInput {
+  name?: Maybe<String>;
 }
 
 export interface InvoiceUpdateWithoutJobDataInput {
@@ -1152,16 +1330,6 @@ export interface InvoiceUpdateWithoutJobDataInput {
   price?: Maybe<Int>;
   status?: Maybe<String>;
   receipt_url?: Maybe<String>;
-}
-
-export interface CityUpdateManyDataInput {
-  name?: Maybe<String>;
-}
-
-export interface InvoiceUpsertWithWhereUniqueWithoutJobInput {
-  where: InvoiceWhereUniqueInput;
-  update: InvoiceUpdateWithoutJobDataInput;
-  create: InvoiceCreateWithoutJobInput;
 }
 
 export interface CountryCreateOneWithoutCitiesInput {
@@ -1338,12 +1506,11 @@ export interface InvoiceWhereInput {
   NOT?: Maybe<InvoiceWhereInput[] | InvoiceWhereInput>;
 }
 
-export interface CompanyCreateOneWithoutJobsInput {
-  create?: Maybe<CompanyCreateWithoutJobsInput>;
-  connect?: Maybe<CompanyWhereUniqueInput>;
+export interface JobCreatejob_typesInput {
+  set?: Maybe<JOB_TYPE[] | JOB_TYPE>;
 }
 
-export interface JobWhereInput {
+export interface CityScalarWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
   id_in?: Maybe<ID_Input[] | ID_Input>;
@@ -1358,142 +1525,20 @@ export interface JobWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
-  position?: Maybe<String>;
-  position_not?: Maybe<String>;
-  position_in?: Maybe<String[] | String>;
-  position_not_in?: Maybe<String[] | String>;
-  position_lt?: Maybe<String>;
-  position_lte?: Maybe<String>;
-  position_gt?: Maybe<String>;
-  position_gte?: Maybe<String>;
-  position_contains?: Maybe<String>;
-  position_not_contains?: Maybe<String>;
-  position_starts_with?: Maybe<String>;
-  position_not_starts_with?: Maybe<String>;
-  position_ends_with?: Maybe<String>;
-  position_not_ends_with?: Maybe<String>;
-  location?: Maybe<String>;
-  location_not?: Maybe<String>;
-  location_in?: Maybe<String[] | String>;
-  location_not_in?: Maybe<String[] | String>;
-  location_lt?: Maybe<String>;
-  location_lte?: Maybe<String>;
-  location_gt?: Maybe<String>;
-  location_gte?: Maybe<String>;
-  location_contains?: Maybe<String>;
-  location_not_contains?: Maybe<String>;
-  location_starts_with?: Maybe<String>;
-  location_not_starts_with?: Maybe<String>;
-  location_ends_with?: Maybe<String>;
-  location_not_ends_with?: Maybe<String>;
-  city?: Maybe<CityWhereInput>;
-  salary?: Maybe<Int>;
-  salary_not?: Maybe<Int>;
-  salary_in?: Maybe<Int[] | Int>;
-  salary_not_in?: Maybe<Int[] | Int>;
-  salary_lt?: Maybe<Int>;
-  salary_lte?: Maybe<Int>;
-  salary_gt?: Maybe<Int>;
-  salary_gte?: Maybe<Int>;
-  description?: Maybe<String>;
-  description_not?: Maybe<String>;
-  description_in?: Maybe<String[] | String>;
-  description_not_in?: Maybe<String[] | String>;
-  description_lt?: Maybe<String>;
-  description_lte?: Maybe<String>;
-  description_gt?: Maybe<String>;
-  description_gte?: Maybe<String>;
-  description_contains?: Maybe<String>;
-  description_not_contains?: Maybe<String>;
-  description_starts_with?: Maybe<String>;
-  description_not_starts_with?: Maybe<String>;
-  description_ends_with?: Maybe<String>;
-  description_not_ends_with?: Maybe<String>;
-  job_type?: Maybe<JOB_TYPE>;
-  job_type_not?: Maybe<JOB_TYPE>;
-  job_type_in?: Maybe<JOB_TYPE[] | JOB_TYPE>;
-  job_type_not_in?: Maybe<JOB_TYPE[] | JOB_TYPE>;
-  status?: Maybe<STATUS_TYPE>;
-  status_not?: Maybe<STATUS_TYPE>;
-  status_in?: Maybe<STATUS_TYPE[] | STATUS_TYPE>;
-  status_not_in?: Maybe<STATUS_TYPE[] | STATUS_TYPE>;
-  apply_url?: Maybe<String>;
-  apply_url_not?: Maybe<String>;
-  apply_url_in?: Maybe<String[] | String>;
-  apply_url_not_in?: Maybe<String[] | String>;
-  apply_url_lt?: Maybe<String>;
-  apply_url_lte?: Maybe<String>;
-  apply_url_gt?: Maybe<String>;
-  apply_url_gte?: Maybe<String>;
-  apply_url_contains?: Maybe<String>;
-  apply_url_not_contains?: Maybe<String>;
-  apply_url_starts_with?: Maybe<String>;
-  apply_url_not_starts_with?: Maybe<String>;
-  apply_url_ends_with?: Maybe<String>;
-  apply_url_not_ends_with?: Maybe<String>;
-  last_payment?: Maybe<DateTimeInput>;
-  last_payment_not?: Maybe<DateTimeInput>;
-  last_payment_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  last_payment_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  last_payment_lt?: Maybe<DateTimeInput>;
-  last_payment_lte?: Maybe<DateTimeInput>;
-  last_payment_gt?: Maybe<DateTimeInput>;
-  last_payment_gte?: Maybe<DateTimeInput>;
-  company?: Maybe<CompanyWhereInput>;
-  company_logo?: Maybe<FileWhereInput>;
-  company_name?: Maybe<String>;
-  company_name_not?: Maybe<String>;
-  company_name_in?: Maybe<String[] | String>;
-  company_name_not_in?: Maybe<String[] | String>;
-  company_name_lt?: Maybe<String>;
-  company_name_lte?: Maybe<String>;
-  company_name_gt?: Maybe<String>;
-  company_name_gte?: Maybe<String>;
-  company_name_contains?: Maybe<String>;
-  company_name_not_contains?: Maybe<String>;
-  company_name_starts_with?: Maybe<String>;
-  company_name_not_starts_with?: Maybe<String>;
-  company_name_ends_with?: Maybe<String>;
-  company_name_not_ends_with?: Maybe<String>;
-  company_email?: Maybe<String>;
-  company_email_not?: Maybe<String>;
-  company_email_in?: Maybe<String[] | String>;
-  company_email_not_in?: Maybe<String[] | String>;
-  company_email_lt?: Maybe<String>;
-  company_email_lte?: Maybe<String>;
-  company_email_gt?: Maybe<String>;
-  company_email_gte?: Maybe<String>;
-  company_email_contains?: Maybe<String>;
-  company_email_not_contains?: Maybe<String>;
-  company_email_starts_with?: Maybe<String>;
-  company_email_not_starts_with?: Maybe<String>;
-  company_email_ends_with?: Maybe<String>;
-  company_email_not_ends_with?: Maybe<String>;
-  company_website?: Maybe<String>;
-  company_website_not?: Maybe<String>;
-  company_website_in?: Maybe<String[] | String>;
-  company_website_not_in?: Maybe<String[] | String>;
-  company_website_lt?: Maybe<String>;
-  company_website_lte?: Maybe<String>;
-  company_website_gt?: Maybe<String>;
-  company_website_gte?: Maybe<String>;
-  company_website_contains?: Maybe<String>;
-  company_website_not_contains?: Maybe<String>;
-  company_website_starts_with?: Maybe<String>;
-  company_website_not_starts_with?: Maybe<String>;
-  company_website_ends_with?: Maybe<String>;
-  company_website_not_ends_with?: Maybe<String>;
-  invoices_every?: Maybe<InvoiceWhereInput>;
-  invoices_some?: Maybe<InvoiceWhereInput>;
-  invoices_none?: Maybe<InvoiceWhereInput>;
-  expiresAt?: Maybe<DateTimeInput>;
-  expiresAt_not?: Maybe<DateTimeInput>;
-  expiresAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  expiresAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  expiresAt_lt?: Maybe<DateTimeInput>;
-  expiresAt_lte?: Maybe<DateTimeInput>;
-  expiresAt_gt?: Maybe<DateTimeInput>;
-  expiresAt_gte?: Maybe<DateTimeInput>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -1510,14 +1555,32 @@ export interface JobWhereInput {
   updatedAt_lte?: Maybe<DateTimeInput>;
   updatedAt_gt?: Maybe<DateTimeInput>;
   updatedAt_gte?: Maybe<DateTimeInput>;
-  AND?: Maybe<JobWhereInput[] | JobWhereInput>;
-  OR?: Maybe<JobWhereInput[] | JobWhereInput>;
-  NOT?: Maybe<JobWhereInput[] | JobWhereInput>;
+  AND?: Maybe<CityScalarWhereInput[] | CityScalarWhereInput>;
+  OR?: Maybe<CityScalarWhereInput[] | CityScalarWhereInput>;
+  NOT?: Maybe<CityScalarWhereInput[] | CityScalarWhereInput>;
 }
 
-export interface UserCreateOneWithoutCompanyInput {
-  create?: Maybe<UserCreateWithoutCompanyInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
+export interface CompanyCreateWithoutJobsInput {
+  id?: Maybe<ID_Input>;
+  createdBy: UserCreateOneWithoutCompanyInput;
+  email: String;
+  name: String;
+  website: String;
+  logo?: Maybe<FileCreateOneInput>;
+}
+
+export interface InvoiceUpdateManyDataInput {
+  last_four_digits?: Maybe<Int>;
+  price?: Maybe<Int>;
+  status?: Maybe<String>;
+  receipt_url?: Maybe<String>;
+}
+
+export interface UserCreateWithoutCompanyInput {
+  id?: Maybe<ID_Input>;
+  email: String;
+  password: String;
+  role: ROLE_TYPE;
 }
 
 export interface JobUpsertWithWhereUniqueWithoutCityInput {
@@ -1526,9 +1589,12 @@ export interface JobUpsertWithWhereUniqueWithoutCityInput {
   create: JobCreateWithoutCityInput;
 }
 
-export interface FileCreateOneInput {
-  create?: Maybe<FileCreateInput>;
-  connect?: Maybe<FileWhereUniqueInput>;
+export interface FileCreateInput {
+  id?: Maybe<ID_Input>;
+  filename: String;
+  mimetype: String;
+  encoding: String;
+  url: String;
 }
 
 export interface JobScalarWhereInput {
@@ -1574,6 +1640,8 @@ export interface JobScalarWhereInput {
   location_not_starts_with?: Maybe<String>;
   location_ends_with?: Maybe<String>;
   location_not_ends_with?: Maybe<String>;
+  remote?: Maybe<Boolean>;
+  remote_not?: Maybe<Boolean>;
   salary?: Maybe<Int>;
   salary_not?: Maybe<Int>;
   salary_in?: Maybe<Int[] | Int>;
@@ -1582,6 +1650,26 @@ export interface JobScalarWhereInput {
   salary_lte?: Maybe<Int>;
   salary_gt?: Maybe<Int>;
   salary_gte?: Maybe<Int>;
+  salary_currency?: Maybe<CURRENCY>;
+  salary_currency_not?: Maybe<CURRENCY>;
+  salary_currency_in?: Maybe<CURRENCY[] | CURRENCY>;
+  salary_currency_not_in?: Maybe<CURRENCY[] | CURRENCY>;
+  min_salary?: Maybe<Int>;
+  min_salary_not?: Maybe<Int>;
+  min_salary_in?: Maybe<Int[] | Int>;
+  min_salary_not_in?: Maybe<Int[] | Int>;
+  min_salary_lt?: Maybe<Int>;
+  min_salary_lte?: Maybe<Int>;
+  min_salary_gt?: Maybe<Int>;
+  min_salary_gte?: Maybe<Int>;
+  max_salary?: Maybe<Int>;
+  max_salary_not?: Maybe<Int>;
+  max_salary_in?: Maybe<Int[] | Int>;
+  max_salary_not_in?: Maybe<Int[] | Int>;
+  max_salary_lt?: Maybe<Int>;
+  max_salary_lte?: Maybe<Int>;
+  max_salary_gt?: Maybe<Int>;
+  max_salary_gte?: Maybe<Int>;
   description?: Maybe<String>;
   description_not?: Maybe<String>;
   description_in?: Maybe<String[] | String>;
@@ -1596,10 +1684,6 @@ export interface JobScalarWhereInput {
   description_not_starts_with?: Maybe<String>;
   description_ends_with?: Maybe<String>;
   description_not_ends_with?: Maybe<String>;
-  job_type?: Maybe<JOB_TYPE>;
-  job_type_not?: Maybe<JOB_TYPE>;
-  job_type_in?: Maybe<JOB_TYPE[] | JOB_TYPE>;
-  job_type_not_in?: Maybe<JOB_TYPE[] | JOB_TYPE>;
   status?: Maybe<STATUS_TYPE>;
   status_not?: Maybe<STATUS_TYPE>;
   status_in?: Maybe<STATUS_TYPE[] | STATUS_TYPE>;
@@ -1697,15 +1781,15 @@ export interface JobScalarWhereInput {
   NOT?: Maybe<JobScalarWhereInput[] | JobScalarWhereInput>;
 }
 
-export interface UserSubscriptionWhereInput {
+export interface JobSubscriptionWhereInput {
   mutation_in?: Maybe<MutationType[] | MutationType>;
   updatedFields_contains?: Maybe<String>;
   updatedFields_contains_every?: Maybe<String[] | String>;
   updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<UserWhereInput>;
-  AND?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
-  OR?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
-  NOT?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
+  node?: Maybe<JobWhereInput>;
+  AND?: Maybe<JobSubscriptionWhereInput[] | JobSubscriptionWhereInput>;
+  OR?: Maybe<JobSubscriptionWhereInput[] | JobSubscriptionWhereInput>;
+  NOT?: Maybe<JobSubscriptionWhereInput[] | JobSubscriptionWhereInput>;
 }
 
 export interface JobUpdateManyWithWhereNestedInput {
@@ -1713,23 +1797,27 @@ export interface JobUpdateManyWithWhereNestedInput {
   data: JobUpdateManyDataInput;
 }
 
-export interface CountrySubscriptionWhereInput {
+export interface CompanySubscriptionWhereInput {
   mutation_in?: Maybe<MutationType[] | MutationType>;
   updatedFields_contains?: Maybe<String>;
   updatedFields_contains_every?: Maybe<String[] | String>;
   updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<CountryWhereInput>;
-  AND?: Maybe<CountrySubscriptionWhereInput[] | CountrySubscriptionWhereInput>;
-  OR?: Maybe<CountrySubscriptionWhereInput[] | CountrySubscriptionWhereInput>;
-  NOT?: Maybe<CountrySubscriptionWhereInput[] | CountrySubscriptionWhereInput>;
+  node?: Maybe<CompanyWhereInput>;
+  AND?: Maybe<CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput>;
+  OR?: Maybe<CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput>;
+  NOT?: Maybe<CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput>;
 }
 
 export interface JobUpdateManyDataInput {
   position?: Maybe<String>;
   location?: Maybe<String>;
+  remote?: Maybe<Boolean>;
   salary?: Maybe<Int>;
+  salary_currency?: Maybe<CURRENCY>;
+  min_salary?: Maybe<Int>;
+  max_salary?: Maybe<Int>;
   description?: Maybe<String>;
-  job_type?: Maybe<JOB_TYPE>;
+  job_types?: Maybe<JobUpdatejob_typesInput>;
   status?: Maybe<STATUS_TYPE>;
   apply_url?: Maybe<String>;
   last_payment?: Maybe<DateTimeInput>;
@@ -1739,13 +1827,210 @@ export interface JobUpdateManyDataInput {
   expiresAt?: Maybe<DateTimeInput>;
 }
 
-export interface CompanyUpsertWithoutCreatedByInput {
-  update: CompanyUpdateWithoutCreatedByDataInput;
-  create: CompanyCreateWithoutCreatedByInput;
+export interface CompanyUpdateWithoutCreatedByDataInput {
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  website?: Maybe<String>;
+  logo?: Maybe<FileUpdateOneInput>;
+  jobs?: Maybe<JobUpdateManyWithoutCompanyInput>;
 }
 
 export interface CityUpdateManyMutationInput {
   name?: Maybe<String>;
+}
+
+export interface UserUpdateInput {
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  role?: Maybe<ROLE_TYPE>;
+  company?: Maybe<CompanyUpdateOneRequiredWithoutCreatedByInput>;
+}
+
+export interface CityUpsertWithWhereUniqueWithoutCountryInput {
+  where: CityWhereUniqueInput;
+  update: CityUpdateWithoutCountryDataInput;
+  create: CityCreateWithoutCountryInput;
+}
+
+export interface CompanyCreateOneWithoutCreatedByInput {
+  create?: Maybe<CompanyCreateWithoutCreatedByInput>;
+  connect?: Maybe<CompanyWhereUniqueInput>;
+}
+
+export interface CityUpdateWithoutCountryDataInput {
+  name?: Maybe<String>;
+  jobs?: Maybe<JobUpdateManyWithoutCityInput>;
+}
+
+export interface JobUpdateInput {
+  position?: Maybe<String>;
+  location?: Maybe<String>;
+  remote?: Maybe<Boolean>;
+  city?: Maybe<CityUpdateOneWithoutJobsInput>;
+  salary?: Maybe<Int>;
+  salary_currency?: Maybe<CURRENCY>;
+  min_salary?: Maybe<Int>;
+  max_salary?: Maybe<Int>;
+  description?: Maybe<String>;
+  job_types?: Maybe<JobUpdatejob_typesInput>;
+  status?: Maybe<STATUS_TYPE>;
+  apply_url?: Maybe<String>;
+  last_payment?: Maybe<DateTimeInput>;
+  company?: Maybe<CompanyUpdateOneWithoutJobsInput>;
+  company_logo?: Maybe<FileUpdateOneInput>;
+  company_name?: Maybe<String>;
+  company_email?: Maybe<String>;
+  company_website?: Maybe<String>;
+  invoices?: Maybe<InvoiceUpdateManyWithoutJobInput>;
+  expiresAt?: Maybe<DateTimeInput>;
+}
+
+export interface CompanyCreateInput {
+  id?: Maybe<ID_Input>;
+  createdBy: UserCreateOneWithoutCompanyInput;
+  email: String;
+  name: String;
+  website: String;
+  logo?: Maybe<FileCreateOneInput>;
+  jobs?: Maybe<JobCreateManyWithoutCompanyInput>;
+}
+
+export type InvoiceWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export interface JobCreateManyWithoutCompanyInput {
+  create?: Maybe<JobCreateWithoutCompanyInput[] | JobCreateWithoutCompanyInput>;
+  connect?: Maybe<JobWhereUniqueInput[] | JobWhereUniqueInput>;
+}
+
+export type JobWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export interface JobCreateWithoutCompanyInput {
+  id?: Maybe<ID_Input>;
+  position: String;
+  location?: Maybe<String>;
+  remote: Boolean;
+  city?: Maybe<CityCreateOneWithoutJobsInput>;
+  salary?: Maybe<Int>;
+  salary_currency?: Maybe<CURRENCY>;
+  min_salary?: Maybe<Int>;
+  max_salary?: Maybe<Int>;
+  description: String;
+  job_types?: Maybe<JobCreatejob_typesInput>;
+  status: STATUS_TYPE;
+  apply_url: String;
+  last_payment: DateTimeInput;
+  company_logo?: Maybe<FileCreateOneInput>;
+  company_name?: Maybe<String>;
+  company_email?: Maybe<String>;
+  company_website?: Maybe<String>;
+  invoices?: Maybe<InvoiceCreateManyWithoutJobInput>;
+  expiresAt: DateTimeInput;
+}
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  email?: Maybe<String>;
+}>;
+
+export interface CityCreateOneWithoutJobsInput {
+  create?: Maybe<CityCreateWithoutJobsInput>;
+  connect?: Maybe<CityWhereUniqueInput>;
+}
+
+export interface CityUpdateManyDataInput {
+  name?: Maybe<String>;
+}
+
+export interface CityCreateWithoutJobsInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  country: CountryCreateOneWithoutCitiesInput;
+}
+
+export interface CountryCreateWithoutCitiesInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+}
+
+export interface CompanyUpdateInput {
+  createdBy?: Maybe<UserUpdateOneRequiredWithoutCompanyInput>;
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  website?: Maybe<String>;
+  logo?: Maybe<FileUpdateOneInput>;
+  jobs?: Maybe<JobUpdateManyWithoutCompanyInput>;
+}
+
+export interface CompanyCreateOneWithoutJobsInput {
+  create?: Maybe<CompanyCreateWithoutJobsInput>;
+  connect?: Maybe<CompanyWhereUniqueInput>;
+}
+
+export interface JobUpdateManyWithoutCompanyInput {
+  create?: Maybe<JobCreateWithoutCompanyInput[] | JobCreateWithoutCompanyInput>;
+  delete?: Maybe<JobWhereUniqueInput[] | JobWhereUniqueInput>;
+  connect?: Maybe<JobWhereUniqueInput[] | JobWhereUniqueInput>;
+  set?: Maybe<JobWhereUniqueInput[] | JobWhereUniqueInput>;
+  disconnect?: Maybe<JobWhereUniqueInput[] | JobWhereUniqueInput>;
+  update?: Maybe<
+    | JobUpdateWithWhereUniqueWithoutCompanyInput[]
+    | JobUpdateWithWhereUniqueWithoutCompanyInput
+  >;
+  upsert?: Maybe<
+    | JobUpsertWithWhereUniqueWithoutCompanyInput[]
+    | JobUpsertWithWhereUniqueWithoutCompanyInput
+  >;
+  deleteMany?: Maybe<JobScalarWhereInput[] | JobScalarWhereInput>;
+  updateMany?: Maybe<
+    JobUpdateManyWithWhereNestedInput[] | JobUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface FileCreateOneInput {
+  create?: Maybe<FileCreateInput>;
+  connect?: Maybe<FileWhereUniqueInput>;
+}
+
+export interface JobUpdateWithWhereUniqueWithoutCompanyInput {
+  where: JobWhereUniqueInput;
+  data: JobUpdateWithoutCompanyDataInput;
+}
+
+export interface FileSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<FileWhereInput>;
+  AND?: Maybe<FileSubscriptionWhereInput[] | FileSubscriptionWhereInput>;
+  OR?: Maybe<FileSubscriptionWhereInput[] | FileSubscriptionWhereInput>;
+  NOT?: Maybe<FileSubscriptionWhereInput[] | FileSubscriptionWhereInput>;
+}
+
+export interface JobUpdateWithoutCompanyDataInput {
+  position?: Maybe<String>;
+  location?: Maybe<String>;
+  remote?: Maybe<Boolean>;
+  city?: Maybe<CityUpdateOneWithoutJobsInput>;
+  salary?: Maybe<Int>;
+  salary_currency?: Maybe<CURRENCY>;
+  min_salary?: Maybe<Int>;
+  max_salary?: Maybe<Int>;
+  description?: Maybe<String>;
+  job_types?: Maybe<JobUpdatejob_typesInput>;
+  status?: Maybe<STATUS_TYPE>;
+  apply_url?: Maybe<String>;
+  last_payment?: Maybe<DateTimeInput>;
+  company_logo?: Maybe<FileUpdateOneInput>;
+  company_name?: Maybe<String>;
+  company_email?: Maybe<String>;
+  company_website?: Maybe<String>;
+  invoices?: Maybe<InvoiceUpdateManyWithoutJobInput>;
+  expiresAt?: Maybe<DateTimeInput>;
 }
 
 export interface CountryWhereInput {
@@ -1801,135 +2086,77 @@ export interface CountryWhereInput {
   NOT?: Maybe<CountryWhereInput[] | CountryWhereInput>;
 }
 
-export interface CityUpsertWithWhereUniqueWithoutCountryInput {
-  where: CityWhereUniqueInput;
-  update: CityUpdateWithoutCountryDataInput;
-  create: CityCreateWithoutCountryInput;
-}
-
-export type CountryWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-  name?: Maybe<String>;
-}>;
-
-export interface CityUpdateWithoutCountryDataInput {
-  name?: Maybe<String>;
-  jobs?: Maybe<JobUpdateManyWithoutCityInput>;
-}
-
-export interface JobUpdateInput {
-  position?: Maybe<String>;
-  location?: Maybe<String>;
-  city?: Maybe<CityUpdateOneWithoutJobsInput>;
-  salary?: Maybe<Int>;
-  description?: Maybe<String>;
-  job_type?: Maybe<JOB_TYPE>;
-  status?: Maybe<STATUS_TYPE>;
-  apply_url?: Maybe<String>;
-  last_payment?: Maybe<DateTimeInput>;
-  company?: Maybe<CompanyUpdateOneWithoutJobsInput>;
-  company_logo?: Maybe<FileUpdateOneInput>;
-  company_name?: Maybe<String>;
-  company_email?: Maybe<String>;
-  company_website?: Maybe<String>;
-  invoices?: Maybe<InvoiceUpdateManyWithoutJobInput>;
-  expiresAt?: Maybe<DateTimeInput>;
-}
-
-export interface CompanyCreateInput {
-  id?: Maybe<ID_Input>;
-  createdBy: UserCreateOneWithoutCompanyInput;
-  email: String;
-  name: String;
-  website: String;
-  logo?: Maybe<FileCreateOneInput>;
-  jobs?: Maybe<JobCreateManyWithoutCompanyInput>;
-}
-
-export interface JobUpsertWithoutInvoicesInput {
-  update: JobUpdateWithoutInvoicesDataInput;
-  create: JobCreateWithoutInvoicesInput;
-}
-
-export interface JobCreateManyWithoutCompanyInput {
-  create?: Maybe<JobCreateWithoutCompanyInput[] | JobCreateWithoutCompanyInput>;
-  connect?: Maybe<JobWhereUniqueInput[] | JobWhereUniqueInput>;
-}
-
-export interface InvoiceUpdateInput {
-  job?: Maybe<JobUpdateOneWithoutInvoicesInput>;
-  last_four_digits?: Maybe<Int>;
-  price?: Maybe<Int>;
-  status?: Maybe<String>;
-  receipt_url?: Maybe<String>;
-}
-
-export interface JobCreateWithoutCompanyInput {
-  id?: Maybe<ID_Input>;
-  position: String;
-  location?: Maybe<String>;
-  city?: Maybe<CityCreateOneWithoutJobsInput>;
-  salary?: Maybe<Int>;
-  description: String;
-  job_type: JOB_TYPE;
-  status: STATUS_TYPE;
-  apply_url: String;
-  last_payment: DateTimeInput;
-  company_logo?: Maybe<FileCreateOneInput>;
-  company_name?: Maybe<String>;
-  company_email?: Maybe<String>;
-  company_website?: Maybe<String>;
-  invoices?: Maybe<InvoiceCreateManyWithoutJobInput>;
-  expiresAt: DateTimeInput;
-}
-
-export interface InvoiceCreateInput {
-  id?: Maybe<ID_Input>;
-  job?: Maybe<JobCreateOneWithoutInvoicesInput>;
-  last_four_digits: Int;
-  price: Int;
-  status?: Maybe<String>;
-  receipt_url: String;
-}
-
-export interface CityCreateOneWithoutJobsInput {
+export interface CityUpdateOneWithoutJobsInput {
   create?: Maybe<CityCreateWithoutJobsInput>;
+  update?: Maybe<CityUpdateWithoutJobsDataInput>;
+  upsert?: Maybe<CityUpsertWithoutJobsInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
   connect?: Maybe<CityWhereUniqueInput>;
 }
 
-export interface CountryUpdateManyMutationInput {
+export interface JobUpdateManyMutationInput {
+  position?: Maybe<String>;
+  location?: Maybe<String>;
+  remote?: Maybe<Boolean>;
+  salary?: Maybe<Int>;
+  salary_currency?: Maybe<CURRENCY>;
+  min_salary?: Maybe<Int>;
+  max_salary?: Maybe<Int>;
+  description?: Maybe<String>;
+  job_types?: Maybe<JobUpdatejob_typesInput>;
+  status?: Maybe<STATUS_TYPE>;
+  apply_url?: Maybe<String>;
+  last_payment?: Maybe<DateTimeInput>;
+  company_name?: Maybe<String>;
+  company_email?: Maybe<String>;
+  company_website?: Maybe<String>;
+  expiresAt?: Maybe<DateTimeInput>;
+}
+
+export interface CityUpdateWithoutJobsDataInput {
   name?: Maybe<String>;
+  country?: Maybe<CountryUpdateOneRequiredWithoutCitiesInput>;
 }
 
-export interface CityCreateWithoutJobsInput {
-  id?: Maybe<ID_Input>;
-  name: String;
-  country: CountryCreateOneWithoutCitiesInput;
+export interface JobUpdateOneWithoutInvoicesInput {
+  create?: Maybe<JobCreateWithoutInvoicesInput>;
+  update?: Maybe<JobUpdateWithoutInvoicesDataInput>;
+  upsert?: Maybe<JobUpsertWithoutInvoicesInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
+  connect?: Maybe<JobWhereUniqueInput>;
 }
 
-export interface CityCreateInput {
-  id?: Maybe<ID_Input>;
-  name: String;
-  country: CountryCreateOneWithoutCitiesInput;
-  jobs?: Maybe<JobCreateManyWithoutCityInput>;
+export interface CityUpsertWithoutJobsInput {
+  update: CityUpdateWithoutJobsDataInput;
+  create: CityCreateWithoutJobsInput;
 }
 
-export interface CompanyUpdateInput {
-  createdBy?: Maybe<UserUpdateOneRequiredWithoutCompanyInput>;
-  email?: Maybe<String>;
-  name?: Maybe<String>;
-  website?: Maybe<String>;
-  logo?: Maybe<FileUpdateOneInput>;
-  jobs?: Maybe<JobUpdateManyWithoutCompanyInput>;
+export interface FileUpdateInput {
+  filename?: Maybe<String>;
+  mimetype?: Maybe<String>;
+  encoding?: Maybe<String>;
+  url?: Maybe<String>;
+}
+
+export interface JobUpsertWithWhereUniqueWithoutCompanyInput {
+  where: JobWhereUniqueInput;
+  update: JobUpdateWithoutCompanyDataInput;
+  create: JobCreateWithoutCompanyInput;
 }
 
 export interface JobCreateWithoutCityInput {
   id?: Maybe<ID_Input>;
   position: String;
   location?: Maybe<String>;
+  remote: Boolean;
   salary?: Maybe<Int>;
+  salary_currency?: Maybe<CURRENCY>;
+  min_salary?: Maybe<Int>;
+  max_salary?: Maybe<Int>;
   description: String;
-  job_type: JOB_TYPE;
+  job_types?: Maybe<JobCreatejob_typesInput>;
   status: STATUS_TYPE;
   apply_url: String;
   last_payment: DateTimeInput;
@@ -1942,133 +2169,21 @@ export interface JobCreateWithoutCityInput {
   expiresAt: DateTimeInput;
 }
 
-export interface JobUpdateManyWithoutCompanyInput {
-  create?: Maybe<JobCreateWithoutCompanyInput[] | JobCreateWithoutCompanyInput>;
-  delete?: Maybe<JobWhereUniqueInput[] | JobWhereUniqueInput>;
-  connect?: Maybe<JobWhereUniqueInput[] | JobWhereUniqueInput>;
-  set?: Maybe<JobWhereUniqueInput[] | JobWhereUniqueInput>;
-  disconnect?: Maybe<JobWhereUniqueInput[] | JobWhereUniqueInput>;
-  update?: Maybe<
-    | JobUpdateWithWhereUniqueWithoutCompanyInput[]
-    | JobUpdateWithWhereUniqueWithoutCompanyInput
-  >;
-  upsert?: Maybe<
-    | JobUpsertWithWhereUniqueWithoutCompanyInput[]
-    | JobUpsertWithWhereUniqueWithoutCompanyInput
-  >;
-  deleteMany?: Maybe<JobScalarWhereInput[] | JobScalarWhereInput>;
-  updateMany?: Maybe<
-    JobUpdateManyWithWhereNestedInput[] | JobUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface UserCreateWithoutCompanyInput {
-  id?: Maybe<ID_Input>;
-  email: String;
-  password: String;
-  role: ROLE_TYPE;
-}
-
-export interface JobUpdateWithWhereUniqueWithoutCompanyInput {
-  where: JobWhereUniqueInput;
-  data: JobUpdateWithoutCompanyDataInput;
-}
-
-export interface InvoiceSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<InvoiceWhereInput>;
-  AND?: Maybe<InvoiceSubscriptionWhereInput[] | InvoiceSubscriptionWhereInput>;
-  OR?: Maybe<InvoiceSubscriptionWhereInput[] | InvoiceSubscriptionWhereInput>;
-  NOT?: Maybe<InvoiceSubscriptionWhereInput[] | InvoiceSubscriptionWhereInput>;
-}
-
-export interface JobUpdateWithoutCompanyDataInput {
-  position?: Maybe<String>;
-  location?: Maybe<String>;
-  city?: Maybe<CityUpdateOneWithoutJobsInput>;
-  salary?: Maybe<Int>;
-  description?: Maybe<String>;
-  job_type?: Maybe<JOB_TYPE>;
-  status?: Maybe<STATUS_TYPE>;
-  apply_url?: Maybe<String>;
-  last_payment?: Maybe<DateTimeInput>;
-  company_logo?: Maybe<FileUpdateOneInput>;
-  company_name?: Maybe<String>;
-  company_email?: Maybe<String>;
-  company_website?: Maybe<String>;
-  invoices?: Maybe<InvoiceUpdateManyWithoutJobInput>;
-  expiresAt?: Maybe<DateTimeInput>;
-}
-
-export interface CompanyUpdateOneRequiredWithoutCreatedByInput {
-  create?: Maybe<CompanyCreateWithoutCreatedByInput>;
-  update?: Maybe<CompanyUpdateWithoutCreatedByDataInput>;
-  upsert?: Maybe<CompanyUpsertWithoutCreatedByInput>;
-  connect?: Maybe<CompanyWhereUniqueInput>;
-}
-
-export interface CityUpdateOneWithoutJobsInput {
-  create?: Maybe<CityCreateWithoutJobsInput>;
-  update?: Maybe<CityUpdateWithoutJobsDataInput>;
-  upsert?: Maybe<CityUpsertWithoutJobsInput>;
-  delete?: Maybe<Boolean>;
-  disconnect?: Maybe<Boolean>;
-  connect?: Maybe<CityWhereUniqueInput>;
-}
-
-export interface UserCreateInput {
-  id?: Maybe<ID_Input>;
-  email: String;
-  password: String;
-  role: ROLE_TYPE;
-  company: CompanyCreateOneWithoutCreatedByInput;
-}
-
-export interface CityUpdateWithoutJobsDataInput {
-  name?: Maybe<String>;
-  country?: Maybe<CountryUpdateOneRequiredWithoutCitiesInput>;
-}
-
-export type InvoiceWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
-
-export interface CityUpsertWithoutJobsInput {
-  update: CityUpdateWithoutJobsDataInput;
-  create: CityCreateWithoutJobsInput;
-}
-
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-  email?: Maybe<String>;
-}>;
-
-export interface JobUpsertWithWhereUniqueWithoutCompanyInput {
-  where: JobWhereUniqueInput;
-  update: JobUpdateWithoutCompanyDataInput;
-  create: JobCreateWithoutCompanyInput;
-}
-
-export interface CountryCreateWithoutCitiesInput {
-  id?: Maybe<ID_Input>;
-  name: String;
-}
-
 export interface CompanyUpdateManyMutationInput {
   email?: Maybe<String>;
   name?: Maybe<String>;
   website?: Maybe<String>;
 }
 
-export interface FileCreateInput {
-  id?: Maybe<ID_Input>;
-  filename: String;
-  mimetype: String;
-  encoding: String;
-  url: String;
+export interface UserSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<UserWhereInput>;
+  AND?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
+  OR?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
+  NOT?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
 }
 
 export interface CountryCreateInput {
@@ -2077,14 +2192,10 @@ export interface CountryCreateInput {
   cities?: Maybe<CityCreateManyWithoutCountryInput>;
 }
 
-export interface CompanyCreateWithoutCreatedByInput {
-  id?: Maybe<ID_Input>;
-  email: String;
-  name: String;
-  website: String;
-  logo?: Maybe<FileCreateOneInput>;
-  jobs?: Maybe<JobCreateManyWithoutCompanyInput>;
-}
+export type CountryWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  name?: Maybe<String>;
+}>;
 
 export interface CityUpdateManyWithoutCountryInput {
   create?: Maybe<
@@ -2126,54 +2237,35 @@ export interface CityCreateManyWithoutCountryInput {
   connect?: Maybe<CityWhereUniqueInput[] | CityWhereUniqueInput>;
 }
 
-export interface JobCreateInput {
-  id?: Maybe<ID_Input>;
-  position: String;
-  location?: Maybe<String>;
-  city?: Maybe<CityCreateOneWithoutJobsInput>;
-  salary?: Maybe<Int>;
-  description: String;
-  job_type: JOB_TYPE;
-  status: STATUS_TYPE;
-  apply_url: String;
-  last_payment: DateTimeInput;
-  company?: Maybe<CompanyCreateOneWithoutJobsInput>;
-  company_logo?: Maybe<FileCreateOneInput>;
-  company_name?: Maybe<String>;
-  company_email?: Maybe<String>;
-  company_website?: Maybe<String>;
-  invoices?: Maybe<InvoiceCreateManyWithoutJobInput>;
-  expiresAt: DateTimeInput;
+export interface InvoiceUpdateManyMutationInput {
+  last_four_digits?: Maybe<Int>;
+  price?: Maybe<Int>;
+  status?: Maybe<String>;
+  receipt_url?: Maybe<String>;
 }
 
-export interface CitySubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<CityWhereInput>;
-  AND?: Maybe<CitySubscriptionWhereInput[] | CitySubscriptionWhereInput>;
-  OR?: Maybe<CitySubscriptionWhereInput[] | CitySubscriptionWhereInput>;
-  NOT?: Maybe<CitySubscriptionWhereInput[] | CitySubscriptionWhereInput>;
+export interface UserUpdateManyMutationInput {
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  role?: Maybe<ROLE_TYPE>;
 }
 
-export interface CompanyCreateWithoutJobsInput {
+export interface UserCreateOneWithoutCompanyInput {
+  create?: Maybe<UserCreateWithoutCompanyInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface CityCreateInput {
   id?: Maybe<ID_Input>;
-  createdBy: UserCreateOneWithoutCompanyInput;
-  email: String;
   name: String;
-  website: String;
-  logo?: Maybe<FileCreateOneInput>;
+  country: CountryCreateOneWithoutCitiesInput;
+  jobs?: Maybe<JobCreateManyWithoutCityInput>;
 }
 
-export interface CityUpdateManyWithWhereNestedInput {
-  where: CityScalarWhereInput;
-  data: CityUpdateManyDataInput;
+export interface JobCreateOneWithoutInvoicesInput {
+  create?: Maybe<JobCreateWithoutInvoicesInput>;
+  connect?: Maybe<JobWhereUniqueInput>;
 }
-
-export type JobWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
 
 export interface NodeNode {
   id: ID_Output;
@@ -2210,25 +2302,21 @@ export interface UserPreviousValuesSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface CompanyConnection {
-  pageInfo: PageInfo;
-  edges: CompanyEdge[];
+export interface CompanyEdge {
+  node: Company;
+  cursor: String;
 }
 
-export interface CompanyConnectionPromise
-  extends Promise<CompanyConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<CompanyEdge>>() => T;
-  aggregate: <T = AggregateCompanyPromise>() => T;
+export interface CompanyEdgePromise extends Promise<CompanyEdge>, Fragmentable {
+  node: <T = CompanyPromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface CompanyConnectionSubscription
-  extends Promise<AsyncIterator<CompanyConnection>>,
+export interface CompanyEdgeSubscription
+  extends Promise<AsyncIterator<CompanyEdge>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<CompanyEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateCompanySubscription>() => T;
+  node: <T = CompanySubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface Company {
@@ -2304,6 +2392,27 @@ export interface CompanyNullablePromise
   updatedAt: () => Promise<DateTimeOutput>;
 }
 
+export interface CompanyConnection {
+  pageInfo: PageInfo;
+  edges: CompanyEdge[];
+}
+
+export interface CompanyConnectionPromise
+  extends Promise<CompanyConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<CompanyEdge>>() => T;
+  aggregate: <T = AggregateCompanyPromise>() => T;
+}
+
+export interface CompanyConnectionSubscription
+  extends Promise<AsyncIterator<CompanyConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<CompanyEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateCompanySubscription>() => T;
+}
+
 export interface AggregateCity {
   count: Int;
 }
@@ -2318,23 +2427,6 @@ export interface AggregateCitySubscription
   extends Promise<AsyncIterator<AggregateCity>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface CityEdge {
-  node: City;
-  cursor: String;
-}
-
-export interface CityEdgePromise extends Promise<CityEdge>, Fragmentable {
-  node: <T = CityPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface CityEdgeSubscription
-  extends Promise<AsyncIterator<CityEdge>>,
-    Fragmentable {
-  node: <T = CitySubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface BatchPayload {
@@ -2353,29 +2445,17 @@ export interface BatchPayloadSubscription
   count: () => Promise<AsyncIterator<Long>>;
 }
 
-export interface AggregateUser {
-  count: Int;
-}
-
-export interface AggregateUserPromise
-  extends Promise<AggregateUser>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUser>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
 export interface Job {
   id: ID_Output;
   position: String;
   location?: String;
+  remote: Boolean;
   salary?: Int;
+  salary_currency?: CURRENCY;
+  min_salary?: Int;
+  max_salary?: Int;
   description: String;
-  job_type: JOB_TYPE;
+  job_types: JOB_TYPE[];
   status: STATUS_TYPE;
   apply_url: String;
   last_payment: DateTimeOutput;
@@ -2391,10 +2471,14 @@ export interface JobPromise extends Promise<Job>, Fragmentable {
   id: () => Promise<ID_Output>;
   position: () => Promise<String>;
   location: () => Promise<String>;
+  remote: () => Promise<Boolean>;
   city: <T = CityPromise>() => T;
   salary: () => Promise<Int>;
+  salary_currency: () => Promise<CURRENCY>;
+  min_salary: () => Promise<Int>;
+  max_salary: () => Promise<Int>;
   description: () => Promise<String>;
-  job_type: () => Promise<JOB_TYPE>;
+  job_types: () => Promise<JOB_TYPE[]>;
   status: () => Promise<STATUS_TYPE>;
   apply_url: () => Promise<String>;
   last_payment: () => Promise<DateTimeOutput>;
@@ -2423,10 +2507,14 @@ export interface JobSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   position: () => Promise<AsyncIterator<String>>;
   location: () => Promise<AsyncIterator<String>>;
+  remote: () => Promise<AsyncIterator<Boolean>>;
   city: <T = CitySubscription>() => T;
   salary: () => Promise<AsyncIterator<Int>>;
+  salary_currency: () => Promise<AsyncIterator<CURRENCY>>;
+  min_salary: () => Promise<AsyncIterator<Int>>;
+  max_salary: () => Promise<AsyncIterator<Int>>;
   description: () => Promise<AsyncIterator<String>>;
-  job_type: () => Promise<AsyncIterator<JOB_TYPE>>;
+  job_types: () => Promise<AsyncIterator<JOB_TYPE[]>>;
   status: () => Promise<AsyncIterator<STATUS_TYPE>>;
   apply_url: () => Promise<AsyncIterator<String>>;
   last_payment: () => Promise<AsyncIterator<DateTimeOutput>>;
@@ -2453,10 +2541,14 @@ export interface JobNullablePromise extends Promise<Job | null>, Fragmentable {
   id: () => Promise<ID_Output>;
   position: () => Promise<String>;
   location: () => Promise<String>;
+  remote: () => Promise<Boolean>;
   city: <T = CityPromise>() => T;
   salary: () => Promise<Int>;
+  salary_currency: () => Promise<CURRENCY>;
+  min_salary: () => Promise<Int>;
+  max_salary: () => Promise<Int>;
   description: () => Promise<String>;
-  job_type: () => Promise<JOB_TYPE>;
+  job_types: () => Promise<JOB_TYPE[]>;
   status: () => Promise<STATUS_TYPE>;
   apply_url: () => Promise<String>;
   last_payment: () => Promise<DateTimeOutput>;
@@ -2479,25 +2571,38 @@ export interface JobNullablePromise extends Promise<Job | null>, Fragmentable {
   updatedAt: () => Promise<DateTimeOutput>;
 }
 
-export interface UserConnection {
-  pageInfo: PageInfo;
-  edges: UserEdge[];
+export interface CityEdge {
+  node: City;
+  cursor: String;
 }
 
-export interface UserConnectionPromise
-  extends Promise<UserConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UserEdge>>() => T;
-  aggregate: <T = AggregateUserPromise>() => T;
+export interface CityEdgePromise extends Promise<CityEdge>, Fragmentable {
+  node: <T = CityPromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnection>>,
+export interface CityEdgeSubscription
+  extends Promise<AsyncIterator<CityEdge>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
+  node: <T = CitySubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface UserEdge {
+  node: User;
+  cursor: String;
+}
+
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
+    Fragmentable {
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface PageInfo {
@@ -2523,20 +2628,66 @@ export interface PageInfoSubscription
   endCursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateJob {
-  count: Int;
+export interface City {
+  id: ID_Output;
+  name: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
 }
 
-export interface AggregateJobPromise
-  extends Promise<AggregateJob>,
-    Fragmentable {
-  count: () => Promise<Int>;
+export interface CityPromise extends Promise<City>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  country: <T = CountryPromise>() => T;
+  jobs: <T = FragmentableArray<Job>>(args?: {
+    where?: JobWhereInput;
+    orderBy?: JobOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
 }
 
-export interface AggregateJobSubscription
-  extends Promise<AsyncIterator<AggregateJob>>,
+export interface CitySubscription
+  extends Promise<AsyncIterator<City>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  country: <T = CountrySubscription>() => T;
+  jobs: <T = Promise<AsyncIterator<JobSubscription>>>(args?: {
+    where?: JobWhereInput;
+    orderBy?: JobOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface CityNullablePromise
+  extends Promise<City | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  country: <T = CountryPromise>() => T;
+  jobs: <T = FragmentableArray<Job>>(args?: {
+    where?: JobWhereInput;
+    orderBy?: JobOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
 }
 
 export interface CityConnection {
@@ -2560,34 +2711,34 @@ export interface CityConnectionSubscription
   aggregate: <T = AggregateCitySubscription>() => T;
 }
 
-export interface JobConnection {
-  pageInfo: PageInfo;
-  edges: JobEdge[];
+export interface JobEdge {
+  node: Job;
+  cursor: String;
 }
 
-export interface JobConnectionPromise
-  extends Promise<JobConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<JobEdge>>() => T;
-  aggregate: <T = AggregateJobPromise>() => T;
+export interface JobEdgePromise extends Promise<JobEdge>, Fragmentable {
+  node: <T = JobPromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface JobConnectionSubscription
-  extends Promise<AsyncIterator<JobConnection>>,
+export interface JobEdgeSubscription
+  extends Promise<AsyncIterator<JobEdge>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<JobEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateJobSubscription>() => T;
+  node: <T = JobSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface JobPreviousValues {
   id: ID_Output;
   position: String;
   location?: String;
+  remote: Boolean;
   salary?: Int;
+  salary_currency?: CURRENCY;
+  min_salary?: Int;
+  max_salary?: Int;
   description: String;
-  job_type: JOB_TYPE;
+  job_types: JOB_TYPE[];
   status: STATUS_TYPE;
   apply_url: String;
   last_payment: DateTimeOutput;
@@ -2605,9 +2756,13 @@ export interface JobPreviousValuesPromise
   id: () => Promise<ID_Output>;
   position: () => Promise<String>;
   location: () => Promise<String>;
+  remote: () => Promise<Boolean>;
   salary: () => Promise<Int>;
+  salary_currency: () => Promise<CURRENCY>;
+  min_salary: () => Promise<Int>;
+  max_salary: () => Promise<Int>;
   description: () => Promise<String>;
-  job_type: () => Promise<JOB_TYPE>;
+  job_types: () => Promise<JOB_TYPE[]>;
   status: () => Promise<STATUS_TYPE>;
   apply_url: () => Promise<String>;
   last_payment: () => Promise<DateTimeOutput>;
@@ -2625,9 +2780,13 @@ export interface JobPreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   position: () => Promise<AsyncIterator<String>>;
   location: () => Promise<AsyncIterator<String>>;
+  remote: () => Promise<AsyncIterator<Boolean>>;
   salary: () => Promise<AsyncIterator<Int>>;
+  salary_currency: () => Promise<AsyncIterator<CURRENCY>>;
+  min_salary: () => Promise<AsyncIterator<Int>>;
+  max_salary: () => Promise<AsyncIterator<Int>>;
   description: () => Promise<AsyncIterator<String>>;
-  job_type: () => Promise<AsyncIterator<JOB_TYPE>>;
+  job_types: () => Promise<AsyncIterator<JOB_TYPE[]>>;
   status: () => Promise<AsyncIterator<STATUS_TYPE>>;
   apply_url: () => Promise<AsyncIterator<String>>;
   last_payment: () => Promise<AsyncIterator<DateTimeOutput>>;
@@ -2639,21 +2798,20 @@ export interface JobPreviousValuesSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface InvoiceEdge {
-  node: Invoice;
-  cursor: String;
+export interface AggregateInvoice {
+  count: Int;
 }
 
-export interface InvoiceEdgePromise extends Promise<InvoiceEdge>, Fragmentable {
-  node: <T = InvoicePromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface InvoiceEdgeSubscription
-  extends Promise<AsyncIterator<InvoiceEdge>>,
+export interface AggregateInvoicePromise
+  extends Promise<AggregateInvoice>,
     Fragmentable {
-  node: <T = InvoiceSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  count: () => Promise<Int>;
+}
+
+export interface AggregateInvoiceSubscription
+  extends Promise<AsyncIterator<AggregateInvoice>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface CitySubscriptionPayload {
@@ -2681,20 +2839,25 @@ export interface CitySubscriptionPayloadSubscription
   previousValues: <T = CityPreviousValuesSubscription>() => T;
 }
 
-export interface AggregateFile {
-  count: Int;
+export interface InvoiceConnection {
+  pageInfo: PageInfo;
+  edges: InvoiceEdge[];
 }
 
-export interface AggregateFilePromise
-  extends Promise<AggregateFile>,
+export interface InvoiceConnectionPromise
+  extends Promise<InvoiceConnection>,
     Fragmentable {
-  count: () => Promise<Int>;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<InvoiceEdge>>() => T;
+  aggregate: <T = AggregateInvoicePromise>() => T;
 }
 
-export interface AggregateFileSubscription
-  extends Promise<AsyncIterator<AggregateFile>>,
+export interface InvoiceConnectionSubscription
+  extends Promise<AsyncIterator<InvoiceConnection>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<InvoiceEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateInvoiceSubscription>() => T;
 }
 
 export interface CityPreviousValues {
@@ -2722,25 +2885,21 @@ export interface CityPreviousValuesSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface FileConnection {
-  pageInfo: PageInfo;
-  edges: FileEdge[];
+export interface FileEdge {
+  node: File;
+  cursor: String;
 }
 
-export interface FileConnectionPromise
-  extends Promise<FileConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<FileEdge>>() => T;
-  aggregate: <T = AggregateFilePromise>() => T;
+export interface FileEdgePromise extends Promise<FileEdge>, Fragmentable {
+  node: <T = FilePromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface FileConnectionSubscription
-  extends Promise<AsyncIterator<FileConnection>>,
+export interface FileEdgeSubscription
+  extends Promise<AsyncIterator<FileEdge>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<FileEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateFileSubscription>() => T;
+  node: <T = FileSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface Invoice {
@@ -2786,290 +2945,6 @@ export interface InvoiceNullablePromise
   price: () => Promise<Int>;
   status: () => Promise<String>;
   receipt_url: () => Promise<String>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface AggregateCountry {
-  count: Int;
-}
-
-export interface AggregateCountryPromise
-  extends Promise<AggregateCountry>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateCountrySubscription
-  extends Promise<AsyncIterator<AggregateCountry>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface CompanySubscriptionPayload {
-  mutation: MutationType;
-  node: Company;
-  updatedFields: String[];
-  previousValues: CompanyPreviousValues;
-}
-
-export interface CompanySubscriptionPayloadPromise
-  extends Promise<CompanySubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = CompanyPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = CompanyPreviousValuesPromise>() => T;
-}
-
-export interface CompanySubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<CompanySubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = CompanySubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = CompanyPreviousValuesSubscription>() => T;
-}
-
-export interface CountryConnection {
-  pageInfo: PageInfo;
-  edges: CountryEdge[];
-}
-
-export interface CountryConnectionPromise
-  extends Promise<CountryConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<CountryEdge>>() => T;
-  aggregate: <T = AggregateCountryPromise>() => T;
-}
-
-export interface CountryConnectionSubscription
-  extends Promise<AsyncIterator<CountryConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<CountryEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateCountrySubscription>() => T;
-}
-
-export interface CompanyPreviousValues {
-  id: ID_Output;
-  email: String;
-  name: String;
-  website: String;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface CompanyPreviousValuesPromise
-  extends Promise<CompanyPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  email: () => Promise<String>;
-  name: () => Promise<String>;
-  website: () => Promise<String>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface CompanyPreviousValuesSubscription
-  extends Promise<AsyncIterator<CompanyPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  email: () => Promise<AsyncIterator<String>>;
-  name: () => Promise<AsyncIterator<String>>;
-  website: () => Promise<AsyncIterator<String>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface CompanyEdge {
-  node: Company;
-  cursor: String;
-}
-
-export interface CompanyEdgePromise extends Promise<CompanyEdge>, Fragmentable {
-  node: <T = CompanyPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface CompanyEdgeSubscription
-  extends Promise<AsyncIterator<CompanyEdge>>,
-    Fragmentable {
-  node: <T = CompanySubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface JobSubscriptionPayload {
-  mutation: MutationType;
-  node: Job;
-  updatedFields: String[];
-  previousValues: JobPreviousValues;
-}
-
-export interface JobSubscriptionPayloadPromise
-  extends Promise<JobSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = JobPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = JobPreviousValuesPromise>() => T;
-}
-
-export interface JobSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<JobSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = JobSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = JobPreviousValuesSubscription>() => T;
-}
-
-export interface UserEdge {
-  node: User;
-  cursor: String;
-}
-
-export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
-  node: <T = UserPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdge>>,
-    Fragmentable {
-  node: <T = UserSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface CountrySubscriptionPayload {
-  mutation: MutationType;
-  node: Country;
-  updatedFields: String[];
-  previousValues: CountryPreviousValues;
-}
-
-export interface CountrySubscriptionPayloadPromise
-  extends Promise<CountrySubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = CountryPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = CountryPreviousValuesPromise>() => T;
-}
-
-export interface CountrySubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<CountrySubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = CountrySubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = CountryPreviousValuesSubscription>() => T;
-}
-
-export interface JobEdge {
-  node: Job;
-  cursor: String;
-}
-
-export interface JobEdgePromise extends Promise<JobEdge>, Fragmentable {
-  node: <T = JobPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface JobEdgeSubscription
-  extends Promise<AsyncIterator<JobEdge>>,
-    Fragmentable {
-  node: <T = JobSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface CountryPreviousValues {
-  id: ID_Output;
-  name: String;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface CountryPreviousValuesPromise
-  extends Promise<CountryPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface CountryPreviousValuesSubscription
-  extends Promise<AsyncIterator<CountryPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface InvoiceConnection {
-  pageInfo: PageInfo;
-  edges: InvoiceEdge[];
-}
-
-export interface InvoiceConnectionPromise
-  extends Promise<InvoiceConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<InvoiceEdge>>() => T;
-  aggregate: <T = AggregateInvoicePromise>() => T;
-}
-
-export interface InvoiceConnectionSubscription
-  extends Promise<AsyncIterator<InvoiceConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<InvoiceEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateInvoiceSubscription>() => T;
-}
-
-export interface File {
-  id: ID_Output;
-  filename: String;
-  mimetype: String;
-  encoding: String;
-  url: String;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface FilePromise extends Promise<File>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  filename: () => Promise<String>;
-  mimetype: () => Promise<String>;
-  encoding: () => Promise<String>;
-  url: () => Promise<String>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface FileSubscription
-  extends Promise<AsyncIterator<File>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  filename: () => Promise<AsyncIterator<String>>;
-  mimetype: () => Promise<AsyncIterator<String>>;
-  encoding: () => Promise<AsyncIterator<String>>;
-  url: () => Promise<AsyncIterator<String>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface FileNullablePromise
-  extends Promise<File | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  filename: () => Promise<String>;
-  mimetype: () => Promise<String>;
-  encoding: () => Promise<String>;
-  url: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -3133,6 +3008,284 @@ export interface CountryNullablePromise
   updatedAt: () => Promise<DateTimeOutput>;
 }
 
+export interface CompanySubscriptionPayload {
+  mutation: MutationType;
+  node: Company;
+  updatedFields: String[];
+  previousValues: CompanyPreviousValues;
+}
+
+export interface CompanySubscriptionPayloadPromise
+  extends Promise<CompanySubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = CompanyPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = CompanyPreviousValuesPromise>() => T;
+}
+
+export interface CompanySubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<CompanySubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = CompanySubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = CompanyPreviousValuesSubscription>() => T;
+}
+
+export interface CountryEdge {
+  node: Country;
+  cursor: String;
+}
+
+export interface CountryEdgePromise extends Promise<CountryEdge>, Fragmentable {
+  node: <T = CountryPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface CountryEdgeSubscription
+  extends Promise<AsyncIterator<CountryEdge>>,
+    Fragmentable {
+  node: <T = CountrySubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface CompanyPreviousValues {
+  id: ID_Output;
+  email: String;
+  name: String;
+  website: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface CompanyPreviousValuesPromise
+  extends Promise<CompanyPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  email: () => Promise<String>;
+  name: () => Promise<String>;
+  website: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface CompanyPreviousValuesSubscription
+  extends Promise<AsyncIterator<CompanyPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  email: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  website: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface AggregateCompany {
+  count: Int;
+}
+
+export interface AggregateCompanyPromise
+  extends Promise<AggregateCompany>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateCompanySubscription
+  extends Promise<AsyncIterator<AggregateCompany>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface JobSubscriptionPayload {
+  mutation: MutationType;
+  node: Job;
+  updatedFields: String[];
+  previousValues: JobPreviousValues;
+}
+
+export interface JobSubscriptionPayloadPromise
+  extends Promise<JobSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = JobPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = JobPreviousValuesPromise>() => T;
+}
+
+export interface JobSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<JobSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = JobSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = JobPreviousValuesSubscription>() => T;
+}
+
+export interface AggregateUser {
+  count: Int;
+}
+
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface CountrySubscriptionPayload {
+  mutation: MutationType;
+  node: Country;
+  updatedFields: String[];
+  previousValues: CountryPreviousValues;
+}
+
+export interface CountrySubscriptionPayloadPromise
+  extends Promise<CountrySubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = CountryPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = CountryPreviousValuesPromise>() => T;
+}
+
+export interface CountrySubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<CountrySubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = CountrySubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = CountryPreviousValuesSubscription>() => T;
+}
+
+export interface AggregateJob {
+  count: Int;
+}
+
+export interface AggregateJobPromise
+  extends Promise<AggregateJob>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateJobSubscription
+  extends Promise<AsyncIterator<AggregateJob>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface CountryPreviousValues {
+  id: ID_Output;
+  name: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface CountryPreviousValuesPromise
+  extends Promise<CountryPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface CountryPreviousValuesSubscription
+  extends Promise<AsyncIterator<CountryPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface InvoiceEdge {
+  node: Invoice;
+  cursor: String;
+}
+
+export interface InvoiceEdgePromise extends Promise<InvoiceEdge>, Fragmentable {
+  node: <T = InvoicePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface InvoiceEdgeSubscription
+  extends Promise<AsyncIterator<InvoiceEdge>>,
+    Fragmentable {
+  node: <T = InvoiceSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface File {
+  id: ID_Output;
+  filename: String;
+  mimetype: String;
+  encoding: String;
+  url: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface FilePromise extends Promise<File>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  filename: () => Promise<String>;
+  mimetype: () => Promise<String>;
+  encoding: () => Promise<String>;
+  url: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface FileSubscription
+  extends Promise<AsyncIterator<File>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  filename: () => Promise<AsyncIterator<String>>;
+  mimetype: () => Promise<AsyncIterator<String>>;
+  encoding: () => Promise<AsyncIterator<String>>;
+  url: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface FileNullablePromise
+  extends Promise<File | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  filename: () => Promise<String>;
+  mimetype: () => Promise<String>;
+  encoding: () => Promise<String>;
+  url: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface FileConnection {
+  pageInfo: PageInfo;
+  edges: FileEdge[];
+}
+
+export interface FileConnectionPromise
+  extends Promise<FileConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<FileEdge>>() => T;
+  aggregate: <T = AggregateFilePromise>() => T;
+}
+
+export interface FileConnectionSubscription
+  extends Promise<AsyncIterator<FileConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<FileEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateFileSubscription>() => T;
+}
+
 export interface FileSubscriptionPayload {
   mutation: MutationType;
   node: File;
@@ -3158,82 +3311,46 @@ export interface FileSubscriptionPayloadSubscription
   previousValues: <T = FilePreviousValuesSubscription>() => T;
 }
 
-export interface AggregateCompany {
-  count: Int;
+export interface CountryConnection {
+  pageInfo: PageInfo;
+  edges: CountryEdge[];
 }
 
-export interface AggregateCompanyPromise
-  extends Promise<AggregateCompany>,
+export interface CountryConnectionPromise
+  extends Promise<CountryConnection>,
     Fragmentable {
-  count: () => Promise<Int>;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<CountryEdge>>() => T;
+  aggregate: <T = AggregateCountryPromise>() => T;
 }
 
-export interface AggregateCompanySubscription
-  extends Promise<AsyncIterator<AggregateCompany>>,
+export interface CountryConnectionSubscription
+  extends Promise<AsyncIterator<CountryConnection>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<CountryEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateCountrySubscription>() => T;
 }
 
-export interface City {
-  id: ID_Output;
-  name: String;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
+export interface UserConnection {
+  pageInfo: PageInfo;
+  edges: UserEdge[];
 }
 
-export interface CityPromise extends Promise<City>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  country: <T = CountryPromise>() => T;
-  jobs: <T = FragmentableArray<Job>>(args?: {
-    where?: JobWhereInput;
-    orderBy?: JobOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface CitySubscription
-  extends Promise<AsyncIterator<City>>,
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
     Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  country: <T = CountrySubscription>() => T;
-  jobs: <T = Promise<AsyncIterator<JobSubscription>>>(args?: {
-    where?: JobWhereInput;
-    orderBy?: JobOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
 }
 
-export interface CityNullablePromise
-  extends Promise<City | null>,
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
     Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  country: <T = CountryPromise>() => T;
-  jobs: <T = FragmentableArray<Job>>(args?: {
-    where?: JobWhereInput;
-    orderBy?: JobOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
 }
 
 export interface InvoicePreviousValues {
@@ -3372,20 +3489,25 @@ export interface FilePreviousValuesSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface AggregateInvoice {
-  count: Int;
+export interface JobConnection {
+  pageInfo: PageInfo;
+  edges: JobEdge[];
 }
 
-export interface AggregateInvoicePromise
-  extends Promise<AggregateInvoice>,
+export interface JobConnectionPromise
+  extends Promise<JobConnection>,
     Fragmentable {
-  count: () => Promise<Int>;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<JobEdge>>() => T;
+  aggregate: <T = AggregateJobPromise>() => T;
 }
 
-export interface AggregateInvoiceSubscription
-  extends Promise<AsyncIterator<AggregateInvoice>>,
+export interface JobConnectionSubscription
+  extends Promise<AsyncIterator<JobConnection>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<JobEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateJobSubscription>() => T;
 }
 
 export interface UserSubscriptionPayload {
@@ -3413,38 +3535,36 @@ export interface UserSubscriptionPayloadSubscription
   previousValues: <T = UserPreviousValuesSubscription>() => T;
 }
 
-export interface CountryEdge {
-  node: Country;
-  cursor: String;
+export interface AggregateCountry {
+  count: Int;
 }
 
-export interface CountryEdgePromise extends Promise<CountryEdge>, Fragmentable {
-  node: <T = CountryPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface CountryEdgeSubscription
-  extends Promise<AsyncIterator<CountryEdge>>,
+export interface AggregateCountryPromise
+  extends Promise<AggregateCountry>,
     Fragmentable {
-  node: <T = CountrySubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  count: () => Promise<Int>;
 }
 
-export interface FileEdge {
-  node: File;
-  cursor: String;
-}
-
-export interface FileEdgePromise extends Promise<FileEdge>, Fragmentable {
-  node: <T = FilePromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface FileEdgeSubscription
-  extends Promise<AsyncIterator<FileEdge>>,
+export interface AggregateCountrySubscription
+  extends Promise<AsyncIterator<AggregateCountry>>,
     Fragmentable {
-  node: <T = FileSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface AggregateFile {
+  count: Int;
+}
+
+export interface AggregateFilePromise
+  extends Promise<AggregateFile>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateFileSubscription
+  extends Promise<AsyncIterator<AggregateFile>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 /*
@@ -3455,15 +3575,15 @@ export type Int = number;
 export type Long = string;
 
 /*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean;
+
+/*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
 */
 export type ID_Input = string | number;
 export type ID_Output = string;
-
-/*
-The `Boolean` scalar type represents `true` or `false`.
-*/
-export type Boolean = boolean;
 
 /*
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
@@ -3487,6 +3607,10 @@ export type DateTimeOutput = string;
 export const models: Model[] = [
   {
     name: "JOB_TYPE",
+    embedded: false
+  },
+  {
+    name: "CURRENCY",
     embedded: false
   },
   {

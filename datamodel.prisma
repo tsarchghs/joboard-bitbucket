@@ -7,6 +7,11 @@ enum JOB_TYPE {
 	UNSPECIFIED
 }
 
+enum CURRENCY {
+	EURO
+	DOLLAR
+}
+
 enum STATUS_TYPE {
 	FEATURED
 	TODAY
@@ -67,10 +72,13 @@ type Job {
 	id: ID! @id
 	position: String!
 	location: String
+	remote: Boolean!
 	city: City
-	salary: Int
+	salary_currency: CURRENCY
+	min_salary: Int
+	max_salary: Int
 	description: String!
-	job_type: JOB_TYPE!
+	job_types: [JOB_TYPE!]! @scalarList(strategy: RELATION)
 	status: STATUS_TYPE!
 	apply_url: String!
 	last_payment: DateTime!

@@ -16,7 +16,7 @@ class Home extends React.Component {
 		this.state = {
 			moveCheckbox: false,
 			search_value: undefined,
-			job_type: undefined,
+			job_types: undefined,
 			featured_jobs: undefined,
 			today_jobs: undefined,
 			week_jobs: undefined,
@@ -43,7 +43,7 @@ class Home extends React.Component {
 				status_not_in,
 				query: this.state.only_remote ? "remote/everywhere" : this.state.search_value,
 				status_type,
-				job_type: this.jobTypeRef && this.jobTypeRef.value === "ALL" ? undefined : this.jobTypeRef.value,
+				job_types: this.jobTypeRef && this.jobTypeRef.value === "ALL" ? undefined : [this.jobTypeRef.value],
 				createdAt_gte,
 				createdAt_lte,
 				first,
@@ -62,6 +62,7 @@ class Home extends React.Component {
 					) {
 				    id
 				    location
+					remote
 				    position
 				    status
 				    company {
@@ -73,7 +74,7 @@ class Home extends React.Component {
 					  }
 				    }
 				    status
-				    job_type
+				    job_types
 					company_logo {
 						id
 						url
@@ -94,6 +95,7 @@ class Home extends React.Component {
 			`,
 			variables
 		})
+		console.log(res.data.jobs)
 		this.setState({
 			[to]: res.data.jobs
 		})
@@ -338,7 +340,11 @@ class Home extends React.Component {
 												? <span className="new blue"><img src="/assets/toolkit/images/blue-star.svg" alt="" />Featured</span>
 												: <span className="new "><img src="/assets/toolkit/images/blue-star.svg" alt="" />New</span>
 										}
-										<h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt="" />{window.__PUBLIC_DATA__.use_predefined_location ? `${job.city.name}, ${job.city.country.name}` : job.location}</h5>
+										<h5>
+											<img src="/assets/toolkit/images/gray-placeholder.svg" alt="" />
+											{window.__PUBLIC_DATA__.use_predefined_location ? `${job.city.name}, ${job.city.country.name}` : job.location} 
+											{job.remote ? `${job.location ? " Or" : ""} remote/anywhere` : ""}
+										</h5>
 									</div>
 								</div>
 							))
@@ -354,36 +360,41 @@ class Home extends React.Component {
 	            	!this.state.today_jobs ? <LoadingAnimation loading_type={1}/>
 	            	: 
 	            	(
-	            		this.state.today_jobs.map(job => (
-			              <div key={job.id} className={`job-listing-table__list home-table ${this.state.today_jobs[0].id === job.id ? "no-border" : ""}`}>
-							<div className="job-listing-table__lt">			                
-							<div className="job-listing-table__logo" 
-			                style={{
-			                	backgroundImage: this.getLogo(job)
-			                }} />
-				                <div className="job-listing-table__info">
-			                	<Link to={`/job/${job.id}`}>
-					                  <h4>
-					                    {job.position}
-					                  </h4>
-					                  <h5>
-					                   {job.company ? job.company.name : job.company_name}
-					                  </h5>
-				            		</Link>
-				                </div>
+	            		this.state.today_jobs.map(job => {
+							console.log(job.remote);
+							return (
+							<div key={job.id} className={`job-listing-table__list home-table ${this.state.today_jobs[0].id === job.id ? "no-border" : ""}`}>
+								<div className="job-listing-table__lt">			                
+								<div className="job-listing-table__logo" 
+								style={{
+									backgroundImage: this.getLogo(job)
+								}} />
+									<div className="job-listing-table__info">
+									<Link to={`/job/${job.id}`}>
+										<h4>
+											{job.position}
+										</h4>
+										<h5>
+										{job.company ? job.company.name : job.company_name}
+										</h5>
+										</Link>
+									</div>
+								</div>
+								<div className="job-listing-table__time">
+									{
+										job.status === "FEATURED" 
+										? <span className="new blue"><img src="/assets/toolkit/images/blue-star.svg" alt=""/>Featured</span>
+										: <span className="new ">New</span>
+									}
+										<h5>
+											<img src="/assets/toolkit/images/gray-placeholder.svg" alt="" />
+											{window.__PUBLIC_DATA__.use_predefined_location ? `${job.city.name}, ${job.city.country.name}` : job.location}
+											{job.remote ? `${job.location ? " Or" : ""} remote/anywhere` : ""}
+										</h5>
+								</div>
 							</div>
-			                <div className="job-listing-table__time">
-				                {
-				                	job.status === "FEATURED" 
-				                	? <span className="new blue"><img src="/assets/toolkit/images/blue-star.svg" alt=""/>Featured</span>
-				                	: <span className="new ">New</span>
-				                }
-								<h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt="" />
-								{window.__PUBLIC_DATA__.use_predefined_location ? `${job.city.name}, ${job.city.country.name}` : job.location}
-								</h5>
-			                </div>
-		              	</div>
-	            		))
+							)
+						})
 	            	)
 	            }
 				{
@@ -413,8 +424,12 @@ class Home extends React.Component {
 								</div>
 							</div>
 			                <div className="job-listing-table__time">
-			                  <h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt=""/>{window.__PUBLIC_DATA__.use_predefined_location ? `${job.city.name}, ${job.city.country.name}` : job.location}</h5>
-			                </div>
+								<h5>
+									<img src="/assets/toolkit/images/gray-placeholder.svg" alt="" />
+									{window.__PUBLIC_DATA__.use_predefined_location ? `${job.city.name}, ${job.city.country.name}` : job.location}
+									{job.remote ? `${job.location ? " Or" : ""} remote/anywhere` : ""}
+								</h5>			                
+							</div>
 		              	</div>
 	            		))
 	            	)
@@ -445,7 +460,11 @@ class Home extends React.Component {
 												</Link>
 											</div>
 											<div className="job-listing-table__time">
-												<h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt="" />{window.__PUBLIC_DATA__.use_predefined_location ? `${job.city.name}, ${job.city.country.name}` : job.location}</h5>
+											<h5>
+												<img src="/assets/toolkit/images/gray-placeholder.svg" alt="" />
+												{window.__PUBLIC_DATA__.use_predefined_location ? `${job.city.name}, ${job.city.country.name}` : job.location}
+												{job.remote ? `${job.location ? " Or" : ""} remote/anywhere` : ""}
+											</h5>											
 											</div>
 										</div>
 									</div>

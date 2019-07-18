@@ -23,7 +23,6 @@ const jobs = async (root,args,context,info) => {
 			}
 		] :  null
 		args.jobFilter.status_type ? where["status"] = args.jobFilter.status_type :  null
-		args.jobFilter.job_type ? where["job_type"] = args.jobFilter.job_type :  null
 		args.jobFilter.createdAt_gte ? where["createdAt_gte"] = args.jobFilter.createdAt_gte :  null	
 		args.jobFilter.createdAt_lte ? where["createdAt_lte"] = args.jobFilter.createdAt_lte :  null
 		args.jobFilter.id_not_in ? where["id_not_in"] = args.jobFilter.id_not_in :  null
@@ -31,13 +30,24 @@ const jobs = async (root,args,context,info) => {
 		args.jobFilter.city ? where["city"] = { id: args.jobFilter.city } : null
 		console.log(where["OR"])
 	}
-	return await context.db.query.jobs({
+	let jobs = await context.db.query.jobs({
 		where,
 		first: args.jobFilter ? args.jobFilter.first : undefined,
 		skip: args.jobFilter ? args.jobFilter.skip : undefined,
 		orderBy: "last_payment_DESC"
 	}
 	,info);
+	jobs = jobs.filter(job => {
+		console.log(args.jobFilter.job_types)
+		for (var x in args.jobFilter.job_types){
+			let job_type = args.jobFilter.job_types[x];
+			if (!job.job_types.includes(job_type)){
+				return false;
+			}
+		}
+		return true;
+	})
+	return jobs;
 }
 
 const createInvoice = async (context,charge,job_id, featured) => {
@@ -74,8 +84,11 @@ const createJob = async (root,args,context,info) => {
 	let data = {
 		position: args.position,
 		location: args.location,
-		salary: args.salary,
-		job_type: args.job_type,
+		remote: args.remote,
+		min_salary: args.min_salary,
+		max_salary: args.max_salary,
+		salary_currency: args.salary_currency,
+		job_types: { set: args.job_types },
 		status: args.status === "FEATURED" ? args.status : "TODAY",
 		apply_url: args.apply_url,
 		description: args.description,
@@ -116,9 +129,10 @@ const createJob = async (root,args,context,info) => {
 		{	
 			id
 			location
+			remote
 			position
 			status
-			job_type
+			job_types
 			expiresAt
 			company {
 				id
@@ -162,8 +176,11 @@ const createJobAndLogin = async (root,args,context,info) => {
 		company: { connect: { id: user.company.id } },
 		position: args.position,
 		location: args.location,
-		salary: args.salary,
-		job_type: args.job_type,
+		remote: args.remote,
+		min_salary: args.min_salary,
+		max_salary: args.max_salary,
+		salary_currency: args.salary_currency,
+		job_types: { set: args.job_types },
 		description: args.description,
 		status: args.status,
 		expiresAt: new Date(today.setDate(today.getDate() + 30)),
@@ -230,8 +247,11 @@ const updateJob = async (root,args,context,info) => {
 			position: args.position,
 			description: args.description,
 			location: args.location,
-			salary: args.salary,
-			job_type: args.job_type,
+			remote: args.remote,
+			min_salary: args.min_salary,
+			max_salary: args.max_salary,
+			salary_currency: args.salary_currency,
+			job_types: { set: args.job_types },
 			apply_url: args.apply_url
 		}
 	},info) 

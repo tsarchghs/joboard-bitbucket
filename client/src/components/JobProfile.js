@@ -24,6 +24,7 @@ class JobProfile extends React.Component {
 	}
 	getJobType(jobType){
 		console.log(jobType);
+		return JSON.stringify(jobType)
 		if (jobType === "FULL_TIME"){
 			jobType = "Full Time";
 		} else if (jobType === "PART_TIME"){
@@ -44,6 +45,10 @@ class JobProfile extends React.Component {
 		}
 		return url;
 	}
+	formatSalary(number,currency){
+		let type = currency === "DOLLAR" ? "USD" : "EUR"
+		return new Intl.NumberFormat(undefined, { maximumSignificantDigits: 3, style: 'currency', currency: type }).format(number);
+	}
 	render() {
 		return (
 			<Query
@@ -56,13 +61,10 @@ class JobProfile extends React.Component {
 				if (loading) { return <h4>Loading</h4> }
 				if (error) { return <h4>{error.message}</h4> }
 				let job = data.job;
-				console.log(job);
 				if (!this.description){
 					let contentState = stateFromHTML(job.description)
 					this.description = convertToRaw(contentState);
 				}
-				console.log(data);
-				console.log(job,123)
 				let backgroundImage;
 				if (job.company) {
 					if (job.company.logo && job.company.logo.url){
@@ -88,13 +90,16 @@ class JobProfile extends React.Component {
 					                    <div className="card-data__subtitle"><a href="#" className="card-data__subtitle">{job.company ? job.company.name : job.company_name}</a></div>
 					                    <div className="card-data__info">
 													<div className="card-data__info--data">
-													<p><img src="/assets/toolkit/images/gray-placeholder.svg" alt />{window.__PUBLIC_DATA__.use_predefined_location ? `${job.city.name}, ${job.city.country.name}` : job.location}</p>
-																	<p><img src="/assets/toolkit/images/gray-portfolio.svg" alt />{this.getJobType(job.job_type)}</p>
+													<p><img src="/assets/toolkit/images/gray-placeholder.svg" alt />{window.__PUBLIC_DATA__.use_predefined_location ? `${job.city.name}, ${job.city.country.name}` : job.location} {job.remote ? "Or remote/anywhere" : ""}</p>
+													<p><img src="/assets/toolkit/images/gray-portfolio.svg" alt />{this.getJobType(job.job_types)}</p>
 													{
-														!job.salary ? null :
-															<p><img src="/assets/salary.svg" alt />{job.salary}$</p>
+														!job.min_salary ? null :
+														<p><img src="/assets/salary.svg" alt />
+															{`${this.formatSalary(job.min_salary,job.salary_currency)}`}
+															{job.max_salary ? `- ${this.formatSalary(job.max_salary,job.salary_currency)}` : null}
+														</p>
 													}
-																</div>
+													</div>
 					                      <a href={job.company ? this.getAbsoluteUrl(job.company.website) : this.getAbsoluteUrl(job.company_website) } target="_blank"><img src="/assets/toolkit/images/grid-world.svg" alt />Company Website</a>
 					                    </div>
 					                  </div>
@@ -112,10 +117,10 @@ class JobProfile extends React.Component {
 									  			<a target="_blank" style={{marginBottom: "35px"}} href={this.getAbsoluteUrl(job.apply_url)} className="button blue">Apply for this job</a>													
 					              </div>
 													<div class="socials with-border">
-													<FacebookShareButton title={job.position} url={`https://www.flutterjobs.io${window.location.pathname}`}>
+													<FacebookShareButton title={job.position} url={`${window.location.href.slice(0,-1)}${window.location.pathname}`}>
 														<p class="button button--fb"><img src="../../assets/toolkit/images/fb.svg" alt=""/>Share on Facebook</p>
 													</FacebookShareButton>
-													<TwitterShareButton url={`https://www.flutterjobs.io${window.location.pathname}`}>
+													<TwitterShareButton url={`${window.location.href.slice(0,-1)}${window.location.pathname}`}>
 														<p class="button button--tw"><img src="../../assets/toolkit/images/tw.svg" alt=""/>Share on Twitter</p>
 													</TwitterShareButton>
 													</div>

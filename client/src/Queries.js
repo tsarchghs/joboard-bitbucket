@@ -33,9 +33,10 @@ const GET_LOGGED_IN_USER = gql`
             jobs {
                 id
                 location
+                remote
                 position
                 status
-                job_type
+                job_types
                 expiresAt
             }
             }
@@ -72,6 +73,7 @@ const JOB_QUERY = gql`
             description
             apply_url
             location
+            remote
             company_logo {
                 id
                 url
@@ -80,21 +82,26 @@ const JOB_QUERY = gql`
             company_website
             company_email
             createdAt
-            job_type
+            job_types
             status
-            salary
+            min_salary
+            max_salary
+            salary_currency
         }
     }
 `
 
-const UPDATE_JOB_QUERY = gql`
+const UPDATE_JOB_MUTATION = gql`
     mutation UpdateJob(
 		$id: ID!
 		$position: String
 		$description: String
 		$location: String
-		$salary: Int
-		$job_type: JOB_TYPE
+        $remote: Boolean
+		$min_salary: Int
+		$max_salary: Int
+		$salary_currency: CURRENCY
+		$job_types: [JOB_TYPE!]!
 		$apply_url: String
     ){
         updateJob(
@@ -102,8 +109,11 @@ const UPDATE_JOB_QUERY = gql`
             position: $position
             description: $description
             location: $location
-            salary: $salary
-            job_type: $job_type
+            remote: $remote
+            min_salary: $min_salary
+            max_salary: $max_salary
+            salary_currency: $salary_currency
+            job_types: $job_types
             apply_url: $apply_url
         ){
             id
@@ -122,6 +132,7 @@ const UPDATE_JOB_QUERY = gql`
             description
             apply_url
             location
+            remote
             company_logo {
                 id
                 url
@@ -130,9 +141,11 @@ const UPDATE_JOB_QUERY = gql`
             company_website
             company_email
             createdAt
-            job_type
+            job_types
             status
-            salary
+            min_salary
+            max_salary
+            salary_currency
         }
     }
 `
@@ -152,9 +165,12 @@ const CREATE_JOB_MUTATION = gql`
     mutation CreateJob(
         $position: String!
         $location: String
+        $remote: Boolean!
         $city: ID
-        $salary: Int
-        $job_type: JOB_TYPE!
+		$min_salary: Int
+		$max_salary: Int
+		$salary_currency: CURRENCY
+        $job_types: [JOB_TYPE!]!
         $status: STATUS_TYPE!
         $apply_url: String!
         $description: String
@@ -169,9 +185,12 @@ const CREATE_JOB_MUTATION = gql`
         createJob(
             position: $position
             location: $location
+            remote: $remote
             city: $city
-            salary: $salary
-            job_type: $job_type
+            min_salary: $min_salary
+            max_salary: $max_salary
+            salary_currency: $salary_currency
+            job_types: $job_types
             status: $status
             apply_url: $apply_url
             description: $description
@@ -185,9 +204,10 @@ const CREATE_JOB_MUTATION = gql`
         ){
             id
             location
+            remote
             position
             status
-            job_type
+            job_types
             expiresAt
         }
     }
@@ -199,8 +219,11 @@ const CREATE_JOB_AND_LOGIN_MUTATION = gql`
 		$password: String!
 		$position: String!
 		$location: String!
-		$salary: Int
-		$job_type: JOB_TYPE!
+        $remote: Boolean!
+		$min_salary: Int
+		$max_salary: Int
+		$salary_currency: CURRENCY
+        $job_types: [JOB_TYPE!]!
 		$status: STATUS_TYPE!
 		$apply_url: String!
 		$description: String!
@@ -211,8 +234,11 @@ const CREATE_JOB_AND_LOGIN_MUTATION = gql`
             password: $password
             position: $position
             location: $location
-            salary: $salary
-            job_type: $job_type
+            remote: $remote
+            min_salary: $min_salary
+            max_salary: $max_salary
+            salary_currency: $salary_currency
+            job_types: $job_types
             status: $status
             apply_url: $apply_url
             description: $description
@@ -244,7 +270,7 @@ export {
     INVOICES_QUERY,
     GET_LOGGED_IN_USER,
     JOB_QUERY,
-    UPDATE_JOB_QUERY,
+    UPDATE_JOB_MUTATION,
     DELETE_JOB_MUTATITON,
     CREATE_JOB_MUTATION,
     CREATE_JOB_AND_LOGIN_MUTATION,

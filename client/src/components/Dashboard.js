@@ -24,7 +24,7 @@ class _Dashboard extends React.Component {
 	closeModal(e,success){
 		if (success){
 			this[`${this.state.modalJob.id}_job-listing-table__time`].outerHTML = `
-			<div class="job-listing-table__time"><h5><img src="/assets/toolkit/images/time-left.svg" alt="">30 days left</h5><h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt="">${this.state.modalJob.location}</h5></div>
+			<div className="job-listing-table__time"><h5><img src="/assets/toolkit/images/time-left.svg" alt="">30 days left</h5><h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt="">${this.state.modalJob.location}</h5></div>
 			`
 			this[`${this.state.modalJob.id}_job-listing-table__more`].outerHTML = ""
 		}
@@ -116,7 +116,7 @@ class _Dashboard extends React.Component {
 						{
 							this.props.user.company.jobs.map(job => {
 								return (
-									<div className={`job-listing-table__list ${this.props.user.company.jobs[0].id === job.id ? "no-border" : ""}`}>
+									<div key={job.id} className={`job-listing-table__list ${this.props.user.company.jobs[0].id === job.id ? "no-border" : ""}`}>
 										<div className="job-listing-table__logo" style={{
 											backgroundImage:
 												this.props.user.company.logo
@@ -138,10 +138,10 @@ class _Dashboard extends React.Component {
 										<div ref={node => this[`${job.id}_job-listing-table__time`] = node} className="job-listing-table__time">
 											{
 												job.status !== "CLOSED"
-													? <h5 className><img src="/assets/toolkit/images/time-left.svg" alt="" />
+													? <h5><img src="/assets/toolkit/images/time-left.svg" alt="" />
 														{`${daysDifference(new Date(), new Date(job.expiresAt))} days left`}
 													</h5>
-													: <h5 class="red"><img src="/assets/toolkit/images/time-left.svg" alt=""/>Job expired</h5>
+													: <h5 className="red"><img src="/assets/toolkit/images/time-left.svg" alt=""/>Job expired</h5>
 											}
 											<h5><img src="/assets/toolkit/images/gray-placeholder.svg" alt="" />{job.location}</h5>
 										</div>
@@ -149,11 +149,11 @@ class _Dashboard extends React.Component {
 												job.status === "CLOSED"
 													?
 													<div ref={node => this[`${job.id}_job-listing-table__more`] = node} className="job-listing-table__more" style={{marginRight:15}}>
-													<p onClick={() => this.openModal("RenewJobModal",job)} class="button blue">Renew</p>
+													<p onClick={() => this.openModal("RenewJobModal",job)} className="button blue">Renew</p>
 													</div>
 													: ""
 											}
-											<div class="custom-dropdown opened" style={{display: this.state.jobOptions == job.id ? "initial" : "none"}}>
+											<div className="custom-dropdown opened" style={{display: this.state.jobOptions == job.id ? "initial" : "none"}}>
 												<Link to={`/job/update/${job.id}`}>
 													<p>Update</p>
 												</Link>	
