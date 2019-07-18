@@ -37,16 +37,18 @@ const jobs = async (root,args,context,info) => {
 		orderBy: "last_payment_DESC"
 	}
 	,info);
-	jobs = jobs.filter(job => {
-		console.log(args.jobFilter.job_types)
-		for (var x in args.jobFilter.job_types){
-			let job_type = args.jobFilter.job_types[x];
-			if (!job.job_types.includes(job_type)){
-				return false;
+	if (args.jobFilter){
+		jobs = jobs.filter(job => {
+			console.log(args.jobFilter.job_types)
+			for (var x in args.jobFilter.job_types){
+				let job_type = args.jobFilter.job_types[x];
+				if (!job.job_types.includes(job_type)){
+					return false;
+				}
 			}
-		}
-		return true;
-	})
+			return true;
+		})
+	}
 	return jobs;
 }
 
