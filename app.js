@@ -166,7 +166,8 @@ if (process.env.production === "true"){
 				use_predefined_location: process.env.USE_PREDEFINED_LOCATION,
 				use_keywords: process.env.USE_KEYWORDS,
 				use_location: process.env.USE_LOCATION,
-				use_categories: process.env.USE_CATEGORIES
+				use_categories: process.env.USE_CATEGORIES,
+				default_city: process.env.DEFAULT_CITY
 			}
 			htmlData = htmlData.replace("</head>",`
 				<link rel="stylesheet" href="${process.env.EXTRA_CSS_PATH}">

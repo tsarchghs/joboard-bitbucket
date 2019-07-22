@@ -23,7 +23,7 @@ class JobForm extends React.Component {
                 />
 
                 {
-                    window.__PUBLIC_DATA__.use_categories && 
+                    window.__PUBLIC_DATA__.use_categories &&
                         <SelectCategoryComponent
                             onChange={this.props.onChange}
                             category={this.props.category}
