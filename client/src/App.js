@@ -20,8 +20,9 @@ import UpdateJobProfile from "./components/UpdateJobProfile";
 import { getQueryParams } from "./helpers";
 import {StripeProvider,Elements} from 'react-stripe-elements';
 import { GET_LOGGED_IN_USER } from "./Queries"
+import  Category from "./components/Category";
 
-//https://frozen-refuge-32300.herokuapp.com
+// https://frozen-refuge-32300.herokuapp.com
 const client = new ApolloClient({
   uri: window.__PUBLIC_DATA__ && window.__PUBLIC_DATA__.apollo_client_uri ? window.__PUBLIC_DATA__.apollo_client_uri : "http://localhost:4000" ,
   request: async (operation) => {
@@ -146,6 +147,18 @@ class App extends Component {
                         </div>
                       )
                     }} />
+                    {
+                      window.__PUBLIC_DATA__.use_predefined_location &&
+                        <Route path="/category/:id" exact component={({ match }) => {
+                          console.log(1);
+                          return (
+                            <div className="master-layout">
+                              <Header user={user} />
+                              <Category match={match} />
+                            </div>
+                          )
+                        }} />
+                    }
                   </div>
                 );
               }}

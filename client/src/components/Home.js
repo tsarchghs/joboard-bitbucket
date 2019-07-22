@@ -1,27 +1,31 @@
 import React from "react";
-import { loadToolKit } from "../helpers";
 import { debounce } from "lodash";
 import { withApollo, Query } from 'react-apollo';
 import gql from "graphql-tag";
 import Footer from "./Footer";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { loadAfterHomeMount } from "../helpers"
 import LoadingAnimation from "./LoadingAnimation";
 import { COUNTRIES_QUERY } from "../Queries";
 import EventListener from 'react-event-listener';
+import DropdownWrapper from "./wrappers/DropdownWrapper";
+import { getQueryParams } from "../helpers";
+import { compose } from "recompose";
+import JobsList from "./home/JobsList";
 
-class Home extends React.Component {
+class _Home extends React.Component {
 	constructor(props){
 		super(props)
 		this.state = {
 			moveCheckbox: false,
-			search_value: undefined,
+			location: undefined,
 			job_types: undefined,
 			featured_jobs: undefined,
 			today_jobs: undefined,
 			week_jobs: undefined,
 			month_jobs: undefined,
-			hideLocationDropdown: true
+			hideLocationDropdown: true,
+			find_only_text: window.__PUBLIC_DATA__.find_only_text
 		}
 		this.jobTypeRef = undefined;
 		this.update = debounce(this.update.bind(this),250);
@@ -30,20 +34,54 @@ class Home extends React.Component {
 		this.handleClick = this.handleClick.bind(this)
 		this.openLocationDropdownButton = undefined;
 		this.countriesDropdown = undefined;
+		this.showCategories = this.showCategories.bind(this)
+		this.toggleLocationDropdownRef = React.createRef();
+		this.toggleLocationDropdown = this.toggleLocationDropdown.bind(this)
+		this.job_categories = {
+			data_scientist: "Data scientist",
+			al_researcher: "AL Researcher",
+			intelligence_specialist: "Intelligence specialist",
+			al_data_analyst: "AL Data Analyst",
+			machine_learning_engineer: "Machine Learning Engineer",
+			software_engineer: "Software Engineer"
+		}
 	}
 	componentDidMount(){
-		loadAfterHomeMount()
-		if (this.jobTypeRef) this.jobTypeRef.onchange = this.update;
-		this.update();
+		this.props.history.listen((location,action) => {
+			if (location.pathname === "/") {
+				if (location.search && !this.job_categories[getQueryParams(window.location.href).category]) {
+					this.props.history.push("/")
+					return;
+				}
+				this.update()
+				let categoryParam = getQueryParams(window.location.href).category;
+				if (location.search){
+					this.setState({
+						find_only_text: this.job_categories[categoryParam]
+					})
+				} else {
+					this.setState({ find_only_text: window.__PUBLIC_DATA__.find_only_text })
+				}
+			};
+		})
+		if (!this.illegalConfiguration()){
+			loadAfterHomeMount()
+			if (this.jobTypeRef) this.jobTypeRef.onchange = this.update;
+			this.update();
+		}
 	}
-	async updateJobs(to,id_not_in, status_not_in, status_type, createdAt_gte, createdAt_lte, first,skip,orderBy){
+	async updateJobs(to,id_not_in, status_not_in, status_type, createdAt_gte, createdAt_lte, first,skip,orderBy){		
+		let category = getQueryParams(window.location.href).category;
+		if (category) category = category.toUpperCase()
 		let variables = {
 			jobFilter: {
+				category,
 				id_not_in,
 				status_not_in,
-				query: this.state.only_remote ? "remote/everywhere" : this.state.search_value,
+				keywords: this.state.keywords,
+				location: this.state.only_remote ? "remote/everywhere" : this.state.location,
 				status_type,
-				job_types: this.jobTypeRef && this.jobTypeRef.value === "ALL" ? undefined : [this.jobTypeRef.value],
+				job_types: this.jobTypeRef && this.jobTypeRef.value === "ALL" ? undefined : (this.jobTypeRef ? [this.jobTypeRef.value] : undefined),
 				createdAt_gte,
 				createdAt_lte,
 				first,
@@ -90,12 +128,12 @@ class Home extends React.Component {
 				    company_name
 				    company_email
 				    company_website	
+					category
 					}
 				}
 			`,
 			variables
 		})
-		console.log(res.data.jobs)
 		this.setState({
 			[to]: res.data.jobs
 		})
@@ -124,27 +162,30 @@ class Home extends React.Component {
 		})
 		this.update()
 	}
-	getLogo(job){
-		let backgroundImage;
-		if (job.company) {
-			if (job.company.logo && job.company.logo.url) {
-				backgroundImage = `url("${job.company.logo.url}")`
-			} else {
-				backgroundImage = 'url("/assets/toolkit/images/	014-copany.svg")';
-			}
-		} else if (job.company_logo && job.company_logo.url) {
-			backgroundImage = `url("${job.company_logo.url}")`
-		} else {
-			backgroundImage = 'url("/assets/toolkit/images/	014-compay.svg")';
-		}
-		return backgroundImage
-	}
 	handleClick(e){
 		if (this.countriesDropdown && !this.countriesDropdown.contains(e.target) && !this.openLocationDropdownButton.contains(e.target)){
 			this.setState({hideLocationDropdown: true})
 		}
 	}
+	illegalConfiguration(){
+		return window.__PUBLIC_DATA__.use_location && window.__PUBLIC_DATA__.use_predefined_location
+	}
+	showCategories(){
+		return window.__PUBLIC_DATA__.use_predefined_location &&  !this.props.match
+	}
+	toggleLocationDropdown(e){
+		console.log(555)
+		this.setState(prevState => {
+			prevState.hideLocationDropdown = !prevState.hideLocationDropdown
+			return prevState;
+		})
+	}
 	render(){
+		if (window.__PUBLIC_DATA__.use_location && window.__PUBLIC_DATA__.use_predefined_location){
+			return (
+				<h1>Only use_location or use_predefined_location can be true</h1>
+			)
+		}
 		return (
 	      <div>
 			<EventListener
@@ -153,61 +194,69 @@ class Home extends React.Component {
 				onMouseUp={this.handleClick}
 			/>
 	        <div className="master-layout__header">
-	          <h1>{window.__PUBLIC_DATA__.find_only_text}</h1>
+	          <h1>{this.state.find_only_text}</h1>
 	          <div dangerouslySetInnerHTML={{
 				  __html: window.__PUBLIC_DATA__.below_find_only_html
 			  }}>
 			  </div>
 	          <div className="home__search">
-	            <label><span>Location</span>
-	              <div className="home__input">
-	                <input 
-	                	id="searchRef"
-						value={this.state.only_remote ? "" : this.state.search_value}
-	                	onChange={(e) => this.updateFilter(e,"search_value")}
-	                	className="input" 
-	                	type="email" 
-						disabled={this.state.only_remote}
-	                	placeholder="Position, skills" />
-	                <img src="../assets/toolkit/images/placeholder.svg" alt=""/>				
-	              </div>
-					<label style={{marginTop: 10}} className="checkbox-container">
-						<input type="checkbox" checked={this.state.only_remote} onChange={e => this.setState(nextState => {
-							nextState.only_remote = !nextState.only_remote;
-							if (nextState.only_remote){
-								nextState.selectedLocation = false;
-								nextState.city = undefined
-							}
-							nextState.hideLocationDropdown = true;
-							nextState.search_value = "";
-							this.update();
-							return nextState
-						 })} />
-						<span className="checkmark" />
-						<p style={{color: "white"}}>Remote/anywhere</p>
-					</label>	           
-				</label>
+	            {
+					!window.__PUBLIC_DATA__.use_keywords ? null
+					: <label>
+						<span>Keywords</span>
+						<div className="home__input">
+						<input 
+							value={this.state.keywords}
+							onChange={(e) => this.updateFilter(e,"keywords")}
+							className="input" 
+							placeholder="Position, skills" />
+						<img src="../assets/toolkit/images/placeholder.svg" alt=""/>				
+						</div>           
+					</label>
+				}
 				
 		{
 			window.__PUBLIC_DATA__.use_predefined_location &&
-				<React.Fragment>
-				<label><span>Location</span>
-					<div ref={node => this.openLocationDropdownButton = node} className="home__input">
-						<div className="home__input--extra" style={{cursor:"pointer"}} onClick={e => {
-							this.setState(prevState => {
-								prevState.hideLocationDropdown = !prevState.hideLocationDropdown 
-								return prevState;
-							})
-						}}>
-						<p>{this.state.selectedLocation ? this.state.selectedLocation : "Select location"}</p>
-						<img src="../assets/toolkit/images/placeholder.svg" alt=""/>				
-										<span className="arrow-down"><img src="../assets/toolkit/images/white-arrow.svg" /></span>
+				<label>
+					<span>Location</span>
+						<div ref={this.toggleLocationDropdownRef} className="home__input">
+							<div className="home__input--extra" style={{cursor:"pointer"}} onClick={this.toggleLocationDropdown}>
+								<p>{this.state.selectedLocation ? this.state.selectedLocation : "Select location"}</p>
+								<img src="../assets/toolkit/images/placeholder.svg" alt=""/>				
+								<span className="arrow-down"><img src="../assets/toolkit/images/white-arrow.svg" /></span>
+							</div>
 						</div>
+						<div style={{marginTop: 10}} className="checkbox-container">
+							<input type="checkbox" checked={this.state.only_remote} onChange={e => this.setState(nextState => {
+								nextState.only_remote = !nextState.only_remote;
+								if (nextState.only_remote){
+									nextState.selectedLocation = false;
+									nextState.city = undefined
+								}
+								nextState.hideLocationDropdown = true;
+								nextState.location = "";
+								this.update();
+								return nextState
+							})} />
+							<span className="checkmark" />
+							<p style={{color: "white"}}>Remote/anywhere</p>
 						</div>
 				</label>
-
-				</React.Fragment>
-
+		}
+		{
+			!window.__PUBLIC_DATA__.use_location ? null : <label>
+						<span>Location</span>
+						<div className="home__input">
+						<input 
+							value={this.state.only_remote ? "" : this.state.location}
+							onChange={(e) => this.updateFilter(e,"location")}
+							className="input" location
+							placeholder="Position, skills" 
+							disabled={this.state.only_remote}
+						/>
+						<img src="../assets/toolkit/images/placeholder.svg" alt=""/>				
+						</div>	           
+					</label>
 		}
 	            <label>
 				<span>Type of work</span>
@@ -238,66 +287,68 @@ class Home extends React.Component {
 								}
 							}
 							return (
-								this.state.hideLocationDropdown ? null : 
-								<div ref={node => this.countriesDropdown = node} className="home__selected open">
-									<div onBlur={e => {
-										console.log(e)
-										this.setState({hideLocationDropdown:true})
-									}} className={`home__selected-container ${this.state.insideState ? "move" : ""}`}>
-										<div className="select-card select-more">
-											<p className="select-card__title">Select country and city</p>
-											<div className="select-card__items">
-											{
-												countries.map(country => (
-													<div className="select-card__item" onClick={e => {
-														this.setState({
-															insideState: country.name
-														})
-													}}>
-														<img src="../assets/toolkit/images/al.jpg" />
-														<p>{country.name}</p>
-														<img className="select-card__item--icon" src="../assets/toolkit/images/gray-arrow.svg" />
-													</div>
-
-												))
-											}
-											</div>
-										</div>
-										<div className="select-card select-more">
-											<div className="select-card__more--title">
-												<img 
-													className="select-card__more--icon" 
-													src="../assets/toolkit/images/gray-arrow.svg" 
-													onClick={e => this.setState({insideState:false})}
-													style={{ cursor: "pointer" }}	
-												/>
-												<img src="../assets/toolkit/images/kos.jpg" />
-												<p className="select-card__title">Kosova</p>
-											</div>
-											<div className="select-card__items">
+								this.state.hideLocationDropdown ? null :
+								<DropdownWrapper
+									toggleButton={this.toggleLocationDropdownRef}
+									toggleDropdown={this.toggleLocationDropdown}
+									displayed={!this.state.hideLocationDropdown}
+								>
+									<div className="home__selected open">
+										<div className={`home__selected-container ${this.state.insideState ? "move" : ""}`}>
+											<div className="select-card select-more">
+												<p className="select-card__title">Select country and city</p>
+												<div className="select-card__items">
 												{
-													cities.map(city => (
-														<div className="select-card__item">
-															<p>{city.name}</p>
-															<label className="container card__checkbox">
-																<input 
-																	onChange={e => this.updateFilter(e,"city")} 
-																	checked={this.state.city === city.id} 
-																	value={city.id} 
-																	type="radio" 
-																	name="radio" 
-																	id={city.name}
-																/>
-																<span className="checkmark"></span>
-															</label>
+													countries.map(country => (
+														<div className="select-card__item" onClick={e => {
+															this.setState({
+																insideState: country.name
+															})
+														}}>
+															<img src="../assets/toolkit/images/al.jpg" />
+															<p>{country.name}</p>
+															<img className="select-card__item--icon" src="../assets/toolkit/images/gray-arrow.svg" />
 														</div>
 
-													))	
+													))
 												}
+												</div>
+											</div>
+											<div className="select-card select-more">
+												<div className="select-card__more--title">
+													<img 
+														className="select-card__more--icon" 
+														src="../assets/toolkit/images/gray-arrow.svg" 
+														onClick={e => this.setState({insideState:false})}
+														style={{ cursor: "pointer" }}	
+													/>
+													<img src="../assets/toolkit/images/kos.jpg" />
+													<p className="select-card__title">Kosova</p>
+												</div>
+												<div className="select-card__items">
+													{
+														cities.map(city => (
+															<div className="select-card__item">
+																<p>{city.name}</p>
+																<label className="container card__checkbox">
+																	<input 
+																		onChange={e => this.updateFilter(e,"city")} 
+																		checked={this.state.city === city.id} 
+																		value={city.id} 
+																		type="radio" 
+																		name="radio" 
+																		id={city.name}
+																	/>
+																	<span className="checkmark"></span>
+																</label>
+															</div>
+														))
+													}
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
+								</DropdownWrapper>
 
 							)
 						 }}
@@ -305,187 +356,56 @@ class Home extends React.Component {
 					 </Query>
 				
 	        </div>
+
+			{
+				!window.__PUBLIC_DATA__.use_categories || !true ? null :
+					<div className="master-layout__hero">
+						<Link to={`?category=data_scientist`}>Data scientist</Link>
+						<Link to={`?category=al_researcher`}>AL Researcher</Link>
+						<Link to={`?category=intelligence_specialist`}>Intelligence specialist</Link>
+						<Link to={`?category=al_data_analyst`}>AL Data Analyst</Link>
+						<Link to={`?category=machine_learning_engineer`}>Machine Learning Engineer</Link>
+						<Link to={`?category=software_engineer`}>Software Engineer</Link>
+					</div>
+			}
 	        <div className="master-layout__hero">
 	          <div className="home__table">
-				{
-					this.state.featured_jobs === undefined || (this.state.featured_jobs && this.state.featured_jobs.length)
-					? <h4 className="home__table-title">Featured</h4>
-					: null
-				}
-				{
-					!this.state.featured_jobs ? <LoadingAnimation loading_type={1}/>
-						:
-						(
-							this.state.featured_jobs.map(job => (
-								<div key={job.id} className={`job-listing-table__list home-table ${this.state.featured_jobs[0].id === job.id ? "no-border" : ""}`}>
-									<div className="job-listing-table__lt">
-										<div className="job-listing-table__logo"
-											style={{
-												backgroundImage: this.getLogo(job)
-											}} />
-										<div className="job-listing-table__info">
-											<Link to={`/job/${job.id}`}>
-												<h4>
-													{job.position}
-												</h4>
-												<h5>
-													{job.company ? job.company.name : job.company_name}
-												</h5>
-											</Link>
-										</div>
-									</div>
-									<div className="job-listing-table__time">
-										{
-											job.status === "FEATURED"
-												? <span className="new blue"><img src="/assets/toolkit/images/blue-star.svg" alt="" />Featured</span>
-												: <span className="new "><img src="/assets/toolkit/images/blue-star.svg" alt="" />New</span>
-										}
-										<h5>
-											<img src="/assets/toolkit/images/gray-placeholder.svg" alt="" />
-											{window.__PUBLIC_DATA__.use_predefined_location ? `${job.city.name}, ${job.city.country.name}` : job.location} 
-											{job.remote ? `${job.location ? " Or" : ""} remote/anywhere` : ""}
-										</h5>
-									</div>
-								</div>
-							))
-						)
-				}
-
-				{
-					this.state.today_jobs === undefined || (this.state.today_jobs && this.state.today_jobs.length)
-						? <h4 className="home__table-title">Today</h4>
-						: null
-				}
-	            {
-	            	!this.state.today_jobs ? <LoadingAnimation loading_type={1}/>
-	            	: 
-	            	(
-	            		this.state.today_jobs.map(job => {
-							console.log(job.remote);
-							return (
-							<div key={job.id} className={`job-listing-table__list home-table ${this.state.today_jobs[0].id === job.id ? "no-border" : ""}`}>
-								<div className="job-listing-table__lt">			                
-								<div className="job-listing-table__logo" 
-								style={{
-									backgroundImage: this.getLogo(job)
-								}} />
-									<div className="job-listing-table__info">
-									<Link to={`/job/${job.id}`}>
-										<h4>
-											{job.position}
-										</h4>
-										<h5>
-										{job.company ? job.company.name : job.company_name}
-										</h5>
-										</Link>
-									</div>
-								</div>
-								<div className="job-listing-table__time">
-									{
-										job.status === "FEATURED" 
-										? <span className="new blue"><img src="/assets/toolkit/images/blue-star.svg" alt=""/>Featured</span>
-										: <span className="new ">New</span>
-									}
-										<h5>
-											<img src="/assets/toolkit/images/gray-placeholder.svg" alt="" />
-											{window.__PUBLIC_DATA__.use_predefined_location ? `${job.city.name}, ${job.city.country.name}` : job.location}
-											{job.remote ? `${job.location ? " Or" : ""} remote/anywhere` : ""}
-										</h5>
-								</div>
-							</div>
-							)
-						})
-	            	)
-	            }
-				{
-					this.state.week_jobs === undefined || (this.state.week_jobs && this.state.week_jobs.length)
-					? <h4 className="home__table-title">Week</h4>
-					: null
-				}	            	
-					{ !this.state.week_jobs ? <LoadingAnimation loading_type={1}/>
-	            	: 
-	            	(
-	            		this.state.week_jobs.map(job => (
-			              <div key={job.id} className={`job-listing-table__list home-table ${this.state.week_jobs[0].id === job.id ? "no-border" : ""}`}>
-							<div className="job-listing-table__lt">
-									<div className="job-listing-table__logo"
-										style={{
-											backgroundImage: this.getLogo(job),
-										}} />
-								<div className="job-listing-table__info">
-									<Link to={`/job/${job.id}`}>
-									<h4>
-										{job.position}
-									</h4>
-									<h5>
-										<p>{job.company ? job.company.name : job.company_name}</p>
-									</h5>
-									</Link>
-								</div>
-							</div>
-			                <div className="job-listing-table__time">
-								<h5>
-									<img src="/assets/toolkit/images/gray-placeholder.svg" alt="" />
-									{window.__PUBLIC_DATA__.use_predefined_location ? `${job.city.name}, ${job.city.country.name}` : job.location}
-									{job.remote ? `${job.location ? " Or" : ""} remote/anywhere` : ""}
-								</h5>			                
-							</div>
-		              	</div>
-	            		))
-	            	)
-	            }
-						{
-							this.state.month_jobs === undefined || (this.state.month_jobs && this.state.month_jobs.length)
-								? <h4 className="home__table-title">Month</h4>
-								: null
-						}
-						{!this.state.month_jobs ? <LoadingAnimation loading_type={1}/>
-							:
-							(
-								this.state.month_jobs.map(job => (
-									<div key={job.id} className={`job-listing-table__list home-table ${this.state.month_jobs[0].id === job.id ? "no-border" : ""}`}>
-										<div className="job-listing-table__lt">
-											<div className="job-listing-table__logo"
-												style={{
-													backgroundImage: this.getLogo(job),
-												}} />
-											<div className="job-listing-table__info">
-												<Link to={`/job/${job.id}`}>
-													<h4>
-														{job.position}
-													</h4>
-													<h5>
-														<p>{job.company ? job.company.name : job.company_name}</p>
-													</h5>
-												</Link>
-											</div>
-											<div className="job-listing-table__time">
-											<h5>
-												<img src="/assets/toolkit/images/gray-placeholder.svg" alt="" />
-												{window.__PUBLIC_DATA__.use_predefined_location ? `${job.city.name}, ${job.city.country.name}` : job.location}
-												{job.remote ? `${job.location ? " Or" : ""} remote/anywhere` : ""}
-											</h5>											
-											</div>
-										</div>
-									</div>
-								))
-							)
-						}
-						{/* <div class="newsletter">
-							<div class="newsletter__title">
-								<img src="../../assets/toolkit/images/015-email.svg" alt=""/>
-								<p>Get the newest Flutter jobs in your inbox</p>
-							</div>
-							<div class="newsletter__input">
-								<input type="text" placeholder="Your email"/>
-								<a href="#" class="button button--blue">Notify me</a>
-							</div>
-						</div> */}
+				<JobsList
+					text={"Featured"}
+					show_status={true}
+					jobs={this.state.featured_jobs}
+					LoadingComponent={<LoadingAnimation loading_type={1} />}
+				/>
+				<JobsList
+					text={"Today"}
+					show_status={true}
+					jobs={this.state.today_jobs}
+					LoadingComponent={<LoadingAnimation loading_type={1} />}
+				/>	
+				<JobsList
+					text={"Week"}
+					show_status={false}
+					jobs={this.state.week_jobs}
+					LoadingComponent={<LoadingAnimation loading_type={1} />}
+				/>
+				<JobsList
+					text={"Month"}
+					show_status={false}
+					jobs={this.state.month_jobs}
+					LoadingComponent={<LoadingAnimation loading_type={1} />}
+				/>
+				{/* <div class="newsletter">
+					<div class="newsletter__title">
+						<img src="../../assets/toolkit/images/015-email.svg" alt=""/>
+						<p>Get the newest Flutter jobs in your inbox</p>
+					</div>
+					<div class="newsletter__input">
+						<input type="text" placeholder="Your email"/>
+						<a href="#" class="button button--blue">Notify me</a>
+					</div>
+				</div> */}
 	        </div>
-
-
-					<Footer/>
-					
+			<Footer/>
 	      </div>
 	    </div>
 				
@@ -493,4 +413,4 @@ class Home extends React.Component {
 	}
 }
 
-export default withApollo(Home);
+export default compose(withApollo,withRouter)(_Home);

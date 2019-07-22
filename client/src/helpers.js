@@ -30,6 +30,7 @@ var getQueryParams = (url) => {
     var pair = vars[i].split('=');
     params[pair[0]] = decodeURIComponent(pair[1]);
   }
+  if (params === "undefined") return undefined;
   return params;
 };
 
@@ -60,10 +61,60 @@ const handleUploadPhotoInput = (element, node) => {
   }
 }
 
+const getLogo = job => {
+  let backgroundImage;
+  if (job.company) {
+    if (job.company.logo && job.company.logo.url) {
+      backgroundImage = `url("${job.company.logo.url}")`
+    } else {
+      backgroundImage = 'url("/assets/toolkit/images/	014-copany.svg")';
+    }
+  } else if (job.company_logo && job.company_logo.url) {
+    backgroundImage = `url("${job.company_logo.url}")`
+  } else {
+    backgroundImage = 'url("/assets/toolkit/images/	014-compay.svg")';
+  }
+  return backgroundImage
+}
+
+const getJobTypes = jobTypes => {
+  for (var x in jobTypes) {
+    if (jobTypes[x] === "FULL_TIME") {
+      jobTypes[x] = "Full Time";
+    } else if (jobTypes[x] === "PART_TIME") {
+      jobTypes[x] = "Part Time";
+    } else if (jobTypes[x] === "CONTRACT") {
+      jobTypes[x] = "Contract";
+    } else if (jobTypes[x] === "FREELANCE") {
+      jobTypes[x] = "Freelance";
+    } else if (jobTypes[x] === "UNSPECIFIED") {
+      jobTypes[x] = "Unspecified";
+    }
+  }
+  return jobTypes.join(",");
+}
+
+const getAbsoluteUrl = url => {
+  if (url.indexOf("http") === -1) {
+    let tmp = `http://${url}`;
+    return tmp;
+  }
+  return url;
+}
+
+const formatSalary = (number,currency) => {
+  let type = currency === "DOLLAR" ? "USD" : "EUR"
+  return new Intl.NumberFormat(undefined, { maximumSignificantDigits: 3, style: 'currency', currency: type }).format(number);
+}
+
 export {
   loadToolKit,
   loadAfterHomeMount,
 	getQueryParams,
   daysDifference,
-  handleUploadPhotoInput
+  handleUploadPhotoInput,
+  getLogo,
+  getJobTypes,
+  getAbsoluteUrl,
+  formatSalary
 }

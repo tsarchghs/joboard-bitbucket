@@ -1,12 +1,19 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
-class Header extends React.Component {
+class _Header extends React.Component {
 	constructor(props){
 		super(props)
 		this.state = {
-			navMobile: false
+			navMobile: false,
+			pathname: window.location.pathname,
+			search: window.location.search
 		}
+	}
+	componentDidMount(){
+		this.props.history.listen((location,action) => {
+			this.setState({ pathname: location.pathname, search: location.search})
+		})
 	}
 	render(){
 		return (
@@ -17,6 +24,12 @@ class Header extends React.Component {
 		            <div className="header__logo"><Link to="/"><img src={window.__PUBLIC_DATA__.logo_url}/></Link></div>
 		          </Link>
 	              <div className="header__nav">
+				  {
+					  this.state.pathname === "/" && this.state.search && 
+						<Link to="/">
+							<a href="/" className="header__nav-login">Home</a>
+						</Link>
+				  }
 	              {
 	              	!this.props.user 
 	              	? <Link to="/login">
@@ -53,4 +66,4 @@ class Header extends React.Component {
 	}
 }
 
-export default Header;
+export default withRouter(_Header);

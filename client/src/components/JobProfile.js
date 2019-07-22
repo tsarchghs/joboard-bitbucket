@@ -11,8 +11,9 @@ import {
 	convertToRaw,
 } from 'draft-js';
 import { stateFromHTML } from "draft-js-import-html";
-import { EditorState } from "draft-js"
-// import { Helmet } from "react-helmet";
+import { getJobTypes, getAbsoluteUrl, formatSalary } from "../helpers";
+
+
 const monthNames = ["January", "February", "March", "April", "May", "June",
 	"July", "August", "September", "October", "November", "December"
 ];
@@ -21,33 +22,6 @@ class JobProfile extends React.Component {
 	constructor(props){
 		super(props);
 		this.description = undefined;
-	}
-	getJobType(jobType){
-		console.log(jobType);
-		return JSON.stringify(jobType)
-		if (jobType === "FULL_TIME"){
-			jobType = "Full Time";
-		} else if (jobType === "PART_TIME"){
-			jobType = "Part Time";
-		} else if (jobType === "CONTRACT"){
-			jobType = "Contract";
-		} else if (jobType === "FREELANCNE"){
-			jobType = "Freelance";
-		} else if (jobType === "UNSPECIFIED") {
-			jobType = "Unspecified";
-		}
-		return jobType;
-	}
-	getAbsoluteUrl = (url) => {
-		if (url.indexOf("http") === -1) {
-			let tmp = `http://${url}`;
-			return tmp;
-		}
-		return url;
-	}
-	formatSalary(number,currency){
-		let type = currency === "DOLLAR" ? "USD" : "EUR"
-		return new Intl.NumberFormat(undefined, { maximumSignificantDigits: 3, style: 'currency', currency: type }).format(number);
 	}
 	render() {
 		return (
@@ -91,22 +65,22 @@ class JobProfile extends React.Component {
 					                    <div className="card-data__info">
 													<div className="card-data__info--data">
 													<p><img src="/assets/toolkit/images/gray-placeholder.svg" alt />{window.__PUBLIC_DATA__.use_predefined_location ? `${job.city.name}, ${job.city.country.name}` : job.location} {job.remote ? "Or remote/anywhere" : ""}</p>
-													<p><img src="/assets/toolkit/images/gray-portfolio.svg" alt />{this.getJobType(job.job_types)}</p>
+													<p><img src="/assets/toolkit/images/gray-portfolio.svg" alt />{getJobTypes(job.job_types)}</p>
 													{
 														!job.min_salary ? null :
 														<p><img src="/assets/salary.svg" alt />
-															{`${this.formatSalary(job.min_salary,job.salary_currency)}`}
-															{job.max_salary ? `- ${this.formatSalary(job.max_salary,job.salary_currency)}` : null}
+															{`${formatSalary(job.min_salary,job.salary_currency)}`}
+															{job.max_salary ? `- ${formatSalary(job.max_salary,job.salary_currency)}` : null}
 														</p>
 													}
 													</div>
-					                      <a href={job.company ? this.getAbsoluteUrl(job.company.website) : this.getAbsoluteUrl(job.company_website) } target="_blank"><img src="/assets/toolkit/images/grid-world.svg" alt />Company Website</a>
+					                      <a href={job.company ? getAbsoluteUrl(job.company.website) : getAbsoluteUrl(job.company_website) } target="_blank"><img src="/assets/toolkit/images/grid-world.svg" alt />Company Website</a>
 					                    </div>
 					                  </div>
 					                </div>
 					                <div className="card__button">
 					                  <p className="gray">Posted {monthNames[new Date(job.createdAt).getMonth()]} {new Date(job.createdAt).toLocaleDateString().split("/")[1] }</p>
-									  <a target="_blank"  href={this.getAbsoluteUrl(job.apply_url)} className="button blue">Apply for this job</a>
+									  <a target="_blank"  href={getAbsoluteUrl(job.apply_url)} className="button blue">Apply for this job</a>
 					                </div>
 					              </div>
 					              <div className="inside-page__description">
@@ -114,7 +88,7 @@ class JobProfile extends React.Component {
 										__html:job.description
 									}} style={{"whiteSpace":"pre-line"}} className="inside-page__description-part">
 					                </div>
-									  			<a target="_blank" style={{marginBottom: "35px"}} href={this.getAbsoluteUrl(job.apply_url)} className="button blue">Apply for this job</a>													
+									  			<a target="_blank" style={{marginBottom: "35px"}} href={getAbsoluteUrl(job.apply_url)} className="button blue">Apply for this job</a>													
 					              </div>
 													<div class="socials with-border">
 													<FacebookShareButton title={job.position} url={`${window.location.href.slice(0,-1)}${window.location.pathname}`}>

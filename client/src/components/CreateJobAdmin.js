@@ -1,17 +1,10 @@
 import React from "react";
-import { CardElement, injectStripe } from 'react-stripe-elements';
-import RichEditor from "./RichEditor";
-import "../richEditor.css"
 import { convertToHTML } from "draft-convert";
 import { withApollo } from 'react-apollo';
 import { compose } from "recompose"
-import gql from "graphql-tag";
 import { withRouter } from "react-router";
-import { GET_LOGGED_IN_USER } from "../Queries";
-import { cloneDeep } from "lodash";
-import { handleUploadPhotoInput } from "../helpers";
 import { CREATE_JOB_MUTATION } from "../Queries";
-import LoadingAnimation from "./LoadingAnimation";
+import JobForm from "./form/JobForm";
 
 class _CreateJob extends React.Component {
 	constructor(props){
@@ -112,197 +105,42 @@ class _CreateJob extends React.Component {
 					<div className="create-job">
 					<h5>{window.__PUBLIC_DATA__.above_job_position_text}</h5>
 					<div className="create-job__input">
-						<label className="create-job__input--label"><span className="create-job__input--span">Position</span>
-						<input 
-							className="input" 
-							type="text"
-							required 
-							placeholder="Software engineer, mobile application developer..." 
-							value={this.state.posititon}
-							onChange={e => this.onChange(e,"position")}	
-						/>
-						</label>
-						<label className="create-job__input--label"><span className="create-job__input--span">JOB DESCRIPTION</span>
-							<RichEditor onChangeParentApp={editorState => this.setState({editorState})} />
-						</label>
-						<label className="create-job__input--label"><span className="create-job__input--span">Location</span>
-						<input 
-							className="input" 
-							type="text" 
-							placeholder="Location of the job" 
-							value={this.state.location}
-							onChange={e => this.onChange(e,"location")}
-							required={!this.state.remote}
-						/>
-						<label className="checkbox-container">
-							<input type="checkbox" checked={this.state.remote} onChange={e => {
-								this.setState(prevState => {
-									prevState.remote = !prevState.remote;
-									return prevState;
-								})
-							}} />
-							<span className="checkmark" />
-							<p>{this.state.location ? "Or Remote/anywhere" : "Remote/anywhere"}</p>
-						</label>
-						</label>
-						<label className="create-job__input--label"><span className="create-job__input--span">Salary</span>
-							Switch to range: <input type="checkbox" checked={this.state.isRange} onChange={e => {
+						<JobForm
+							user={false}
+							category={this.state.category}
+							onChangeParentApp={editorState => this.setState({ editorState })}
+							position={this.state.position}
+							city={this.state.city}
+							location={this.state.location}
+							remote={this.state.remote}
+							isRange={this.state.isRange}
+							salaryInputDisabled={this.state.salaryInputDisabled}
+							min_salary={this.state.min_salary}
+							max_salary={this.state.max_salary}
+							salary_currency={this.state.salary_currency}
+							onChange={this.onChange}
+							rangeOnChange={e => {
 								this.setState(prevState => {
 									prevState.isRange = !prevState.isRange
 									prevState.max_salary = undefined;
 									return prevState;
 								})
-							}} />
-
-							<input className="input" type="text" type="number" placeholder={this.state.isRange ? "Type the minimum salary" : "Type the salary here"}
-								onChange={e => this.onChange(e, "min_salary")}
-								disabled={this.state.salaryInputDisabled}
-								value={this.state.min_salary}
-								required
-							/>
-							{
-								!this.state.isRange ? null
-									: <input className="input" type="text" type="number" placeholder="Type the maximum salary"
-										onChange={e => this.onChange(e, "max_salary")}
-										disabled={this.state.salaryInputDisabled}
-										value={this.state.max_salary}
-										required
-									/>
-							}
-							<select value={this.state.salary_currency} onChange={e => this.setState({ salary_currency: e.target.value })} disabled={this.state.salaryInputDisabled}>
-								<option value="DOLLAR">Dollar</option>
-								<option value="EURO">Euro</option>
-							</select>
-							<label className="checkbox-container">
-								<input type="checkbox" checked={this.state.salaryInputDisabled} onChange={e => this.setState(nextState => {
-									nextState.salaryInputDisabled = !nextState.salaryInputDisabled
-									return nextState;
-								})} />
-								<span className="checkmark" />
-								<p className="checkmark-text">Do not show salary
-								</p>
-							</label>
-						</label>
-						<label className="create-job__input--label less-margin"><span className="create-job__input--span">Job type</span></label>
-						<div className="create-job__checkbox">
-							<label className="radio-container">
-								<input value="FULL_TIME" onChange={e => this.onChange(e, "job_types")} checked={this.state.job_types.includes("FULL_TIME")} type="checkbox" />
-								<span className="checkmarked">
-									<p>Full time</p>
-								</span>
-							</label>
-							<label className="radio-container">
-								<input value="PART_TIME" onChange={e => this.onChange(e, "job_types")} checked={this.state.job_types.includes("PART_TIME")} type="checkbox" />
-								<span className="checkmarked">
-									<p>Part-time</p>
-								</span>
-							</label>
-							<label className="radio-container">
-								<input value="FREELANCE" onChange={e => this.onChange(e, "job_types")} checked={this.state.job_types.includes("FREELANCE")} type="checkbox" />
-								<span className="checkmarked">
-									<p>Freelance</p>
-								</span>
-							</label>
-							<label className="radio-container">
-								<input value="CONTRACT" onChange={e => this.onChange(e, "job_types")} checked={this.state.job_types.includes("CONTRACT")} type="checkbox" />
-								<span className="checkmarked">
-									<p>Contract</p>
-								</span>
-							</label>
-							<label className="radio-container">
-								<input value="UNSPECIFIED" onChange={e => this.onChange(e, "job_types")} checked={this.state.job_types.includes("UNSPECIFIED")} type="checkbox" />
-								<span className="checkmarked">
-									<p>Unspecified</p>
-								</span>
-							</label>
-						</div>
-						<label className="create-job__input--label"><span className="create-job__input--span">Apply url</span>
-						<input onChange={e => this.onChange(e,"apply_url")} value={this.state.apply_url} required className="input" type="text" placeholder="Where people can apply" />
-						</label>
-					</div>
-					</div>
-					{
-						!this.props.user && <span className="line" />	
-					}
-					<div className="company-info">
-						<h5>Company info</h5>
-						<div>
-							<div className="upload-image">
-								<div ref={node => this.companyLogoDiv = node} style={{display:"inline"}} className="upload-image__img" style={{
-									backgroundSize: "cover",
-									backgroundRepeat:"no-repeat"
-								}} />
-								<div style={{display:"inline"}} style={{
-											position: "relative",
-											overflow: "hidden",
-											display: "inline-block"
-								}}>
-									<button style={{
-											border: "2px solid #00FFFF",
-											color: "#00FFFF",
-											backgroundColor: "white",
-											padding: "8px 20px",
-											borderRadius: "8px",
-											fontSize: "20px",
-											fontWeight: "bold",
-											marginTop: 5
-									}}>Upload a file</button>
-									<input style={{
-										fontSize: "100px",
-										position: "absolute",
-										left: 0,
-										top: 0,
-										opacity: 0
-									  }} 
-										ref={node => this.companyLogoInput = node}
-										onChange={e => {
-											e.persist();
-											handleUploadPhotoInput(e.target, this.companyLogoDiv);
-										}}
-									  type="file" name="myfile" />
-								</div>
-							</div>
-							<label className="create-job__input--label"><span className="create-job__input--span">Company name</span>
-								<input 
-									className="input" 
-									type="text" 
-									placeholder="Type your company name" 
-									onChange={e => this.onChange(e,"company_name")}	
-									value={this.state.company_name}
-									required
-								/>
-							</label>
-							<label className="create-job__input--label"><span className="create-job__input--span">Company email</span>
-								<input 
-									className="input" 
-									type="email" 
-									placeholder="Your Email here" 
-									value={this.state.company_email}
-									onChange={e => this.onChange(e,"company_email")}	
-									required
-								/>
-							</label>
-							<label className="create-job__input--label"><span className="create-job__input--span">Company website</span>
-								<input 
-									className="input" 
-									type="text"
-									placeholder="Company website" 
-									value={this.state.company_website}
-									onChange={e => this.onChange(e,"company_website")}	
-									required
-								/>
-							</label>
-						</div>
-						<label className="checkbox-container">
-							<input type="checkbox" checked={this.state.featured} onChange={e => this.onChange({target:{value:!this.state.featured}},"featured")}/>
-							<span className="checkmark" />
-							<p className="checkmark-text">Make my job vacancy featured for 7 days ( +50$) <span className="new blue"><img src="/assets/toolkit/images/blue-star.svg" alt />Featured</span></p>
-						</label>
-					<div className="text-center">
-					{
-						this.state.loading ? <LoadingAnimation loading_type={2}/>
-						: <button style={{width:"100%"}} type="submit" className="button blue">Post this job ({this.state.featured ? "249" : "199"}$)</button>
-					}
+							}}
+							apply_url={this.state.apply_url}
+							job_types={this.state.job_types}
+							toggle={this.toggle}
+							under_company_info_error={this.state.under_company_info_error}
+							hasAccount={this.state.hasAccount}
+							email={this.state.email}
+							password={this.state.password}
+							company_name={this.state.company_name}
+							company_email={this.state.company_email}
+							company_website={this.state.company_website}
+							card_error={this.state.card_error}
+							loading={this.state.loading}
+							featured={this.state.featured}
+							renderCard={false}
+						/>
 					</div>
 					</div>
 				</form>

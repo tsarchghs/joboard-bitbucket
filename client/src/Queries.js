@@ -87,6 +87,7 @@ const JOB_QUERY = gql`
             min_salary
             max_salary
             salary_currency
+            category
         }
     }
 `
@@ -94,6 +95,8 @@ const JOB_QUERY = gql`
 const UPDATE_JOB_MUTATION = gql`
     mutation UpdateJob(
 		$id: ID!
+        $city: ID
+        $category: JOB_CATEGORY
 		$position: String
 		$description: String
 		$location: String
@@ -106,6 +109,8 @@ const UPDATE_JOB_MUTATION = gql`
     ){
         updateJob(
             id: $id
+            city: $city
+            category: $category
             position: $position
             description: $description
             location: $location
@@ -137,6 +142,14 @@ const UPDATE_JOB_MUTATION = gql`
                 id
                 url
             }
+            city {
+                id
+                name
+                country {
+                    id
+                    name
+                }
+            }
             company_name
             company_website
             company_email
@@ -163,6 +176,7 @@ const DELETE_JOB_MUTATITON = gql`
 
 const CREATE_JOB_MUTATION = gql`
     mutation CreateJob(
+        $category: JOB_CATEGORY
         $position: String!
         $location: String
         $remote: Boolean!
@@ -183,6 +197,7 @@ const CREATE_JOB_MUTATION = gql`
         $bp: Boolean!
     ) {
         createJob(
+            category: $category
             position: $position
             location: $location
             remote: $remote
@@ -215,6 +230,7 @@ const CREATE_JOB_MUTATION = gql`
 
 const CREATE_JOB_AND_LOGIN_MUTATION = gql`
     mutation CreateJobAndLogin(
+        $category: JOB_CATEGORY
 		$email: String!
 		$password: String!
 		$position: String!
@@ -230,6 +246,7 @@ const CREATE_JOB_AND_LOGIN_MUTATION = gql`
 		$stripe_token: String!
     ){
         createJobAndLogin(
+            category: $category
             email: $email
             password: $password
             position: $position
@@ -266,6 +283,7 @@ const COUNTRIES_QUERY = gql`
         }
     }
 `
+
 export {
     INVOICES_QUERY,
     GET_LOGGED_IN_USER,
