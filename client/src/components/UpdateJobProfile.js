@@ -163,6 +163,7 @@ class _UpdateJobProfile extends React.Component {
                                         <PostJobButton
                                             loading={this.state.loading}
                                             featured={this.state.featured}
+                                            update={true}
                                         />
                                     </div>
                                 </div>
