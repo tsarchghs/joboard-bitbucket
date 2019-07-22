@@ -69,7 +69,7 @@ class _UpdateJobProfile extends React.Component {
         let job = res.data.job;
         console.log(job,55555);
         this.setState({
-            city: job.city.id,
+            city: job.city ? job.city.id : undefined,
             category: job.category,
             position: job.position,
             location: job.location,
