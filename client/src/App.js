@@ -24,7 +24,7 @@ import  Category from "./components/Category";
 
 // https://frozen-refuge-32300.herokuapp.com
 const client = new ApolloClient({
-  uri: "https://frozen-refuge-32300.herokuapp.com",
+  uri: window.__PUBLIC_DATA__.apollo_client_uri ? window.__PUBLIC_DATA__.apollo_client_uri : "http://localhost:4000/", 
   request: async (operation) => {
     const token = Cookies.get("token");
     operation.setContext({
