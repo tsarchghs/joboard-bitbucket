@@ -48,6 +48,7 @@ class JobForm extends React.Component {
                             onChange={this.props.onChange}
                             location={this.props.location}
                             remote={this.props.remote}
+                            toggle={this.props.toggle}
                         />
                 }
                 </label>
