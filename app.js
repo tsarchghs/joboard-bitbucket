@@ -106,7 +106,7 @@ if (process.env.production === "true"){
 
 	server.express.use((req, res, next) => {
 		let protocol = req.get('x-forwarded-proto');
-		if (protocol !== "https"){
+		if (process.env.REDIRECT_TO_HTTPS && protocol !== "https"){
 			console.log("REDIRECT");
 			return res.redirect(`${process.env.REDIRECT_TO_HTTPS}${req.url}`)
 		}
