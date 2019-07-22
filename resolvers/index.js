@@ -4,6 +4,7 @@ const companyResolvers = require("./Company");
 const jobResolvers = require("./Job");
 const invoiceResolvers = require("./Invoice")
 const countryResolvers = require("./Country");
+const { forwardTo } = require('prisma-binding')
 
 module.exports = {
 	Query: {

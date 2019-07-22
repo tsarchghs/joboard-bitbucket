@@ -335,30 +335,22 @@ export interface ClientConstructor<T> {
  * Types
  */
 
-export type InvoiceOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "last_four_digits_ASC"
-  | "last_four_digits_DESC"
-  | "price_ASC"
-  | "price_DESC"
-  | "status_ASC"
-  | "status_DESC"
-  | "receipt_url_ASC"
-  | "receipt_url_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
-
-export type ROLE_TYPE = "NORMAL" | "ADMIN";
-
 export type JOB_TYPE =
   | "FULL_TIME"
   | "PART_TIME"
   | "FREELANCE"
   | "CONTRACT"
   | "UNSPECIFIED";
+
+export type ROLE_TYPE = "NORMAL" | "ADMIN";
+
+export type JOB_CATEGORY =
+  | "DATA_SCIENTIST"
+  | "AL_RESEARCHER"
+  | "INTELLIGENCE_SPECIALIST"
+  | "AL_DATA_ANALYST"
+  | "MACHINE_LEARNING_ENGINEER"
+  | "SOFTWARE_ENGINEER";
 
 export type UserOrderByInput =
   | "id_ASC"
@@ -391,6 +383,8 @@ export type CURRENCY = "EURO" | "DOLLAR";
 export type JobOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "category_ASC"
+  | "category_DESC"
   | "position_ASC"
   | "position_DESC"
   | "location_ASC"
@@ -442,6 +436,22 @@ export type FileOrderByInput =
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
+export type InvoiceOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "last_four_digits_ASC"
+  | "last_four_digits_DESC"
+  | "price_ASC"
+  | "price_DESC"
+  | "status_ASC"
+  | "status_DESC"
+  | "receipt_url_ASC"
+  | "receipt_url_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
 export type CompanyOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -466,13 +476,9 @@ export type CountryOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export interface FileUpdateOneInput {
-  create?: Maybe<FileCreateInput>;
-  update?: Maybe<FileUpdateDataInput>;
-  upsert?: Maybe<FileUpsertNestedInput>;
-  delete?: Maybe<Boolean>;
-  disconnect?: Maybe<Boolean>;
-  connect?: Maybe<FileWhereUniqueInput>;
+export interface UserUpsertWithoutCompanyInput {
+  update: UserUpdateWithoutCompanyDataInput;
+  create: UserCreateWithoutCompanyInput;
 }
 
 export type CityWhereUniqueInput = AtLeastOne<{
@@ -771,6 +777,10 @@ export interface JobWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
+  category?: Maybe<JOB_CATEGORY>;
+  category_not?: Maybe<JOB_CATEGORY>;
+  category_in?: Maybe<JOB_CATEGORY[] | JOB_CATEGORY>;
+  category_not_in?: Maybe<JOB_CATEGORY[] | JOB_CATEGORY>;
   position?: Maybe<String>;
   position_not?: Maybe<String>;
   position_in?: Maybe<String[] | String>;
@@ -1022,6 +1032,7 @@ export type CompanyWhereUniqueInput = AtLeastOne<{
 }>;
 
 export interface JobUpdateWithoutCityDataInput {
+  category?: Maybe<JOB_CATEGORY>;
   position?: Maybe<String>;
   location?: Maybe<String>;
   remote?: Maybe<Boolean>;
@@ -1161,6 +1172,7 @@ export interface UserUpdateWithoutCompanyDataInput {
 
 export interface JobCreateInput {
   id?: Maybe<ID_Input>;
+  category?: Maybe<JOB_CATEGORY>;
   position: String;
   location?: Maybe<String>;
   remote: Boolean;
@@ -1182,9 +1194,9 @@ export interface JobCreateInput {
   expiresAt: DateTimeInput;
 }
 
-export interface UserUpsertWithoutCompanyInput {
-  update: UserUpdateWithoutCompanyDataInput;
-  create: UserCreateWithoutCompanyInput;
+export interface CityUpdateManyWithWhereNestedInput {
+  where: CityScalarWhereInput;
+  data: CityUpdateManyDataInput;
 }
 
 export interface JobUpsertWithoutInvoicesInput {
@@ -1192,12 +1204,17 @@ export interface JobUpsertWithoutInvoicesInput {
   create: JobCreateWithoutInvoicesInput;
 }
 
-export interface CityUpdateManyWithWhereNestedInput {
-  where: CityScalarWhereInput;
-  data: CityUpdateManyDataInput;
+export interface FileUpdateOneInput {
+  create?: Maybe<FileCreateInput>;
+  update?: Maybe<FileUpdateDataInput>;
+  upsert?: Maybe<FileUpsertNestedInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
+  connect?: Maybe<FileWhereUniqueInput>;
 }
 
 export interface JobUpdateWithoutInvoicesDataInput {
+  category?: Maybe<JOB_CATEGORY>;
   position?: Maybe<String>;
   location?: Maybe<String>;
   remote?: Maybe<Boolean>;
@@ -1240,6 +1257,7 @@ export interface FileUpsertNestedInput {
 
 export interface JobCreateWithoutInvoicesInput {
   id?: Maybe<ID_Input>;
+  category?: Maybe<JOB_CATEGORY>;
   position: String;
   location?: Maybe<String>;
   remote: Boolean;
@@ -1598,6 +1616,10 @@ export interface JobScalarWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
+  category?: Maybe<JOB_CATEGORY>;
+  category_not?: Maybe<JOB_CATEGORY>;
+  category_in?: Maybe<JOB_CATEGORY[] | JOB_CATEGORY>;
+  category_not_in?: Maybe<JOB_CATEGORY[] | JOB_CATEGORY>;
   position?: Maybe<String>;
   position_not?: Maybe<String>;
   position_in?: Maybe<String[] | String>;
@@ -1787,6 +1809,7 @@ export interface CompanySubscriptionWhereInput {
 }
 
 export interface JobUpdateManyDataInput {
+  category?: Maybe<JOB_CATEGORY>;
   position?: Maybe<String>;
   location?: Maybe<String>;
   remote?: Maybe<Boolean>;
@@ -1840,6 +1863,7 @@ export interface CityUpdateWithoutCountryDataInput {
 }
 
 export interface JobUpdateInput {
+  category?: Maybe<JOB_CATEGORY>;
   position?: Maybe<String>;
   location?: Maybe<String>;
   remote?: Maybe<Boolean>;
@@ -1886,6 +1910,7 @@ export type JobWhereUniqueInput = AtLeastOne<{
 
 export interface JobCreateWithoutCompanyInput {
   id?: Maybe<ID_Input>;
+  category?: Maybe<JOB_CATEGORY>;
   position: String;
   location?: Maybe<String>;
   remote: Boolean;
@@ -1987,6 +2012,7 @@ export interface FileSubscriptionWhereInput {
 }
 
 export interface JobUpdateWithoutCompanyDataInput {
+  category?: Maybe<JOB_CATEGORY>;
   position?: Maybe<String>;
   location?: Maybe<String>;
   remote?: Maybe<Boolean>;
@@ -2070,6 +2096,7 @@ export interface CityUpdateOneWithoutJobsInput {
 }
 
 export interface JobUpdateManyMutationInput {
+  category?: Maybe<JOB_CATEGORY>;
   position?: Maybe<String>;
   location?: Maybe<String>;
   remote?: Maybe<Boolean>;
@@ -2121,6 +2148,7 @@ export interface JobUpsertWithWhereUniqueWithoutCompanyInput {
 
 export interface JobCreateWithoutCityInput {
   id?: Maybe<ID_Input>;
+  category?: Maybe<JOB_CATEGORY>;
   position: String;
   location?: Maybe<String>;
   remote: Boolean;
@@ -2419,6 +2447,7 @@ export interface BatchPayloadSubscription
 
 export interface Job {
   id: ID_Output;
+  category?: JOB_CATEGORY;
   position: String;
   location?: String;
   remote: Boolean;
@@ -2440,6 +2469,7 @@ export interface Job {
 
 export interface JobPromise extends Promise<Job>, Fragmentable {
   id: () => Promise<ID_Output>;
+  category: () => Promise<JOB_CATEGORY>;
   position: () => Promise<String>;
   location: () => Promise<String>;
   remote: () => Promise<Boolean>;
@@ -2475,6 +2505,7 @@ export interface JobSubscription
   extends Promise<AsyncIterator<Job>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  category: () => Promise<AsyncIterator<JOB_CATEGORY>>;
   position: () => Promise<AsyncIterator<String>>;
   location: () => Promise<AsyncIterator<String>>;
   remote: () => Promise<AsyncIterator<Boolean>>;
@@ -2508,6 +2539,7 @@ export interface JobSubscription
 
 export interface JobNullablePromise extends Promise<Job | null>, Fragmentable {
   id: () => Promise<ID_Output>;
+  category: () => Promise<JOB_CATEGORY>;
   position: () => Promise<String>;
   location: () => Promise<String>;
   remote: () => Promise<Boolean>;
@@ -2698,6 +2730,7 @@ export interface JobEdgeSubscription
 
 export interface JobPreviousValues {
   id: ID_Output;
+  category?: JOB_CATEGORY;
   position: String;
   location?: String;
   remote: Boolean;
@@ -2721,6 +2754,7 @@ export interface JobPreviousValuesPromise
   extends Promise<JobPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  category: () => Promise<JOB_CATEGORY>;
   position: () => Promise<String>;
   location: () => Promise<String>;
   remote: () => Promise<Boolean>;
@@ -2744,6 +2778,7 @@ export interface JobPreviousValuesSubscription
   extends Promise<AsyncIterator<JobPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  category: () => Promise<AsyncIterator<JOB_CATEGORY>>;
   position: () => Promise<AsyncIterator<String>>;
   location: () => Promise<AsyncIterator<String>>;
   remote: () => Promise<AsyncIterator<Boolean>>;
@@ -3584,6 +3619,10 @@ export const models: Model[] = [
   },
   {
     name: "ROLE_TYPE",
+    embedded: false
+  },
+  {
+    name: "JOB_CATEGORY",
     embedded: false
   },
   {

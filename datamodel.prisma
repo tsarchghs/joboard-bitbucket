@@ -25,6 +25,14 @@ enum ROLE_TYPE {
 	ADMIN
 }
 
+enum JOB_CATEGORY {
+	DATA_SCIENTIST
+	AL_RESEARCHER
+	INTELLIGENCE_SPECIALIST
+	AL_DATA_ANALYST
+	MACHINE_LEARNING_ENGINEER
+	SOFTWARE_ENGINEER
+}
 
 type User {
 	id: ID! @id
@@ -70,6 +78,7 @@ type Invoice {
 
 type Job {
 	id: ID! @id
+	category: JOB_CATEGORY
 	position: String!
 	location: String
 	remote: Boolean!

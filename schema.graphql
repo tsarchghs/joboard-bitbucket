@@ -1,4 +1,13 @@
 
+enum JOB_CATEGORY {
+	DATA_SCIENTIST
+	AL_RESEARCHER
+	INTELLIGENCE_SPECIALIST
+	AL_DATA_ANALYST
+	MACHINE_LEARNING_ENGINEER
+	SOFTWARE_ENGINEER
+}
+
 enum JOB_TYPE {
 	FULL_TIME
 	PART_TIME
@@ -68,6 +77,7 @@ type Invoice {
 
 type Job {
 	id: ID!
+	category: JOB_CATEGORY
 	position: String!
 	location: String
 	remote: Boolean!
@@ -108,6 +118,7 @@ type City {
 }
 
 input CreateJob {
+	category: JOB_CATEGORY
 	position: String!
 	location: String
 	remote: Boolean!
@@ -144,9 +155,11 @@ input CreateCompanyInput {
 }
 
 input JobFilterInput {
+	category: JOB_CATEGORY
 	id_not_in: [ID!]
 	status_not_in: [STATUS_TYPE!]
-	query: String
+	keywords: String
+	location: String
 	city: ID
 	status_type: STATUS_TYPE
 	job_types: [JOB_TYPE!]
@@ -203,6 +216,7 @@ type Mutation {
 	): Job!
 
 	createJob(
+		category: JOB_CATEGORY
 		position: String!
 		location: String
 		remote: Boolean!
@@ -224,6 +238,7 @@ type Mutation {
 	): Job!
 
 	createJobAndLogin(
+		category: JOB_CATEGORY
 		email: String!
 		password: String!
 		position: String!
@@ -242,6 +257,8 @@ type Mutation {
 
 	updateJob(
 		id: ID!
+		city: ID
+		category: JOB_CATEGORY
 		position: String
 		description: String
 		location: String

@@ -2,7 +2,11 @@
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-export const typeDefs = /* GraphQL */ `type AggregateCity {
+export const typeDefs = /* GraphQL */ `type AggregateCategory {
+  count: Int!
+}
+
+type AggregateCity {
   count: Int!
 }
 
@@ -32,6 +36,151 @@ type AggregateUser {
 
 type BatchPayload {
   count: Long!
+}
+
+type Category {
+  id: ID!
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type CategoryConnection {
+  pageInfo: PageInfo!
+  edges: [CategoryEdge]!
+  aggregate: AggregateCategory!
+}
+
+input CategoryCreateInput {
+  id: ID
+  name: String!
+}
+
+input CategoryCreateOneInput {
+  create: CategoryCreateInput
+  connect: CategoryWhereUniqueInput
+}
+
+type CategoryEdge {
+  node: Category!
+  cursor: String!
+}
+
+enum CategoryOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type CategoryPreviousValues {
+  id: ID!
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type CategorySubscriptionPayload {
+  mutation: MutationType!
+  node: Category
+  updatedFields: [String!]
+  previousValues: CategoryPreviousValues
+}
+
+input CategorySubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: CategoryWhereInput
+  AND: [CategorySubscriptionWhereInput!]
+  OR: [CategorySubscriptionWhereInput!]
+  NOT: [CategorySubscriptionWhereInput!]
+}
+
+input CategoryUpdateDataInput {
+  name: String
+}
+
+input CategoryUpdateInput {
+  name: String
+}
+
+input CategoryUpdateManyMutationInput {
+  name: String
+}
+
+input CategoryUpdateOneInput {
+  create: CategoryCreateInput
+  update: CategoryUpdateDataInput
+  upsert: CategoryUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: CategoryWhereUniqueInput
+}
+
+input CategoryUpsertNestedInput {
+  update: CategoryUpdateDataInput!
+  create: CategoryCreateInput!
+}
+
+input CategoryWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [CategoryWhereInput!]
+  OR: [CategoryWhereInput!]
+  NOT: [CategoryWhereInput!]
+}
+
+input CategoryWhereUniqueInput {
+  id: ID
+  name: String
 }
 
 type City {
@@ -695,6 +844,11 @@ input CountryWhereUniqueInput {
   name: String
 }
 
+enum CURRENCY {
+  EURO
+  DOLLAR
+}
+
 scalar DateTime
 
 type File {
@@ -1221,12 +1375,16 @@ input InvoiceWhereUniqueInput {
 
 type Job {
   id: ID!
+  category: Category
   position: String!
   location: String
+  remote: Boolean!
   city: City
-  salary: Int
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String!
-  job_type: JOB_TYPE!
+  job_types: [JOB_TYPE!]!
   status: STATUS_TYPE!
   apply_url: String!
   last_payment: DateTime!
@@ -1257,12 +1415,16 @@ type JobConnection {
 
 input JobCreateInput {
   id: ID
+  category: CategoryCreateOneInput
   position: String!
   location: String
+  remote: Boolean!
   city: CityCreateOneWithoutJobsInput
-  salary: Int
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String!
-  job_type: JOB_TYPE!
+  job_types: JobCreatejob_typesInput
   status: STATUS_TYPE!
   apply_url: String!
   last_payment: DateTime!
@@ -1273,6 +1435,10 @@ input JobCreateInput {
   company_website: String
   invoices: InvoiceCreateManyWithoutJobInput
   expiresAt: DateTime!
+}
+
+input JobCreatejob_typesInput {
+  set: [JOB_TYPE!]
 }
 
 input JobCreateManyWithoutCityInput {
@@ -1292,11 +1458,15 @@ input JobCreateOneWithoutInvoicesInput {
 
 input JobCreateWithoutCityInput {
   id: ID
+  category: CategoryCreateOneInput
   position: String!
   location: String
-  salary: Int
+  remote: Boolean!
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String!
-  job_type: JOB_TYPE!
+  job_types: JobCreatejob_typesInput
   status: STATUS_TYPE!
   apply_url: String!
   last_payment: DateTime!
@@ -1311,12 +1481,16 @@ input JobCreateWithoutCityInput {
 
 input JobCreateWithoutCompanyInput {
   id: ID
+  category: CategoryCreateOneInput
   position: String!
   location: String
+  remote: Boolean!
   city: CityCreateOneWithoutJobsInput
-  salary: Int
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String!
-  job_type: JOB_TYPE!
+  job_types: JobCreatejob_typesInput
   status: STATUS_TYPE!
   apply_url: String!
   last_payment: DateTime!
@@ -1330,12 +1504,16 @@ input JobCreateWithoutCompanyInput {
 
 input JobCreateWithoutInvoicesInput {
   id: ID
+  category: CategoryCreateOneInput
   position: String!
   location: String
+  remote: Boolean!
   city: CityCreateOneWithoutJobsInput
-  salary: Int
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String!
-  job_type: JOB_TYPE!
+  job_types: JobCreatejob_typesInput
   status: STATUS_TYPE!
   apply_url: String!
   last_payment: DateTime!
@@ -1359,12 +1537,16 @@ enum JobOrderByInput {
   position_DESC
   location_ASC
   location_DESC
-  salary_ASC
-  salary_DESC
+  remote_ASC
+  remote_DESC
+  salary_currency_ASC
+  salary_currency_DESC
+  min_salary_ASC
+  min_salary_DESC
+  max_salary_ASC
+  max_salary_DESC
   description_ASC
   description_DESC
-  job_type_ASC
-  job_type_DESC
   status_ASC
   status_DESC
   apply_url_ASC
@@ -1389,9 +1571,12 @@ type JobPreviousValues {
   id: ID!
   position: String!
   location: String
-  salary: Int
+  remote: Boolean!
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String!
-  job_type: JOB_TYPE!
+  job_types: [JOB_TYPE!]!
   status: STATUS_TYPE!
   apply_url: String!
   last_payment: DateTime!
@@ -1446,14 +1631,28 @@ input JobScalarWhereInput {
   location_not_starts_with: String
   location_ends_with: String
   location_not_ends_with: String
-  salary: Int
-  salary_not: Int
-  salary_in: [Int!]
-  salary_not_in: [Int!]
-  salary_lt: Int
-  salary_lte: Int
-  salary_gt: Int
-  salary_gte: Int
+  remote: Boolean
+  remote_not: Boolean
+  salary_currency: CURRENCY
+  salary_currency_not: CURRENCY
+  salary_currency_in: [CURRENCY!]
+  salary_currency_not_in: [CURRENCY!]
+  min_salary: Int
+  min_salary_not: Int
+  min_salary_in: [Int!]
+  min_salary_not_in: [Int!]
+  min_salary_lt: Int
+  min_salary_lte: Int
+  min_salary_gt: Int
+  min_salary_gte: Int
+  max_salary: Int
+  max_salary_not: Int
+  max_salary_in: [Int!]
+  max_salary_not_in: [Int!]
+  max_salary_lt: Int
+  max_salary_lte: Int
+  max_salary_gt: Int
+  max_salary_gte: Int
   description: String
   description_not: String
   description_in: [String!]
@@ -1468,10 +1667,6 @@ input JobScalarWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
-  job_type: JOB_TYPE
-  job_type_not: JOB_TYPE
-  job_type_in: [JOB_TYPE!]
-  job_type_not_in: [JOB_TYPE!]
   status: STATUS_TYPE
   status_not: STATUS_TYPE
   status_in: [STATUS_TYPE!]
@@ -1588,12 +1783,16 @@ input JobSubscriptionWhereInput {
 }
 
 input JobUpdateInput {
+  category: CategoryUpdateOneInput
   position: String
   location: String
+  remote: Boolean
   city: CityUpdateOneWithoutJobsInput
-  salary: Int
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String
-  job_type: JOB_TYPE
+  job_types: JobUpdatejob_typesInput
   status: STATUS_TYPE
   apply_url: String
   last_payment: DateTime
@@ -1606,12 +1805,19 @@ input JobUpdateInput {
   expiresAt: DateTime
 }
 
+input JobUpdatejob_typesInput {
+  set: [JOB_TYPE!]
+}
+
 input JobUpdateManyDataInput {
   position: String
   location: String
-  salary: Int
+  remote: Boolean
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String
-  job_type: JOB_TYPE
+  job_types: JobUpdatejob_typesInput
   status: STATUS_TYPE
   apply_url: String
   last_payment: DateTime
@@ -1624,9 +1830,12 @@ input JobUpdateManyDataInput {
 input JobUpdateManyMutationInput {
   position: String
   location: String
-  salary: Int
+  remote: Boolean
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String
-  job_type: JOB_TYPE
+  job_types: JobUpdatejob_typesInput
   status: STATUS_TYPE
   apply_url: String
   last_payment: DateTime
@@ -1675,11 +1884,15 @@ input JobUpdateOneWithoutInvoicesInput {
 }
 
 input JobUpdateWithoutCityDataInput {
+  category: CategoryUpdateOneInput
   position: String
   location: String
-  salary: Int
+  remote: Boolean
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String
-  job_type: JOB_TYPE
+  job_types: JobUpdatejob_typesInput
   status: STATUS_TYPE
   apply_url: String
   last_payment: DateTime
@@ -1693,12 +1906,16 @@ input JobUpdateWithoutCityDataInput {
 }
 
 input JobUpdateWithoutCompanyDataInput {
+  category: CategoryUpdateOneInput
   position: String
   location: String
+  remote: Boolean
   city: CityUpdateOneWithoutJobsInput
-  salary: Int
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String
-  job_type: JOB_TYPE
+  job_types: JobUpdatejob_typesInput
   status: STATUS_TYPE
   apply_url: String
   last_payment: DateTime
@@ -1711,12 +1928,16 @@ input JobUpdateWithoutCompanyDataInput {
 }
 
 input JobUpdateWithoutInvoicesDataInput {
+  category: CategoryUpdateOneInput
   position: String
   location: String
+  remote: Boolean
   city: CityUpdateOneWithoutJobsInput
-  salary: Int
+  salary_currency: CURRENCY
+  min_salary: Int
+  max_salary: Int
   description: String
-  job_type: JOB_TYPE
+  job_types: JobUpdatejob_typesInput
   status: STATUS_TYPE
   apply_url: String
   last_payment: DateTime
@@ -1770,6 +1991,7 @@ input JobWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  category: CategoryWhereInput
   position: String
   position_not: String
   position_in: [String!]
@@ -1798,15 +2020,29 @@ input JobWhereInput {
   location_not_starts_with: String
   location_ends_with: String
   location_not_ends_with: String
+  remote: Boolean
+  remote_not: Boolean
   city: CityWhereInput
-  salary: Int
-  salary_not: Int
-  salary_in: [Int!]
-  salary_not_in: [Int!]
-  salary_lt: Int
-  salary_lte: Int
-  salary_gt: Int
-  salary_gte: Int
+  salary_currency: CURRENCY
+  salary_currency_not: CURRENCY
+  salary_currency_in: [CURRENCY!]
+  salary_currency_not_in: [CURRENCY!]
+  min_salary: Int
+  min_salary_not: Int
+  min_salary_in: [Int!]
+  min_salary_not_in: [Int!]
+  min_salary_lt: Int
+  min_salary_lte: Int
+  min_salary_gt: Int
+  min_salary_gte: Int
+  max_salary: Int
+  max_salary_not: Int
+  max_salary_in: [Int!]
+  max_salary_not_in: [Int!]
+  max_salary_lt: Int
+  max_salary_lte: Int
+  max_salary_gt: Int
+  max_salary_gte: Int
   description: String
   description_not: String
   description_in: [String!]
@@ -1821,10 +2057,6 @@ input JobWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
-  job_type: JOB_TYPE
-  job_type_not: JOB_TYPE
-  job_type_in: [JOB_TYPE!]
-  job_type_not_in: [JOB_TYPE!]
   status: STATUS_TYPE
   status_not: STATUS_TYPE
   status_in: [STATUS_TYPE!]
@@ -1934,6 +2166,12 @@ input JobWhereUniqueInput {
 scalar Long
 
 type Mutation {
+  createCategory(data: CategoryCreateInput!): Category!
+  updateCategory(data: CategoryUpdateInput!, where: CategoryWhereUniqueInput!): Category
+  updateManyCategories(data: CategoryUpdateManyMutationInput!, where: CategoryWhereInput): BatchPayload!
+  upsertCategory(where: CategoryWhereUniqueInput!, create: CategoryCreateInput!, update: CategoryUpdateInput!): Category!
+  deleteCategory(where: CategoryWhereUniqueInput!): Category
+  deleteManyCategories(where: CategoryWhereInput): BatchPayload!
   createCity(data: CityCreateInput!): City!
   updateCity(data: CityUpdateInput!, where: CityWhereUniqueInput!): City
   updateManyCities(data: CityUpdateManyMutationInput!, where: CityWhereInput): BatchPayload!
@@ -1996,6 +2234,9 @@ type PageInfo {
 }
 
 type Query {
+  category(where: CategoryWhereUniqueInput!): Category
+  categories(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Category]!
+  categoriesConnection(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CategoryConnection!
   city(where: CityWhereUniqueInput!): City
   cities(where: CityWhereInput, orderBy: CityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [City]!
   citiesConnection(where: CityWhereInput, orderBy: CityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CityConnection!
@@ -2034,6 +2275,7 @@ enum STATUS_TYPE {
 }
 
 type Subscription {
+  category(where: CategorySubscriptionWhereInput): CategorySubscriptionPayload
   city(where: CitySubscriptionWhereInput): CitySubscriptionPayload
   company(where: CompanySubscriptionWhereInput): CompanySubscriptionPayload
   country(where: CountrySubscriptionWhereInput): CountrySubscriptionPayload

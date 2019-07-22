@@ -1227,6 +1227,7 @@ input InvoiceWhereUniqueInput {
 
 type Job {
   id: ID!
+  category: JOB_CATEGORY
   position: String!
   location: String
   remote: Boolean!
@@ -1250,6 +1251,15 @@ type Job {
   updatedAt: DateTime!
 }
 
+enum JOB_CATEGORY {
+  DATA_SCIENTIST
+  AL_RESEARCHER
+  INTELLIGENCE_SPECIALIST
+  AL_DATA_ANALYST
+  MACHINE_LEARNING_ENGINEER
+  SOFTWARE_ENGINEER
+}
+
 enum JOB_TYPE {
   FULL_TIME
   PART_TIME
@@ -1266,6 +1276,7 @@ type JobConnection {
 
 input JobCreateInput {
   id: ID
+  category: JOB_CATEGORY
   position: String!
   location: String
   remote: Boolean!
@@ -1308,6 +1319,7 @@ input JobCreateOneWithoutInvoicesInput {
 
 input JobCreateWithoutCityInput {
   id: ID
+  category: JOB_CATEGORY
   position: String!
   location: String
   remote: Boolean!
@@ -1330,6 +1342,7 @@ input JobCreateWithoutCityInput {
 
 input JobCreateWithoutCompanyInput {
   id: ID
+  category: JOB_CATEGORY
   position: String!
   location: String
   remote: Boolean!
@@ -1352,6 +1365,7 @@ input JobCreateWithoutCompanyInput {
 
 input JobCreateWithoutInvoicesInput {
   id: ID
+  category: JOB_CATEGORY
   position: String!
   location: String
   remote: Boolean!
@@ -1380,6 +1394,8 @@ type JobEdge {
 enum JobOrderByInput {
   id_ASC
   id_DESC
+  category_ASC
+  category_DESC
   position_ASC
   position_DESC
   location_ASC
@@ -1416,6 +1432,7 @@ enum JobOrderByInput {
 
 type JobPreviousValues {
   id: ID!
+  category: JOB_CATEGORY
   position: String!
   location: String
   remote: Boolean!
@@ -1450,6 +1467,10 @@ input JobScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  category: JOB_CATEGORY
+  category_not: JOB_CATEGORY
+  category_in: [JOB_CATEGORY!]
+  category_not_in: [JOB_CATEGORY!]
   position: String
   position_not: String
   position_in: [String!]
@@ -1630,6 +1651,7 @@ input JobSubscriptionWhereInput {
 }
 
 input JobUpdateInput {
+  category: JOB_CATEGORY
   position: String
   location: String
   remote: Boolean
@@ -1656,6 +1678,7 @@ input JobUpdatejob_typesInput {
 }
 
 input JobUpdateManyDataInput {
+  category: JOB_CATEGORY
   position: String
   location: String
   remote: Boolean
@@ -1674,6 +1697,7 @@ input JobUpdateManyDataInput {
 }
 
 input JobUpdateManyMutationInput {
+  category: JOB_CATEGORY
   position: String
   location: String
   remote: Boolean
@@ -1730,6 +1754,7 @@ input JobUpdateOneWithoutInvoicesInput {
 }
 
 input JobUpdateWithoutCityDataInput {
+  category: JOB_CATEGORY
   position: String
   location: String
   remote: Boolean
@@ -1751,6 +1776,7 @@ input JobUpdateWithoutCityDataInput {
 }
 
 input JobUpdateWithoutCompanyDataInput {
+  category: JOB_CATEGORY
   position: String
   location: String
   remote: Boolean
@@ -1772,6 +1798,7 @@ input JobUpdateWithoutCompanyDataInput {
 }
 
 input JobUpdateWithoutInvoicesDataInput {
+  category: JOB_CATEGORY
   position: String
   location: String
   remote: Boolean
@@ -1834,6 +1861,10 @@ input JobWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  category: JOB_CATEGORY
+  category_not: JOB_CATEGORY
+  category_in: [JOB_CATEGORY!]
+  category_not_in: [JOB_CATEGORY!]
   position: String
   position_not: String
   position_in: [String!]

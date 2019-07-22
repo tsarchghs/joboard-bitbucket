@@ -20,6 +20,7 @@ const prismaDb = new Prisma({
 	endpoint: process.env.PRISMA_ENDPOINT,
 	debug: false
 })
+console.log(prismaDb.query.categories)
 const EVERY_MIDNIGHT = "0 0 0 * * *"
 const EVERY_MINUTE = "* * * * *"
 
@@ -99,7 +100,7 @@ const server = new graphqlServer({
 });
 
 
-if (process.env.production){
+if (process.env.production === "true"){
 	server.express.use(logger("dev"));
 	server.express.use(compression());
 
@@ -107,13 +108,7 @@ if (process.env.production){
 		let protocol = req.get('x-forwarded-proto');
 		if (protocol !== "https"){
 			console.log("REDIRECT");
-			if (req.get('host').indexOf("unityjobs") !== -1){
-				return res.redirect(`https://www.unityjobs.io${req.url}`)
-			} else if (req.get('host').indexOf("flutterjobs") !== -1) {
-				return res.redirect(`https://www.flutterjobs.io${req.url}`)
-			} else {
-				return res.redirect(`https://alb-jobs.herokuapp.com${req.url}`)
-			}
+			return res.redirect(`${process.env.REDIRECT_TO_HTTPS}${req.url}`)
 		}
 		next();
 	})
@@ -154,6 +149,7 @@ if (process.env.production){
 				console.log(err);
 				return res.status(404).end();
 			}
+			console.log(process.env.USE_LOCATION,55)
 			let PUBLIC_DATA = {
 				logo_url: process.env.LOGO_URL,
 				domain: process.env.DOMAIN,
@@ -167,7 +163,10 @@ if (process.env.production){
 				domain_svg: process.env.DOMAIN_SVG,
 				apollo_client_uri: process.env.APOLLO_CLIENT_URI,
 				above_job_position_text: process.env.ABOVE_JOB_POSITION_TEXT,
-				use_predefined_location: process.env.USE_PREDEFINED_LOCATION
+				use_predefined_location: process.env.USE_PREDEFINED_LOCATION,
+				use_keywords: process.env.USE_KEYWORDS,
+				use_location: process.env.USE_LOCATION,
+				use_categories: process.env.USE_CATEGORIES
 			}
 			htmlData = htmlData.replace("</head>",`
 				<link rel="stylesheet" href="${process.env.EXTRA_CSS_PATH}">

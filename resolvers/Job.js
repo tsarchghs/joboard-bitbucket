@@ -14,21 +14,15 @@ const job = async (root,args,context,info) => {
 const jobs = async (root,args,context,info) => {
 	where = {}
 	if (args.jobFilter){
-		args.jobFilter.query ? where["OR"] = [
-			{
-				"location_contains": args.jobFilter.query,
-			},
-			{
-				"position_contains": args.jobFilter.query
-			}
-		] :  null
+		args.jobFilter.category ? where["category"] = args.jobFilter.category : null
+		args.jobFilter.location ? where["location_contains"] = args.jobFilter.location : null
+		args.jobFilter.keywords ? where["position_contains"] = args.jobFilter.keywords : null
 		args.jobFilter.status_type ? where["status"] = args.jobFilter.status_type :  null
 		args.jobFilter.createdAt_gte ? where["createdAt_gte"] = args.jobFilter.createdAt_gte :  null	
 		args.jobFilter.createdAt_lte ? where["createdAt_lte"] = args.jobFilter.createdAt_lte :  null
 		args.jobFilter.id_not_in ? where["id_not_in"] = args.jobFilter.id_not_in :  null
 		args.jobFilter.status_not_in ? where["status_not_in"] = args.jobFilter.status_not_in : null
 		args.jobFilter.city ? where["city"] = { id: args.jobFilter.city } : null
-		console.log(where["OR"])
 	}
 	let jobs = await context.db.query.jobs({
 		where,
@@ -39,7 +33,6 @@ const jobs = async (root,args,context,info) => {
 	,info);
 	if (args.jobFilter){
 		jobs = jobs.filter(job => {
-			console.log(args.jobFilter.job_types)
 			for (var x in args.jobFilter.job_types){
 				let job_type = args.jobFilter.job_types[x];
 				if (!job.job_types.includes(job_type)){
@@ -84,6 +77,7 @@ const createJob = async (root,args,context,info) => {
 		throw new Error("Stripe token not found");
 	}
 	let data = {
+		category: args.category,
 		position: args.position,
 		location: args.location,
 		remote: args.remote,
@@ -99,7 +93,6 @@ const createJob = async (root,args,context,info) => {
 		company_website: args.company_website,
 		last_payment: new Date()
 	}
-	console.log(args,5999);
 	if (args.city){
 		data["city"] = { connect: { id: args.city }}
 	}
@@ -175,6 +168,7 @@ const createJobAndLogin = async (root,args,context,info) => {
 	let charge = await chargeCard(args.status, args.position, args.stripe_token);
 	let today = new Date();
 	let data = {
+		category: args.category,
 		company: { connect: { id: user.company.id } },
 		position: args.position,
 		location: args.location,
@@ -235,6 +229,7 @@ const renewJob = async (root,args,context,info) => {
 }
 
 const updateJob = async (root,args,context,info) => {
+	console.log("SDADSJAHDASJHKDASJKJK")
 	await permissions.loginPermissions(context);
 	let job = await context.db.query.jobs({
 		where: {id: args.id, company: {createdBy: { id: context.user.id }}}
@@ -243,19 +238,25 @@ const updateJob = async (root,args,context,info) => {
 	if (!job){
 		throw new Error("Job not found");
 	}
+	console.log(args)
+	let data = {
+		category: args.category,
+		position: args.position,
+		description: args.description,
+		location: args.location,
+		remote: args.remote,
+		min_salary: args.min_salary,
+		max_salary: args.max_salary,
+		salary_currency: args.salary_currency,
+		job_types: { set: args.job_types },
+		apply_url: args.apply_url
+	}
+	if (args.city){
+		data["city"] = { connect: { id: args.city }}
+	}
 	return await context.db.mutation.updateJob({
 		where: { id: args.id },
-		data: {
-			position: args.position,
-			description: args.description,
-			location: args.location,
-			remote: args.remote,
-			min_salary: args.min_salary,
-			max_salary: args.max_salary,
-			salary_currency: args.salary_currency,
-			job_types: { set: args.job_types },
-			apply_url: args.apply_url
-		}
+		data
 	},info) 
 }
 
