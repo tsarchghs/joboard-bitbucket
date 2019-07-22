@@ -33,6 +33,7 @@ class _UpdateJobProfile extends React.Component {
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.toggle = this.toggle.bind(this)
+        console.log(this.state.job_types,9999)
     }
     toggle(val) {
         this.setState(prevState => {
@@ -58,7 +59,10 @@ class _UpdateJobProfile extends React.Component {
 				[key]: e.target.value
 			})
 		}
-	}
+    }
+    formatJobTypes(job_types){
+        return job_types.join(",").toUpperCase().replace(/ /g, "_").split(",") // lazy ass
+    }
     async componentDidMount(){
         let res = await this.props.client.query({
             query: JOB_QUERY,
@@ -77,7 +81,7 @@ class _UpdateJobProfile extends React.Component {
             max_salary: job.max_salary,
             salary_currency: job.salary_currency, 
             salaryInputDisabled: !job.min_salary,
-            job_types: job.job_types,
+            job_types: this.formatJobTypes(job.job_types),
             remote: job.remote,
             apply_url: job.apply_url,
             htmlContent: job.description,
