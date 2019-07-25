@@ -89,7 +89,7 @@ class JobProfile extends React.Component {
 										</div>
 										<div className="card__button">
 										<p className="gray">Posted {monthNames[new Date(job.createdAt).getMonth()]} {new Date(job.createdAt).toLocaleDateString().split("/")[1] }</p>
-										<a target="_blank"  href={getAbsoluteUrl(job.apply_url)} className="button blue">Apply for thsis job</a>
+										<a target="_blank"  href={getAbsoluteUrl(job.apply_url)} className="button blue">Apply for this job</a>
 										{
 											this.props.user && this.props.user.role === "ADMIN" &&
 											<React.Fragment>

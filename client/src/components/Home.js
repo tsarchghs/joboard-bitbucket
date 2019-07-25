@@ -392,13 +392,13 @@ class _Home extends React.Component {
 					LoadingComponent={<LoadingAnimation loading_type={1} />}
 				/>	
 				<JobsList
-					text={"Week"}
+					text={"This Week"}
 					show_status={false}
 					jobs={this.state.week_jobs}
 					LoadingComponent={<LoadingAnimation loading_type={1} />}
 				/>
 				<JobsList
-					text={"Month"}
+					text={"This Month"}
 					show_status={false}
 					jobs={this.state.month_jobs}
 					LoadingComponent={<LoadingAnimation loading_type={1} />}
