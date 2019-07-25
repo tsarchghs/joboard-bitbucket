@@ -5,6 +5,7 @@ import { compose } from "recompose"
 import { withRouter } from "react-router";
 import { CREATE_JOB_MUTATION } from "../Queries";
 import JobForm from "./form/JobForm";
+import PostJobButton from "./form/PostJobButton";
 
 class _CreateJob extends React.Component {
 	constructor(props){
@@ -140,6 +141,12 @@ class _CreateJob extends React.Component {
 							loading={this.state.loading}
 							featured={this.state.featured}
 							renderCard={false}
+							companyLogoInput={this.companyLogoInput}
+							assignNodeToLogo={node => this.companyLogoInput = node}
+						/>
+						<PostJobButton
+							loading={this.state.loading}
+							featured={this.state.featured}
 						/>
 					</div>
 					</div>
@@ -149,4 +156,4 @@ class _CreateJob extends React.Component {
 	}
 }
 
-export default compose(withApollo,withRouter)(_CreateJob);
+export default compose(withApollo, withRouter)(_CreateJob);
