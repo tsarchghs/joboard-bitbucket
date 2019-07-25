@@ -134,7 +134,7 @@ class App extends Component {
                       return (
                         <div>
                           <Header user={user} />
-                          <JobProfile match={match} />
+                          <JobProfile user={user} match={match} />
                         </div>
                       )
                     }} />

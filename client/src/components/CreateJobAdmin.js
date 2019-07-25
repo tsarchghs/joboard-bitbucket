@@ -5,6 +5,7 @@ import { compose } from "recompose"
 import { withRouter } from "react-router";
 import { CREATE_JOB_MUTATION } from "../Queries";
 import JobForm from "./form/JobForm";
+import PostJobButton from "./form/PostJobButton";
 
 class _CreateJob extends React.Component {
 	constructor(props){
@@ -26,7 +27,8 @@ class _CreateJob extends React.Component {
 			company_website: "",
 			featured: false,
 			loading: false,
-			job: undefined
+			job: undefined,
+			city: window.__PUBLIC_DATA__.use_predefined_location ? window.__PUBLIC_DATA__.default_predefined_location : false
 		}
 		this.onChange = this.onChange.bind(this)
 		this.companyLogoInput = undefined; //ref
@@ -140,6 +142,12 @@ class _CreateJob extends React.Component {
 							loading={this.state.loading}
 							featured={this.state.featured}
 							renderCard={false}
+							companyLogoInput={this.companyLogoInput}
+							assignNodeToLogo={node => this.companyLogoInput = node}
+						/>
+						<PostJobButton
+							loading={this.state.loading}
+							featured={this.state.featured}
 						/>
 					</div>
 					</div>
@@ -149,4 +157,4 @@ class _CreateJob extends React.Component {
 	}
 }
 
-export default compose(withApollo,withRouter)(_CreateJob);
+export default compose(withApollo, withRouter)(_CreateJob);

@@ -76,7 +76,6 @@ class CompanySettings extends React.Component {
 										let cached = this.props.client.readQuery({
 											query: GET_LOGGED_IN_USER
 										})
-										console.log(cached)
 										let cached_user = cached.getLoggedInUser;
 
 										let updated_company = res.data.updateCompany;
@@ -85,7 +84,6 @@ class CompanySettings extends React.Component {
 											jobs: cached_user.company.jobs,
 											...updated_company
 										}
-										console.log(updated_company.logo.url);
 										this.props.client.writeQuery({
 											query: GET_LOGGED_IN_USER,
 											data: cached

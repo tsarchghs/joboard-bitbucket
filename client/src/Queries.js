@@ -21,6 +21,7 @@ const GET_LOGGED_IN_USER = gql`
     query {
         getLoggedInUser{
         id
+        role
         company {
             id
             name
