@@ -1,5 +1,9 @@
 import React from "react";
 import Modal from 'react-modal';
+import { Mutation, withApollo } from "react-apollo";
+import { withRouter } from "react-router-dom";
+import { compose} from "recompose";
+import { DELETE_JOB_MUTATITON } from "../Queries";
 
 const customStyles = {
     overlay: {
@@ -36,7 +40,28 @@ const DeleteJobModal = props => {
                     <div className="modal__footer">
                         <div className="modal__footer-buttons">
                             <a onClick={props.closeModal} className="button gray" data-close aria-label="Close modal">No I don’t want</a>
-                            <a onClick={props.onYes} style={{backgroundColor: "#F6534E"}} className="button red">Delete</a>
+                            {   
+                                props.onYes && 
+                                <a onClick={props.onYes} style={{backgroundColor: "#F6534E"}} className="button red">Delete</a>
+                            }
+                            {
+                                !props.onYes &&
+                                <Mutation
+                                    mutation={DELETE_JOB_MUTATITON}
+                                >
+                                    { (deleteJob,{loading,error,data}) => {
+                                        return (
+                                            <a onClick={async () => {
+                                                if (loading) return "Loading";
+                                                if (error) return error.message;
+                                                console.log({ variables: { id: props.job.id } })
+                                                let res = await deleteJob({variables:{id: props.job.id}})
+                                                window.location.href = "/"
+                                            }} style={{ backgroundColor: "#F6534E" }} className="button red">Delete</a>
+                                        )
+                                    }}
+                                </Mutation>
+                            }
                         </div>
                     </div>
                 </div>
@@ -45,4 +70,4 @@ const DeleteJobModal = props => {
     );
 }
 
-export default DeleteJobModal;
+export default compose(withApollo,withRouter)(DeleteJobModal);

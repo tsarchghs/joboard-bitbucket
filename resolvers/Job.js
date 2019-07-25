@@ -231,9 +231,12 @@ const renewJob = async (root,args,context,info) => {
 const updateJob = async (root,args,context,info) => {
 	console.log("SDADSJAHDASJHKDASJKJK")
 	await permissions.loginPermissions(context);
-	let job = await context.db.query.jobs({
-		where: {id: args.id, company: {createdBy: { id: context.user.id }}}
-	},info)
+	let where = { id: args.id }
+	console.log(context.user)
+	if (context.user.role !== "ADMIN"){
+		where["company"] = { createdBy: { id: context.user.id } }
+	}
+	let job = await context.db.query.jobs({where},info)
 	job = job[0];
 	if (!job){
 		throw new Error("Job not found");
@@ -262,9 +265,11 @@ const updateJob = async (root,args,context,info) => {
 
 const deleteJob = async (root,args,context,info) => {
 	await permissions.loginPermissions(context);
-	let job = await context.db.query.jobs({
-		where: { id: args.id, company: { createdBy: { id: context.user.id } } }
-	}, info)
+	let where = { id: args.id }
+	if (context.user.role !== "ADMIN"){
+		where["company"] = { createdBy: { id: context.user.id } }
+	}
+	let job = await context.db.query.jobs({where}, info)
 	job = job[0];
 	if (!job) {
 		throw new Error("Job not found");
