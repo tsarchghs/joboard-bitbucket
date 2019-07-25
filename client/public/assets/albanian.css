@@ -127,7 +127,7 @@
 
 .select-card__items {
     padding: 15px;
-    overflow: scroll;
+    overflow-y: auto;
     height: 195px;
 }
 

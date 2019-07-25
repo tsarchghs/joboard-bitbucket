@@ -35,12 +35,16 @@
 .ai-filter {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0px 180px;
+    flex-wrap: wrap;
+    padding: 0px 54px;
+    max-width: 75rem;
+    margin-right: auto;
+    margin-left: auto;
 }
 
+
 .ai-filter a {
-    margin-bottom: 25px;
+    margin: 0px 11px 25px;
     font-size: 14px;
     font-weight: 900;
     color: #ffffff;
@@ -67,3 +71,14 @@
 .highlighted {
     background-color: #13c3cf !important;
 } 
+
+@media screen and (max-width: 39.9375em) {
+    .ai-filter {
+        justify-content: center;
+        padding: 0px 15px;
+    }
+    .ai-filter a {
+        width: 120px;
+        height: 70px;
+    }   
+}
