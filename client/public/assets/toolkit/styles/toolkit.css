@@ -6004,6 +6004,9 @@ a.thumbnail {
   text-align: center; }
   .header__nav-mobie.open {
     right: 0; }
+    .header__nav-mobie.open a {
+      margin-top: 10px;
+      margin-bottom: 10px; }
   .header__nav-mobie .header__nav-login {
     margin-right: 40px;
     margin: 0;
@@ -6484,7 +6487,7 @@ a.thumbnail {
   display: flex; }
   @media screen and (max-width: 39.9375em) {
     .home__search {
-      width: 100%;
+      width: 100%!important;
       margin: 0 auto;
       padding: 35px 0px;
       display: -webkit-box;
@@ -6551,7 +6554,7 @@ a.thumbnail {
   @media screen and (max-width: 39.9375em) {
     .master-layout__header {
       padding: 0px 15px;
-      margin-top: 30px; } }
+      margin-top: 55px; } }
   .master-layout__header h1, .master-layout__header h5 {
     text-align: center;
     color: #fff; }

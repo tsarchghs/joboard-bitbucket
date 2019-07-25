@@ -7,24 +7,32 @@
 }
 
 .radio-container input:checked ~ .checkmarked {
-    background-color: #2f2f3c;
+    background-color: #ac477a;
 }
 
 .button.blue {
-    background-color: #2f2f3c;
+    background-color: #ac477a;
 }
 
 .button.blue:hover {
-    background-color: #2f2f3c;
+    background-color: #ac477a;
+}
+
+.button.blue:focus {
+    background-color: #ac477a;
 }
 
 .sidebar {
-    background: linear-gradient(to bottom, #444354, #23232d)!important;
+    background: linear-gradient(to bottom, #7d3984, #d85470)!important;
 
 }
 
+.company-info__avatar a {
+    color: #ac477a;
+}
+
 .jobs-card {
-    background-color: #2f2f3c;
+    background-color: #ac477a;
 }
 
 .card-data__info a:first-child {
@@ -32,11 +40,13 @@
 }
 
 .highlighted {
-    background-color: #2f2f3c !important;
+    background-color: #ac477a !important;
 }
 
 .home__search {
-    width: 820px!important;
+    width: 850px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 .home__search input {
@@ -117,6 +127,8 @@
 
 .select-card__items {
     padding: 15px;
+    overflow: scroll;
+    height: 195px;
 }
 
 .select-card__item--icon {
@@ -128,8 +140,10 @@
 }
 
 .home__selected {
-    left: 565px;
-    top: 250px;
+    transform: translateX(-43%);
+    left: 50%;
+    z-index: 120;
+    top: 315px;
     min-height: 285px;
     display: none;
     position: absolute;

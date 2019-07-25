@@ -18,6 +18,10 @@
     background-color: #2f2f3c;
 }
 
+.button.blue:focus {
+    background-color: #2f2f3c;
+}
+
 .sidebar {
     background: linear-gradient(to bottom, #444354, #23232d)!important;
 
