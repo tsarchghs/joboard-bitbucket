@@ -27,7 +27,8 @@ class _CreateJob extends React.Component {
 			company_website: "",
 			featured: false,
 			loading: false,
-			job: undefined
+			job: undefined,
+			city: window.__PUBLIC_DATA__.use_predefined_location ? "cjxx5ieu1kfxx0b3677nbsntq" : false
 		}
 		this.onChange = this.onChange.bind(this)
 		this.companyLogoInput = undefined; //ref
