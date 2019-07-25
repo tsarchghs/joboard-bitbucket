@@ -1,0 +1,84 @@
+.master-layout {
+    background-image: linear-gradient(to bottom, #08b4dd, #2de6ae);
+}
+
+.header {
+    background: linear-gradient(to left, #444354, #23232d);
+}
+
+.home__search {
+    width: 850px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.radio-container input:checked ~ .checkmarked {
+    background-color: #13c3cf;
+}
+
+.button.blue {
+    background-color: #13c3cf;
+}
+
+.button.blue:hover {
+    background-color: #13c3cf;
+}
+
+.button.blue:focus {
+    background-color: #13c3cf;
+}
+
+.sidebar {
+    background: linear-gradient(to bottom, #08b4dd, #2de6ae)!important;
+}
+
+.ai-filter {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 0px 54px;
+    max-width: 75rem;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+
+.ai-filter a {
+    margin: 0px 11px 25px;
+    font-size: 14px;
+    font-weight: 900;
+    color: #ffffff;
+    justify-content: center;
+    text-align: center;
+    padding: 0px 10px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    border-radius: 18px;
+    background-color: rgba(0, 0, 0, 0.3);
+    width: 160px;
+    max-width: 160px!important;
+}
+
+.jobs-card {
+    background-color: #13c3cf;
+}
+
+.card-data__info a:first-child {
+
+}
+
+.highlighted {
+    background-color: #13c3cf !important;
+} 
+
+@media screen and (max-width: 39.9375em) {
+    .ai-filter {
+        justify-content: center;
+        padding: 0px 15px;
+    }
+    .ai-filter a {
+        width: 120px;
+        height: 70px;
+    }   
+}
