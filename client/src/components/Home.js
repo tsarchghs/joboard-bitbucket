@@ -17,6 +17,7 @@ class _Home extends React.Component {
 	constructor(props){
 		super(props)
 		this.state = {
+			only_remote: false,
 			moveCheckbox: false,
 			location: undefined,
 			job_types: undefined,
@@ -217,7 +218,8 @@ class _Home extends React.Component {
 				
 		{
 			window.__PUBLIC_DATA__.use_predefined_location &&
-				<label>
+			<React.Fragment>
+				<label onClick={e => e.preventDefault()}>
 					<span>Location</span>
 						<div ref={this.toggleLocationDropdownRef} className="home__input">
 							<div className="home__input--extra" style={{cursor:"pointer"}} onClick={this.toggleLocationDropdown}>
@@ -226,10 +228,13 @@ class _Home extends React.Component {
 								<span className="arrow-down"><img src="../assets/toolkit/images/white-arrow.svg" /></span>
 							</div>
 						</div>
-						<div style={{marginTop: 10}} className="checkbox-container">
-							<input type="checkbox" checked={this.state.only_remote} onChange={e => this.setState(nextState => {
+						<div style={{ marginTop: 83, position: "absolute" }} onClick={e => {
+							console.log(1234)
+							e.preventDefault()
+							this.setState(nextState => {
+								console.log(231222)
 								nextState.only_remote = !nextState.only_remote;
-								if (nextState.only_remote){
+								if (nextState.only_remote) {
 									nextState.selectedLocation = false;
 									nextState.city = undefined
 								}
@@ -237,11 +242,15 @@ class _Home extends React.Component {
 								nextState.location = "";
 								this.update();
 								return nextState
-							})} />
-							<span className="checkmark" />
-							<p style={{color: "white"}}>Remote/anywhere</p>
-						</div>
+							})
+						}} className="checkbox-container">
+						<input type="checkbox" checked={this.state.only_remote} />
+						<span className="checkmark" />
+						<p style={{color: "white"}}>Remote/anywhere</p>
+					</div>
 				</label>
+
+			</React.Fragment>
 		}
 		{
 			!window.__PUBLIC_DATA__.use_location ? null : <label>
