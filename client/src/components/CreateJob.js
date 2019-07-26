@@ -44,7 +44,7 @@ class _CreateJob extends React.Component {
 			email: "",
 			password: "",
 			under_company_info_error: "",
-			city: window.__PUBLIC_DATA__.use_predefined_location ? window.__PUBLIC_DATA__.default_predefined_location : false
+			city: window.__PUBLIC_DATA__.use_predefined_location ? window.__PUBLIC_DATA__.default_predefined_location : undefined
 		}
 		this.onChange = this.onChange.bind(this)
 		this.closeModal = this.closeModal.bind(this)

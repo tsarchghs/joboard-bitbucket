@@ -28,9 +28,10 @@ class _CreateJob extends React.Component {
 			featured: false,
 			loading: false,
 			job: undefined,
-			city: window.__PUBLIC_DATA__.use_predefined_location ? window.__PUBLIC_DATA__.default_predefined_location : false
+			city: window.__PUBLIC_DATA__.use_predefined_location ? window.__PUBLIC_DATA__.default_predefined_location : undefined
 		}
 		this.onChange = this.onChange.bind(this)
+		this.toggle = this.toggle.bind(this)
 		this.companyLogoInput = undefined; //ref
 		this.companyLogoDiv = undefined; //ref
 	}
@@ -98,6 +99,12 @@ class _CreateJob extends React.Component {
 				[key]: e.target.value
 			})
 		}
+	}
+	toggle(val) {
+		this.setState(prevState => {
+			prevState[val] = !prevState[val]
+			return prevState;
+		})
 	}
 	render(){
 		return (
