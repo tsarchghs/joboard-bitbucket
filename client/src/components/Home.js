@@ -254,27 +254,34 @@ class _Home extends React.Component {
 			</React.Fragment>
 		}
 		{
-			!window.__PUBLIC_DATA__.use_location ? null : <label>
-						<span>Location</span>
-						<div className="home__input">
-						<input 
-							value={this.state.only_remote ? "" : this.state.location}
-							onChange={(e) => this.updateFilter(e,"location")}
-							className="input" location
-							placeholder="Search location" 
-							disabled={this.state.only_remote}
-						/>
-						<input type="checkbox" checked={this.state.only_remote} onChange={e => {
-								this.setState(prevState => {
-									prevState.only_remote = !prevState.only_remote;
-									return prevState;
-								},this.update)
-							}} />
-						<span className="checkmark" />
-						<p style={{ color: "white" }}>Remote/anywhere</p>
-						<img src="../assets/toolkit/images/placeholder.svg" alt=""/>				
-						</div>	           
-					</label>
+			!window.__PUBLIC_DATA__.use_location ? null : 
+								<label><span>Location</span>
+									<div className="home__input">
+										<input
+											value={this.state.only_remote ? "" : this.state.location}
+											onChange={(e) => this.updateFilter(e, "location")}
+											className="input" location
+											placeholder="Search location"
+											disabled={this.state.only_remote}
+										/>
+										<img src="../assets/toolkit/images/placeholder.svg" alt="" />
+									</div>
+									<label style={{ marginTop: 10 }} className="checkbox-container">
+										<input 
+											type="checkbox"
+											checked={this.state.only_remote}
+											onChange={e => {
+												this.setState(prevState => {
+													prevState.only_remote = !prevState.only_remote;
+													prevState.location = "";
+													return prevState;
+												}, this.update)
+											}} 
+										 />
+										<span className="checkmark" />
+										<p style={{ color: "white" }}>Remote/anywhere</p>
+									</label>
+								</label>
 		}
 	            <label>
 				<span>Type of work</span>
