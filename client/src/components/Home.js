@@ -81,6 +81,7 @@ class _Home extends React.Component {
 				status_not_in,
 				keywords: this.state.keywords,
 				location: this.state.only_remote ? "remote/everywhere" : this.state.location,
+				remote: this.state.only_remote,
 				status_type,
 				job_types: this.jobTypeRef && this.jobTypeRef.value === "ALL" ? undefined : (this.jobTypeRef ? [this.jobTypeRef.value] : undefined),
 				createdAt_gte,
@@ -260,9 +261,17 @@ class _Home extends React.Component {
 							value={this.state.only_remote ? "" : this.state.location}
 							onChange={(e) => this.updateFilter(e,"location")}
 							className="input" location
-							placeholder="Position, skills" 
+							placeholder="Search location" 
 							disabled={this.state.only_remote}
 						/>
+						<input type="checkbox" checked={this.state.only_remote} onChange={e => {
+								this.setState(prevState => {
+									prevState.only_remote = !prevState.only_remote;
+									return prevState;
+								},this.update)
+							}} />
+						<span className="checkmark" />
+						<p style={{ color: "white" }}>Remote/anywhere</p>
 						<img src="../assets/toolkit/images/placeholder.svg" alt=""/>				
 						</div>	           
 					</label>
