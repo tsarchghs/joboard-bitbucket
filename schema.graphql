@@ -156,6 +156,7 @@ input CreateCompanyInput {
 
 input JobFilterInput {
 	category: JOB_CATEGORY
+	remote: Boolean
 	id_not_in: [ID!]
 	status_not_in: [STATUS_TYPE!]
 	keywords: String
