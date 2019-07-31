@@ -40,9 +40,9 @@ class _Home extends React.Component {
 		this.toggleLocationDropdown = this.toggleLocationDropdown.bind(this)
 		this.job_categories = {
 			data_scientist: "Data scientist",
-			al_researcher: "AL Researcher",
+			ai_researcher: "AI Researcher",
 			intelligence_specialist: "Intelligence specialist",
-			al_data_analyst: "AL Data Analyst",
+			ai_data_analyst: "AI Data Analyst",
 			machine_learning_engineer: "Machine Learning Engineer",
 			software_engineer: "Software Engineer"
 		}
