@@ -1,9 +1,9 @@
 
 enum JOB_CATEGORY {
 	DATA_SCIENTIST
-	AL_RESEARCHER
+	AI_RESEARCHER
 	INTELLIGENCE_SPECIALIST
-	AL_DATA_ANALYST
+	AI_DATA_ANALYST
 	MACHINE_LEARNING_ENGINEER
 	SOFTWARE_ENGINEER
 }
@@ -156,7 +156,7 @@ input CreateCompanyInput {
 
 input JobFilterInput {
 	category: JOB_CATEGORY
-	remote: Boolean
+	remote: Boolean	
 	id_not_in: [ID!]
 	status_not_in: [STATUS_TYPE!]
 	keywords: String

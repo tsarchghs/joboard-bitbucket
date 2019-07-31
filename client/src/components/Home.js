@@ -386,9 +386,9 @@ class _Home extends React.Component {
 				!window.__PUBLIC_DATA__.use_categories || !true ? null :
 						<div className="ai-filter">
 							<Link to={`?category=data_scientist`}>Data scientist</Link>
-							<Link to={`?category=al_researcher`}>AL Researcher</Link>
+							<Link to={`?category=ai_researcher`}>AI Researcher</Link>
 							<Link to={`?category=intelligence_specialist`}>Intelligence specialist</Link>
-							<Link to={`?category=al_data_analyst`}>AL Data Analyst</Link>
+							<Link to={`?category=ai_data_analyst`}>AI Data Analyst</Link>
 							<Link to={`?category=machine_learning_engineer`}>Machine Learning Engineer</Link>
 							<Link to={`?category=software_engineer`}>Software Engineer</Link>
 						</div>
