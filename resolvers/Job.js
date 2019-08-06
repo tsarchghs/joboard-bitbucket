@@ -16,6 +16,7 @@ const jobs = async (root,args,context,info) => {
 	if (args.jobFilter){
 		args.jobFilter.category ? where["category"] = args.jobFilter.category : null
 		args.jobFilter.location ? where["location_contains"] = args.jobFilter.location : null
+		args.jobFilter.location ? where["remote"] = args.jobFilter.remote : null
 		args.jobFilter.keywords ? where["position_contains"] = args.jobFilter.keywords : null
 		args.jobFilter.status_type ? where["status"] = args.jobFilter.status_type :  null
 		args.jobFilter.createdAt_gte ? where["createdAt_gte"] = args.jobFilter.createdAt_gte :  null	

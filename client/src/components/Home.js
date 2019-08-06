@@ -80,7 +80,6 @@ class _Home extends React.Component {
 				id_not_in,
 				status_not_in,
 				keywords: this.state.keywords,
-				location: this.state.only_remote ? "remote/everywhere" : this.state.location,
 				remote: this.state.only_remote,
 				status_type,
 				job_types: this.jobTypeRef && this.jobTypeRef.value === "ALL" ? undefined : (this.jobTypeRef ? [this.jobTypeRef.value] : undefined),
