@@ -1,3 +1,4 @@
+
 .master-layout {
     background: linear-gradient(to bottom, #7d3984, #d85470)!important;
 }
@@ -76,6 +77,106 @@
 
 .home__input--extra {
     background-color: rgba(216, 216, 216, 0.3);
+Here is the complete, centered version of your code.
+
+I have consolidated your CSS into the <style> block and applied Flexbox to the main layout to ensure everything remains perfectly aligned in the center of the screen.
+
+HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centered Career Portal</title>
+    <style>
+        /* Base Master Layout with Centering */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        .master-layout {
+            background: linear-gradient(to bottom, #7d3984, #d85470) !important;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Horizontal center */
+            justify-content: center; /* Vertical center */
+            font-family: sans-serif;
+        }
+
+        /* Header Style */
+        .header {
+            background: linear-gradient(to left, #d85470, #7d3984);
+            width: 100%;
+            padding: 20px 0;
+            text-align: center;
+            color: white;
+            position: fixed;
+            top: 0;
+        }
+
+        /* Search Container */
+        .home__search {
+            width: 100%;
+            max-width: 850px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .home__search input {
+            background-color: rgba(216, 216, 216, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            padding: 12px 25px;
+            width: 100%;
+            color: white;
+            font-size: 16px;
+            outline: none;
+            text-align: center; /* Centers the typing text */
+        }
+
+        .home__search input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Filter Links Styling */
+        .ai-filter {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .ai-filter a {
+            padding: 10px 20px;
+            text-decoration: none;
+            color: white;
+            background-color: #ac477a;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .ai-filter a:hover {
+            background-color: #7d3984;
+        }
+
+        /* Elements from your CSS */
+        .highlighted {
+            background-color: #ac477a !important;
+            border: 2px solid white;
+        }
+
+        /* Responsive Sidebar (Optional) */
+        .sidebar {
+            display: none; /* Hidden for this centered search view */
+        }
+
     border-radius: 6px;
     padding: 6px 6px 6px 25px;
 }

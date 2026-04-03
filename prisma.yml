@@ -19,7 +19,7 @@
 #   - generator: javascript-client
 #     output: ./generated/prisma-client/
 
-endpoint: https://eu1.prisma.sh/gjergj-kadriu/ai-jobs/dev
+endpoint: http://localhost:4467
 datamodel: datamodel.prisma
 
 generate:

@@ -24,7 +24,7 @@ import  Category from "./components/Category";
 
 // https://frozen-refuge-32300.herokuapp.com
 const client = new ApolloClient({
-  uri: window.__PUBLIC_DATA__.apollo_client_uri,
+  uri: "https://54.209.236.62:4001",
   request: async (operation) => {
     const token = Cookies.get("token");
     operation.setContext({
@@ -47,7 +47,7 @@ class App extends Component {
   }
   render() {
     return (
-      <StripeProvider apiKey={window.__PUBLIC_DATA__.production_client ? "pk_live_VzebAEDh33V8db6oZe4beNA6" : "pk_test_N1sdoxQTHRHokGxvtutLWw0x00HDZ2RDsi"}>
+      <StripeProvider apiKey={false ? "pk_live_VzebAEDh33V8db6oZe4beNA6" : "pk_test_51TAcLxCQPvziXDdOvgYRElj0Y62abG8QYCedB2xhOcXw9yx4jQD65kWGDaXnFx95Jw06zadRKiWYXNOCgUYBRo8O00NIX0pyPx"}>
         <ApolloProvider client={client}>
           <Router>
             <Query query={GET_LOGGED_IN_USER}>

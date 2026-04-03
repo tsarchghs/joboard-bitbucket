@@ -204,7 +204,16 @@ if (process.env.production === "true"){
 	});
 }
 
+var privateKey  = fs.readFileSync('sslcert/server.key', 'utf8');
+var certificate = fs.readFileSync('sslcert/server.crt', 'utf8');	
 
 server.start({
+	port: 4001,
+  https: {
+    key: privateKey,
+    cert: certificate
+  },
+
+
 	bodyParserOptions: { limit: "100mb", type: "application/json" }
-},() => console.log("Running on 4000"));
+},() => console.log("Running on 4001"));
