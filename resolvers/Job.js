@@ -3,51 +3,32 @@ const configs = require("../configs");
 const stripe = require("stripe")(configs.stripe_secret_key);
 const { processUpload } = require("../modules/fileApi");
 const { createToken } = require("./authentication");
-const bcrypt = require("bcrypt");
-
-const saltRounds = 10;
+const bcrypt = require("bcryptjs");
+const {
+	buildJobWhere,
+	createJobTypesWrite,
+	replaceJobTypesWrite
+} = require("./helpers");
 
 const job = async (root,args,context,info) => {
-	return await context.db.query.job({ where: { id: args.id } },info);
+	return await context.db.job.findUnique({
+		where: { id: args.id }
+	});
 }
 
 const jobs = async (root,args,context,info) => {
-	where = {}
-	if (args.jobFilter){
-		args.jobFilter.category ? where["category"] = args.jobFilter.category : null
-		args.jobFilter.location ? where["location_contains"] = args.jobFilter.location : null
-		args.jobFilter.remote ? where["remote"] = args.jobFilter.remote : null
-		args.jobFilter.keywords ? where["position_contains"] = args.jobFilter.keywords : null
-		args.jobFilter.status_type ? where["status"] = args.jobFilter.status_type :  null
-		args.jobFilter.createdAt_gte ? where["createdAt_gte"] = args.jobFilter.createdAt_gte :  null	
-		args.jobFilter.createdAt_lte ? where["createdAt_lte"] = args.jobFilter.createdAt_lte :  null
-		args.jobFilter.id_not_in ? where["id_not_in"] = args.jobFilter.id_not_in :  null
-		args.jobFilter.status_not_in ? where["status_not_in"] = args.jobFilter.status_not_in : null
-		args.jobFilter.city ? where["city"] = { id: args.jobFilter.city } : null
-	}
-	let jobs = await context.db.query.jobs({
-		where,
-		first: args.jobFilter ? args.jobFilter.first : undefined,
+	return await context.db.job.findMany({
+		where: buildJobWhere(args.jobFilter),
+		take: args.jobFilter ? args.jobFilter.first : undefined,
 		skip: args.jobFilter ? args.jobFilter.skip : undefined,
-		orderBy: "last_payment_DESC"
-	}
-	,info);
-	if (args.jobFilter){
-		jobs = jobs.filter(job => {
-			for (var x in args.jobFilter.job_types){
-				let job_type = args.jobFilter.job_types[x];
-				if (!job.job_types.includes(job_type)){
-					return false;
-				}
-			}
-			return true;
-		})
-	}
-	return jobs;
+		orderBy: {
+			last_payment: "desc"
+		}
+	});
 }
 
 const createInvoice = async (context,charge,job_id, featured) => {
-	return await context.db.mutation.createInvoice({
+	return await context.db.invoice.create({
 		data: {
 			price: featured ? 249 : 199,
 			last_four_digits: Number(charge["source"]["last4"]),
@@ -62,7 +43,7 @@ const createInvoice = async (context,charge,job_id, featured) => {
 
 const chargeCard = async (status,position,token) => {
 	try {
-		charge = await stripe.charges.create({
+		const charge = await stripe.charges.create({
 			amount: status === "FEATURED" ? 100 * 249 : 100 * 199,
 			currency: 'usd',
 			description: position,
@@ -85,7 +66,7 @@ const createJob = async (root,args,context,info) => {
 		min_salary: args.min_salary,
 		max_salary: args.max_salary,
 		salary_currency: args.salary_currency,
-		job_types: { set: args.job_types },
+		job_types_rel: createJobTypesWrite(args.job_types),
 		status: args.status === "FEATURED" ? args.status : "TODAY",
 		apply_url: args.apply_url,
 		description: args.description,
@@ -101,12 +82,14 @@ const createJob = async (root,args,context,info) => {
 	if (!args.company && !(args.company_name && args.company_email && args.company_website)){
 		throw new Error("Must be related to a company");
 	}
-	let no_account = false;
-	if (args.company_name && args.company_email && args.company_website){
-		no_account = true;
-	}
 	if (args.company){
 		permissions.loginPermissions(context);
+		const company = await context.db.company.findUnique({
+			where: { id: args.company }
+		});
+		if (!company || company.createdById !== context.user.id){
+			throw new Error("Unauthorized");
+		}
 		data["company"] = {connect:{id:args.company}}
 	}
 	if (args.company_logo){
@@ -119,46 +102,22 @@ const createJob = async (root,args,context,info) => {
 	if (!args.bp){
 		charge = await chargeCard(args.status,args.position,args.stripe_token);
 	}
-	let job = await context.db.mutation.createJob({
+	let job = await context.db.job.create({
 		data
-	},`
-		{	
-			id
-			location
-			remote
-			position
-			status
-			job_types
-			expiresAt
-			company {
-				id
-				createdBy {
-					id
-				}
-			}
-		}
-	`)
+	})
 	if (!args.bp) {
-		createInvoice(context,charge,job.id, args.status === "FEATURED")
-	}
-	if (!no_account && job.company.createdBy.id !== context.user.id){
-		context.db.mutation.deleteJob({where:{id:job.id}})
-		throw new Error("Unauthorized");
+		await createInvoice(context,charge,job.id, args.status === "FEATURED")
 	}
 	return job;
 }
 
 const createJobAndLogin = async (root,args,context,info) => {
-	const user = await context.db.query.user({ where: { email: args.email } },
-		`
-			{
-				id
-				password
-				company {
-					id
-				}
-			}
-		`);
+	const user = await context.db.user.findUnique({
+		where: { email: args.email },
+		include: {
+			company: true
+		}
+	});
 	if (!user) {
 		throw new Error("Invalid credentials");
 	}
@@ -177,7 +136,7 @@ const createJobAndLogin = async (root,args,context,info) => {
 		min_salary: args.min_salary,
 		max_salary: args.max_salary,
 		salary_currency: args.salary_currency,
-		job_types: { set: args.job_types },
+		job_types_rel: createJobTypesWrite(args.job_types),
 		description: args.description,
 		status: args.status,
 		expiresAt: new Date(today.setDate(today.getDate() + 30)),
@@ -187,10 +146,10 @@ const createJobAndLogin = async (root,args,context,info) => {
 	if (args.city){
 		data["city"] = { connect: { id: args.city}}
 	}
-	const job = await context.db.mutation.createJob({data})
-	createInvoice(context, charge, job.id, args.status === "FEATURED")
+	const job = await context.db.job.create({data})
+	await createInvoice(context, charge, job.id, args.status === "FEATURED")
 	let auth_data = {
-		user,
+		user: sanitizeUser(user),
 		token: createToken(user.id),
 		expiresIn: 1
 	};
@@ -202,7 +161,9 @@ const createJobAndLogin = async (root,args,context,info) => {
 
 const renewJob = async (root,args,context,info) => {
 	await permissions.loginPermissions(context)
-	let job = await context.db.query.job({where:{id:args.id}})
+	let job = await context.db.job.findUnique({
+		where:{id:args.id}
+	})
 	let charge;
 	try {
 		charge = await stripe.charges.create({
@@ -214,9 +175,9 @@ const renewJob = async (root,args,context,info) => {
 	} catch (e) {
 		throw new Error(`CardError:${e.message}`);
 	}
-	createInvoice(context, charge,job.id,args.featured)
+	await createInvoice(context, charge,job.id,args.featured)
 	let today = new Date();
-	await context.db.mutation.updateJob({
+	return await context.db.job.update({
 		where:{
 			id: job.id
 		},
@@ -225,8 +186,7 @@ const renewJob = async (root,args,context,info) => {
 			status: args.featured ? "FEATURED" : "TODAY",
 			last_payment: new Date()
 		}
-	},info)
-	return job;
+	})
 }
 
 const updateJob = async (root,args,context,info) => {
@@ -235,10 +195,9 @@ const updateJob = async (root,args,context,info) => {
 	let where = { id: args.id }
 	console.log(context.user)
 	if (context.user.role !== "ADMIN"){
-		where["company"] = { createdBy: { id: context.user.id } }
+		where["company"] = { is: { createdById: context.user.id } }
 	}
-	let job = await context.db.query.jobs({where},info)
-	job = job[0];
+	let job = await context.db.job.findFirst({where})
 	if (!job){
 		throw new Error("Job not found");
 	}
@@ -252,30 +211,29 @@ const updateJob = async (root,args,context,info) => {
 		min_salary: args.min_salary,
 		max_salary: args.max_salary,
 		salary_currency: args.salary_currency,
-		job_types: { set: args.job_types },
+		job_types_rel: replaceJobTypesWrite(args.job_types),
 		apply_url: args.apply_url
 	}
 	if (args.city){
 		data["city"] = { connect: { id: args.city }}
 	}
-	return await context.db.mutation.updateJob({
+	return await context.db.job.update({
 		where: { id: args.id },
 		data
-	},info) 
+	}) 
 }
 
 const deleteJob = async (root,args,context,info) => {
 	await permissions.loginPermissions(context);
 	let where = { id: args.id }
 	if (context.user.role !== "ADMIN"){
-		where["company"] = { createdBy: { id: context.user.id } }
+		where["company"] = { is: { createdById: context.user.id } }
 	}
-	let job = await context.db.query.jobs({where}, info)
-	job = job[0];
+	let job = await context.db.job.findFirst({where})
 	if (!job) {
 		throw new Error("Job not found");
 	}
-	return await context.db.mutation.deleteJob({
+	return await context.db.job.delete({
 		where: { id: args.id }
 	})
 }

@@ -1,7 +1,5 @@
-const { Prisma } = require("prisma-binding");
 const graphqlServer = require("graphql-yoga").GraphQLServer;
 const resolvers = require("./resolvers");
-const prismaTypeDefs = require("./generated/prisma-client/prisma-schema.js").typeDefs;
 const jwt = require("jsonwebtoken");
 const configs = require("./configs");
 const logger = require("morgan");
@@ -14,15 +12,8 @@ const compression = require('compression');
 
 require('dotenv').config()
 
-
-const prismaDb = new Prisma({
-	typeDefs:prismaTypeDefs,
-	endpoint: process.env.PRISMA_ENDPOINT,
-	debug: false
-})
-console.log(prismaDb.query.categories)
-const EVERY_MIDNIGHT = "0 0 0 * * *"
-const EVERY_MINUTE = "* * * * *"
+const prismaDb = require("./prisma/client");
+const { sanitizeUser } = require("./resolvers/helpers");
 
 var daysDifference = (data1, data2) => {
 	// time difference
@@ -37,14 +28,10 @@ cron.schedule("0 */30 * * * *", async () => {
 	console.log("STARTED")
 	let dayInMs = 86400000
 	let today = new Date().getTime();
-	let yesterday = today - dayInMs;
-	let tomorrow = today + dayInMs
-
-	let jobs = await prismaDb.query.jobs({
-		where:{status_not:"CLOSED"}
+	let jobs = await prismaDb.job.findMany({
+		where:{status:{not:"CLOSED"}}
 	});
-	for (x in jobs){
-		let job = jobs[x];
+	for (const job of jobs){
 		let job_expiresAt = new Date(job.expiresAt).getTime()
 		let new_status = undefined
 		let daysDiff = daysDifference(new Date(today), new Date(job_expiresAt));
@@ -59,7 +46,7 @@ cron.schedule("0 */30 * * * *", async () => {
 		
 		console.log(job.id,"---",daysDiff,"---",new_status);
 		if (new_status !== undefined && new_status !== job.status){
-			prismaDb.mutation.updateJob({
+			await prismaDb.job.update({
 				where:{id: job.id},
 				data: {
 					status: new_status
@@ -75,25 +62,21 @@ const server = new graphqlServer({
 	context: async (req) => {
 		var user = undefined
 		if (req.request.headers["authorization"]){
-
 			const token = req.request.headers["authorization"].split(" ")[1];
-			const decoded = await jwt.verify(token,configs.jwt_secret,(err,decoded) => {
-				if (err) {
-					if (err.name === "JsonWebTokenError") {
-						return Error("Invalid token");
-					}
-					return new Error("Invalid token");
+			try {
+				const decoded = jwt.verify(token,configs.jwt_secret);
+				if (decoded.userId){
+					user = await prismaDb.user.findUnique({
+						where: { id: decoded.userId }
+					})
 				}
-				return decoded
-			});
-			if (decoded.userId){
-				user = await prismaDb.query.user({where:{id:decoded.userId}})
+			} catch (error) {
+				user = undefined;
 			}
 		}
-		if (user) user.password = null;
 		return {
 			req,
-			user: user,
+			user: sanitizeUser(user),
 			db: prismaDb
 		}
 	}
@@ -122,24 +105,17 @@ if (process.env.production === "true"){
 		let splitted = req.originalUrl.split("/");
 		let job;
 		if (splitted[1] === "job"){
-			job = await prismaDb.query.job({where:{id:splitted[2]}},`
-			{
-				id
-				company_logo { 
-					id
-					url
-				}
-				position
-				description
-				company {
-					id
-					logo {
-						id
-						url
-					}
+			job = await prismaDb.job.findUnique({
+				where:{id:splitted[2]},
+				include: {
+					company_logo: true,
+					company: {
+						include: {
+							logo: true
+						}
 					}
 				}
-				`);
+			});
 			
 		}
 

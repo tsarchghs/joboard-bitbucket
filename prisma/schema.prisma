@@ -1,0 +1,158 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Local migration target: MariaDB/MySQL.
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum JOB_TYPE {
+  FULL_TIME
+  PART_TIME
+  FREELANCE
+  CONTRACT
+  UNSPECIFIED
+}
+
+enum CURRENCY {
+  EURO
+  DOLLAR
+}
+
+enum STATUS_TYPE {
+  FEATURED
+  TODAY
+  WEEK
+  MONTH
+  CLOSED
+}
+
+enum ROLE_TYPE {
+  NORMAL
+  ADMIN
+}
+
+enum JOB_CATEGORY {
+  DATA_SCIENTIST
+  AI_RESEARCHER
+  INTELLIGENCE_SPECIALIST
+  AI_DATA_ANALYST
+  MACHINE_LEARNING_ENGINEER
+  SOFTWARE_ENGINEER
+}
+
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  password  String
+  role      ROLE_TYPE
+  company   Company?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model File {
+  id               String    @id @default(cuid())
+  filename         String
+  mimetype         String
+  encoding         String
+  url              String    @unique
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  company_logos    Company[] @relation("CompanyLogo")
+  job_companylogos Job[]     @relation("JobCompanyLogo")
+}
+
+model Company {
+  id          String   @id @default(cuid())
+  createdBy   User     @relation(fields: [createdById], references: [id])
+  createdById String   @unique
+  email       String
+  name        String
+  website     String
+  logo        File?    @relation("CompanyLogo", fields: [logoId], references: [id], onDelete: SetNull)
+  logoId      String?
+  jobs        Job[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([logoId])
+}
+
+model Invoice {
+  id               String   @id @default(cuid())
+  job              Job?     @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  jobId            String?
+  last_four_digits Int
+  price            Int
+  status           String   @default("Paid")
+  receipt_url      String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([jobId])
+}
+
+model Job {
+  id               String         @id @default(cuid())
+  category         JOB_CATEGORY?
+  position         String
+  location         String?
+  remote           Boolean
+  city             City?          @relation(fields: [cityId], references: [id], onDelete: SetNull)
+  cityId           String?
+  salary_currency  CURRENCY?
+  min_salary       Int?
+  max_salary       Int?
+  description      String
+  job_types_rel    JobTypeOnJob[]
+  status           STATUS_TYPE
+  apply_url        String
+  last_payment     DateTime
+  company          Company?       @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  companyId        String?
+  company_logo     File?          @relation("JobCompanyLogo", fields: [company_logoId], references: [id], onDelete: SetNull)
+  company_logoId   String?
+  company_name     String?
+  company_email    String?
+  company_website  String?
+  invoices         Invoice[]
+  expiresAt        DateTime
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  @@index([cityId])
+  @@index([companyId])
+  @@index([status])
+}
+
+model JobTypeOnJob {
+  job    Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  jobId  String
+  type   JOB_TYPE
+
+  @@id([jobId, type])
+  @@index([type])
+}
+
+model Country {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  cities    City[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model City {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  country   Country  @relation(fields: [countryId], references: [id])
+  countryId String
+  jobs      Job[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([countryId])
+}

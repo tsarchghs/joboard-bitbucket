@@ -22,7 +22,7 @@ const processUpload = async (upload, mimetype, context, save_encoding = false) =
 	let extension = get_extension(imgdata)
 	let filename = `file-${uuid()}.png`;
 	let base64Data = imgdata.replace(/^data:([A-Za-z-+/]+);base64,/, '');
-	let buff = new Buffer(base64Data, "base64");
+	let buff = Buffer.from(base64Data, "base64");
 	// fs.writeFileSync(__dirname + "/../public" + path, base64Data,  {encoding: 'base64'});
 	let s3_data = {
 		Key: filename,
@@ -39,9 +39,7 @@ const processUpload = async (upload, mimetype, context, save_encoding = false) =
 		encoding: "",
 		url: `https://uxstories.s3.amazonaws.com/${filename}`
 	}
-	let file = context.db.mutation.createFile({
-		data: fileData
-	})
+	let file = context.db.file.create({ data: fileData })
 	return file;
 }
 

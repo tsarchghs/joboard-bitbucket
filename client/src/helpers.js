@@ -25,12 +25,14 @@ var getQueryParams = (url) => {
   var parser = document.createElement('a');
   parser.href = url;
   var query = parser.search.substring(1);
+  if (!query) return params;
   var vars = query.split('&');
   for (var i = 0; i < vars.length; i++) {
-    var pair = vars[i].split('=');
-    params[pair[0]] = decodeURIComponent(pair[1]);
+    var separator = vars[i].indexOf("=") !== -1 ? "=" : ":";
+    var pair = vars[i].split(separator);
+    if (!pair[0]) continue;
+    params[pair[0]] = pair[1] ? decodeURIComponent(pair[1]) : "";
   }
-  if (params === "undefined") return undefined;
   return params;
 };
 

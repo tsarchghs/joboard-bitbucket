@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import { gql } from "./lib/apolloCompat";
 
 const INVOICES_QUERY = gql`
     query {

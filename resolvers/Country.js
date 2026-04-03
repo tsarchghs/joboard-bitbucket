@@ -1,6 +1,6 @@
 
 const countries = (root,args,context,info) => {
-    return context.db.query.countries({},info);
+    return context.db.country.findMany();
 }
 
 module.exports = {
