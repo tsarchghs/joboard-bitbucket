@@ -25,9 +25,13 @@ import { getQueryParams } from "./helpers";
 import { GET_LOGGED_IN_USER } from "./Queries";
 import Category from "./components/Category";
 
-// https://frozen-refuge-32300.herokuapp.com
+const apolloUri =
+  window.__PUBLIC_DATA__?.apollo_client_uri ||
+  import.meta.env.VITE_APOLLO_CLIENT_URI ||
+  "http://localhost:4001";
+
 const httpLink = new HttpLink({
-  uri: "https://54.209.236.62:4001",
+  uri: apolloUri,
 });
 
 const authLink = new ApolloLink((operation, forward) => {

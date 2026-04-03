@@ -185,10 +185,6 @@ var certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
 
 server.start({
 	port: 4001,
-  https: {
-    key: privateKey,
-    cert: certificate
-  },
 
 
 	bodyParserOptions: { limit: "100mb", type: "application/json" }
