@@ -98,7 +98,11 @@ const getJobTypes = jobTypes => {
 
 const getAbsoluteUrl = url => {
   if (url.indexOf("http") === -1) {
-    let tmp = `http://${url}`;
+    const protocol =
+      typeof window !== "undefined" && window.location && window.location.protocol
+        ? window.location.protocol
+        : "https:";
+    let tmp = `${protocol}//${url}`;
     return tmp;
   }
   return url;

@@ -192,10 +192,10 @@ if (shouldServeClient) {
 
       if (job) {
         let logo;
-        if (job.company && job.company.logo && job.company.logo.url) {
-          logo = job.company.logo.url.replace("https", "http");
+      if (job.company && job.company.logo && job.company.logo.url) {
+          logo = job.company.logo.url;
         } else if (job.company_logo && job.company_logo.url) {
-          logo = job.company_logo.url.replace("https", "http");
+          logo = job.company_logo.url;
         }
 
         return res.send(

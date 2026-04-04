@@ -1,5 +1,6 @@
 const uuid = require("uuid");
 const fs = require("fs");
+const configs = require("../configs");
 const { aws, S3 } = require("../aws");
 
 const get_extension = (encoded) => {
@@ -32,12 +33,12 @@ const processUpload = async (upload, mimetype, context, save_encoding = false) =
 	}
 
 	S3.putObject(s3_data, console.log)
-	console.log(`https://uxstories.s3.amazonaws.com/${filename}`);
+	console.log(`https://${configs.s3.bucketName}.s3.amazonaws.com/${filename}`);
 	let fileData = {
 		filename: filename,
 		mimetype: mimetype,
 		encoding: "",
-		url: `https://uxstories.s3.amazonaws.com/${filename}`
+		url: `https://${configs.s3.bucketName}.s3.amazonaws.com/${filename}`
 	}
 	let file = context.db.file.create({ data: fileData })
 	return file;
