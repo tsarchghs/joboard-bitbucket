@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "express",
+  "functions": {
+    "app.js": {
+      "includeFiles": "schema.graphql"
+    },
+    "api/graphql.js": {
+      "includeFiles": "schema.graphql"
+    }
+  }
+}
