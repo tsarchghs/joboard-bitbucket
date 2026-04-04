@@ -25,10 +25,31 @@ import { getQueryParams } from "./helpers";
 import { GET_LOGGED_IN_USER } from "./Queries";
 import Category from "./components/Category";
 
+const normalizeApolloUri = (uri) => {
+  if (typeof window === "undefined" || !uri) {
+    return uri;
+  }
+
+  try {
+    const resolvedUri = new URL(uri, window.location.origin);
+    const normalizedPath = resolvedUri.pathname.replace(/\/+$/, "") || "/";
+
+    if (resolvedUri.origin === window.location.origin && normalizedPath === "/") {
+      return "/api/graphql";
+    }
+
+    return resolvedUri.toString();
+  } catch (error) {
+    return uri;
+  }
+};
+
 const apolloUri =
-  window.__PUBLIC_DATA__?.apollo_client_uri ||
-  import.meta.env.VITE_APOLLO_CLIENT_URI ||
-  "http://localhost:4001";
+  normalizeApolloUri(
+    window.__PUBLIC_DATA__?.apollo_client_uri ||
+      import.meta.env.VITE_APOLLO_CLIENT_URI ||
+      "http://localhost:4001"
+  );
 
 const httpLink = new HttpLink({
   uri: apolloUri,

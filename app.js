@@ -39,6 +39,31 @@ function resolveClientPath() {
   return path.join(__dirname, "client", "build");
 }
 
+function resolveApolloClientUri(configuredUri, requestOrigin) {
+  if (!configuredUri) {
+    return graphqlEndpoint;
+  }
+
+  if (!isVercel) {
+    return configuredUri;
+  }
+
+  try {
+    const resolvedUri = new URL(configuredUri, requestOrigin);
+    const normalizedPath = resolvedUri.pathname.replace(/\/+$/, "") || "/";
+
+    if (resolvedUri.origin === requestOrigin && normalizedPath === "/") {
+      return graphqlEndpoint;
+    }
+  } catch (error) {
+    if (configuredUri === "/") {
+      return graphqlEndpoint;
+    }
+  }
+
+  return configuredUri;
+}
+
 function daysDifference(date1, date2) {
   const timeDiff = Math.abs(date1.getTime() - date2.getTime());
   return Math.ceil(timeDiff / (1000 * 3600 * 24));
@@ -155,6 +180,8 @@ if (shouldServeClient) {
         return res.status(404).end();
       }
 
+      const requestProtocol = req.get("x-forwarded-proto") || "https";
+      const requestOrigin = `${requestProtocol}://${req.get("host")}`;
       const publicData = {
         logo_url: process.env.LOGO_URL,
         domain: process.env.DOMAIN,
@@ -166,7 +193,10 @@ if (shouldServeClient) {
         email: process.env.EMAIL,
         favicon_path: process.env.FAVICON_PATH,
         domain_svg: process.env.DOMAIN_SVG,
-        apollo_client_uri: process.env.APOLLO_CLIENT_URI || graphqlEndpoint,
+        apollo_client_uri: resolveApolloClientUri(
+          process.env.APOLLO_CLIENT_URI,
+          requestOrigin
+        ),
         above_job_position_text: process.env.ABOVE_JOB_POSITION_TEXT,
         use_predefined_location: process.env.USE_PREDEFINED_LOCATION,
         use_keywords: process.env.USE_KEYWORDS,

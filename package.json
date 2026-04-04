@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node app",
-    "build": "npm ci --prefix client && npm --prefix client run build && node scripts/sync-client-build-to-public.js",
-    "vercel-build": "npm ci --prefix client && npm --prefix client run build && node scripts/sync-client-build-to-public.js",
+    "build": "npm run prisma:generate && npm ci --prefix client && npm --prefix client run build && node scripts/sync-client-build-to-public.js",
+    "vercel-build": "npm run prisma:generate && npm ci --prefix client && npm --prefix client run build && node scripts/sync-client-build-to-public.js",
+    "postinstall": "prisma generate --schema prisma/schema.prisma",
     "prisma:generate": "cd prisma && prisma generate --schema schema.prisma",
     "prisma:push": "cd prisma && prisma db push --schema schema.prisma",
     "prisma:validate": "cd prisma && prisma validate --schema schema.prisma",
